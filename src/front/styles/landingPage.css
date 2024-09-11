@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap');
+
+.landing-content, .landing-container{
+    font-family: "ABeeZee", sans-serif;
+}
+
+.hover-white:hover {
+    color: white !important;
+    background-color: #F44322;
+    border-color: #F44322 !important;
+  }
+
+  @media (max-width: 1030px){
+    .landing-container{
+        background-color: yellow;
+    }
+
+    .landing-text {
+        font-size: small;
+    }
+
+    .landing-img{
+        width: 30%;
+    }
+  }
+
+/*
+    home.css: This website contains selectors only used in home.css
+
+    All pages share the styles on index.css but you should create 
+    one more css for each page that will contain the selected used 
+    on that page only (the ones not reused in other pages).
+*/
