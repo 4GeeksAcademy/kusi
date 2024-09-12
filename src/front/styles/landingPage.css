@@ -4,25 +4,44 @@
     font-family: "ABeeZee", sans-serif;
 }
 
+.btn-login{
+    color: white;
+    background-color: #F44322;
+    border-color: #F44322;
+}
+
 .hover-white:hover {
     color: white !important;
     background-color: #F44322;
     border-color: #F44322 !important;
   }
 
-  @media (max-width: 1030px){
+  /* @media (max-width: 1030px){
     .landing-container{
         background-color: yellow;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .landing-img-2 {
+        display: flex;
+        justify-content: center;
+        background-color: pink;
+        width: 100%;
+        
+
+    }
+
+    .img-2{
+        align-items: end;
     }
 
     .landing-text {
-        font-size: small;
-    }
+        background-color: aqua;
+    } */
 
-    .landing-img{
-        width: 30%;
-    }
-  }
+  /* } */
 
 /*
     home.css: This website contains selectors only used in home.css
