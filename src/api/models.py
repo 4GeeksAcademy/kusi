@@ -51,3 +51,24 @@ class User(db.Model):
             "profile_picture_url": self.profile_picture_url,
             "created_at": self.created_at
         }
+
+class OrderStatusName(str, Enum):
+    PENDING = "pending"
+    IN_PROGRESS = "in progress"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+
+class OrderStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Enum(OrderStatusName), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)    
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    status_id = db.Column(db.Integer, db.ForeignKey("order_status.id"), nullable=False)
+    grand_total = db.Column(db.Float, nullable=False)
+    special_instructions = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
