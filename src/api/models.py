@@ -99,6 +99,7 @@ class OrderDish(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
     dish_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
@@ -120,6 +121,7 @@ class Dish(db.Model):
     price = db.Column(db.Float, nullable=False)
     discount_percentage = db.Column(db.Integer, nullable=False)
     cooking_time = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
 
@@ -134,7 +136,8 @@ class Dish(db.Model):
             "image_url": self.image_url,
             "price": self.price,
             "discount_percentage": self.discount_percentage,
-            "cooking_time": self.cooking_time
+            "cooking_time": self.cooking_time,
+            "quantity": self.quantity
         }
  
 class Ingredient(db.Model):
