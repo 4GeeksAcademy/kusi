@@ -1,0 +1,8 @@
+.container-dishes{
+    width: 70%;
+}
+@media (width < 576px){
+    .container-dishes{
+        width: 90%;
+    }
+}

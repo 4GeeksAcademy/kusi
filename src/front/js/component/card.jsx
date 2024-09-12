@@ -7,7 +7,7 @@ export const Card = ({ imgSrc, title, time, price }) => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="card" style={{ borderRadius: '20px', width: '300px', height: '300px', overflow: 'hidden' }}>
+		<div className="card" style={{ borderRadius: '20px', width: '100%', height: '300px', overflow: 'hidden' }}>
 			<img src={imgSrc} className="card-img-top img-fluid" alt={title} style={{ borderTopLeftRadius: '20px', borderTopRightRadius: '20px', height: '70%', objectFit: 'cover' }} />
 			<div className="card-body" style={{ height: '30%' }}>
 				<div className="d-flex mb-2 mt-1 justify-content-between align-items-center">

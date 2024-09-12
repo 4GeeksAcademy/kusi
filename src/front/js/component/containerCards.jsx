@@ -17,7 +17,7 @@ export const ContainerCards = () => {
       ];
       
     return (
-        <div className="container mt-5 mx-auto" style={{ maxWidth: '80%'}}>
+        <div className="container-dishes mt-5 mx-auto">
             <div className="row">
                 {items.map((item, index) => (
                 <div key={index} className="col-12 col-sm-6 col-md-4 mb-4">
