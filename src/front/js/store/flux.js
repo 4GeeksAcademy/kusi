@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -17,6 +19,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+
+			Login: async (user) => {
+				const store = getStore();
+				try{
+					
+					let resp = await fetch(process.env.BACKEND_URL + "/", {
+						method: 'POST',
+						body: JSON.stringify(user),
+						headers: {
+							'Content-Type': 'application/json',
+						  },	
+					})
+					let data = await resp.json()
+
+					if (data.email) {
+						localStorage.setItem("token" , data.token)
+						localStorage.setItem("name" , data.name)
+						localStorage.setItem("email" , data.email)
+					}
+					else {
+						Swal.fire("Oh no!", ``, "error");
+					}
+					
+				}catch(error){
+					console.log("Error loading message from backend ", error)
+				}
+			},
+
+
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},

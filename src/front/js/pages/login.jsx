@@ -1,22 +1,85 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext, useRef  } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/login.css";
 
 import { Context } from "../store/appContext";
 
 
+
 export const Login = () => {
+    const { store, actions } = useContext(Context);
+	const navigate = useNavigate();
+    const inputRef1 = useRef(null);
+    const inputRef2 = useRef(null);
+
+    const [dataLogin,setDataLogin] = useState({
+		email: "",
+		password: ""
+	})
+
+	const captureData = (e)=> {
+		let inputvalue = e.target.value
+		let inputname = e.target.name
+		setDataLogin({...dataLogin,[inputname]:inputvalue})
+	}
+
+
+
+    const checkFocus = (e) => {
+        if (inputRef1.current && dataLogin.email.trim() === "") {
+          e.preventDefault(); // Evitar el cambio de enfoque
+          e.stopPropagation();
+          inputRef1.current.focus(); // Mantener el foco en el primer campo
+        }
+      };
+
+    const sendLogin = async (e) => {
+		// console.log(dataLogin);
+		
+		e.preventDefault() 
+		try{
+			// await actions.Login(dataLogin)
+			// setDataLogin({
+			// 	email: "",
+			// 	password: ""
+			// })
+			// if ( localStorage.getItem("token")) {
+			// 	navigate("/")
+			// 	console.log(localStorage.getItem("token"));
+				
+			// }
+            if (dataLogin.email !== "" && dataLogin.password !== "" ) {
+                // await actions.Login(dataLogin)
+                localStorage.setItem("email" , dataLogin.email)
+                localStorage.setItem("password" , dataLogin.password)
+                // console.log("datos guardados"+localStorage.getItem("email")+localStorage.getItem("password"))
+                setDataLogin({
+                    email: "",
+                    password: "",
+                })
+                navigate("/") // validar si hay token en localstorage para navigate a viewuser
+            }
+            
+		}catch(e){
+			console.error(e);
+			
+		}
+	}
+
+
+
 
     return (
         <div className="container">
             <div></div>
+            <form onSubmit={sendLogin} className="form-signup">
                 <div className="text-center justify-content-center align-items-center">
                     <div className="d-flex justify-content-center align-items-center">
                         <div><svg width="30" height="30" viewBox="0 0 49 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M41.8871 0H7.1129C5.22709 0.00205137 3.41911 0.737595 2.08563 2.04525C0.752157 3.35291 0.00209187 5.12589 0 6.9752V28.0248C0 31.8705 3.19132 35 7.1129 35H41.8871C45.8087 35 49 31.8705 49 28.0248V6.9752C49 3.12954 45.8087 0 41.8871 0ZM39.7848 4.65013L37.6035 6.33968L25.97 15.3454C25.1006 16.012 23.8994 16.012 23.03 15.3454L11.8074 6.64969L9.2199 4.65013H39.7848ZM41.8871 30.3499H7.1129C5.80571 30.3499 4.74194 29.3067 4.74194 28.0248V7.12245L20.09 19.0035C21.3861 20.0111 22.951 20.5071 24.5 20.5071C26.049 20.5071 27.6139 20.0111 28.91 19.0035L44.2581 7.1271V28.0248C44.2581 29.3067 43.1943 30.3499 41.8871 30.3499Z" fill="#6E6969"/>
                             </svg>
                         </div>
-                        <div><input className="inputLogin" placeholder="Ingresa tu correo" type="text" id="inputEmail" /></div>
+                        <div><input ref={inputRef1} onFocus={checkFocus} className="inputLogin" placeholder="Ingresa tu correo" type="email" id="inputEmail" name="email" onChange={captureData} required /></div>
                     </div>
                     <div className="d-flex justify-content-center align-items-center">
                         <div>
@@ -25,7 +88,7 @@ export const Login = () => {
                             <path d="M23.9997 29.5238C26.6507 29.5238 28.7997 27.8183 28.7997 25.7143C28.7997 23.6104 26.6507 21.9048 23.9997 21.9048C21.3487 21.9048 19.1997 23.6104 19.1997 25.7143C19.1997 27.8183 21.3487 29.5238 23.9997 29.5238Z" fill="#6E6969"/>
                             </svg>
                         </div>
-                        <div><input className="inputLogin" placeholder="Ingresa tu contraseña" type="password" id="inputPassword" /></div>
+                        <div><input ref={inputRef2} onFocus={checkFocus} className="inputLogin" placeholder="Ingresa tu contraseña" type="password" id="inputPassword" name="password" onChange={captureData} required /></div>
                     </div>
                     <div>
                         <Link to="/" className="div-link"><span className="span">¿Olvidaste tu Contraseña?</span></Link>
@@ -38,6 +101,7 @@ export const Login = () => {
                         <div className="div-link"><Link to="/signup" className="div-link"><span className="span">Regístrate</span></Link></div>
                     </div>
                 </div>
+            </form>
         </div>
     )
 }

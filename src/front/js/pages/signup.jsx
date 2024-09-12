@@ -1,23 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { Link,useNavigate } from "react-router-dom";
 import "../../styles/signup.css";
 
 import { Context } from "../store/appContext";
 
 
 export const SignUp = () => {
+    const { store, actions } = useContext(Context);
+	const navigate = useNavigate();
+
 
     return (
         <div className="container">
+            <div></div>
             <form className="form-signup">
-                <div></div>
                     <div className="text-center justify-content-center align-items-center">
                         <div className="d-flex justify-content-center align-items-center">
                             <div><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 37 38" fill="none">
                                 <path d="M18.5 19C23.6106 19 27.75 14.7487 27.75 9.5C27.75 4.25125 23.6106 0 18.5 0C13.3894 0 9.25 4.25125 9.25 9.5C9.25 14.7487 13.3894 19 18.5 19ZM18.5 23.75C12.3256 23.75 0 26.9325 0 33.25V35.625C0 36.9313 1.04062 38 2.3125 38H34.6875C35.9594 38 37 36.9313 37 35.625V33.25C37 26.9325 24.6744 23.75 18.5 23.75Z" fill="#6E6969"/>
                                 </svg>
                             </div>
-                            <div><input className="inputLogin" placeholder="Ingresa tu nombre" type="text" id="inputUsername" /></div>
+                            <div><input className="inputLogin" placeholder="Ingresa tu nombre" type="text" id="inputUsername" required /></div>
                         </div>
                         <div className="d-flex justify-content-center align-items-center">
                             <div>
@@ -32,7 +35,7 @@ export const SignUp = () => {
                                     <path d="M41.8871 0H7.1129C5.22709 0.00205137 3.41911 0.737595 2.08563 2.04525C0.752157 3.35291 0.00209187 5.12589 0 6.9752V28.0248C0 31.8705 3.19132 35 7.1129 35H41.8871C45.8087 35 49 31.8705 49 28.0248V6.9752C49 3.12954 45.8087 0 41.8871 0ZM39.7848 4.65013L37.6035 6.33968L25.97 15.3454C25.1006 16.012 23.8994 16.012 23.03 15.3454L11.8074 6.64969L9.2199 4.65013H39.7848ZM41.8871 30.3499H7.1129C5.80571 30.3499 4.74194 29.3067 4.74194 28.0248V7.12245L20.09 19.0035C21.3861 20.0111 22.951 20.5071 24.5 20.5071C26.049 20.5071 27.6139 20.0111 28.91 19.0035L44.2581 7.1271V28.0248C44.2581 29.3067 43.1943 30.3499 41.8871 30.3499Z" fill="#6E6969"/>
                                 </svg>
                             </div>
-                            <div><input className="inputLogin" placeholder="Ingresa tu correo" type="text" id="inputEmail" /></div>
+                            <div><input className="inputLogin" placeholder="Ingresa tu correo" type="email" id="inputEmail" required /></div>
                         </div>
                         <div className="d-flex justify-content-center align-items-center">
                             <div>
@@ -41,7 +44,7 @@ export const SignUp = () => {
                                 <path d="M23.9997 29.5238C26.6507 29.5238 28.7997 27.8183 28.7997 25.7143C28.7997 23.6104 26.6507 21.9048 23.9997 21.9048C21.3487 21.9048 19.1997 23.6104 19.1997 25.7143C19.1997 27.8183 21.3487 29.5238 23.9997 29.5238Z" fill="#6E6969"/>
                                 </svg>
                             </div>
-                            <div><input className="inputLogin" placeholder="Ingresa tu contraseña" type="password" id="inputPassword" /></div>
+                            <div><input className="inputLogin" placeholder="Crea tu contraseña" type="password" id="inputPassword" required /></div>
                         </div>
                         <div className="d-flex text-center justify-content-center align-items-center">
                             <button type="submit">Registrar</button>
