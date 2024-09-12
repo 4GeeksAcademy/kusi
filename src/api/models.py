@@ -72,3 +72,14 @@ class Order(db.Model):
     special_instructions = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+
+class Dish(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    image_url = db.Column(db.String(255))
+    price = db.Column(db.Float, nullable=False)
+    discount_percentage = db.Column(db.Integer, nullable=False)
+    cooking_time = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
