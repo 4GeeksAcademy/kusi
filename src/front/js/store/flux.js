@@ -19,6 +19,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+			logoRefresh: () => {
+				window.location.reload();
+			  },
+
 
 			Login: async (user) => {
 				const store = getStore();
