@@ -15,7 +15,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			list : [
+				{
+					"id": 1,
+					"name": "nameproduct con papas fritas y arroz y platano ",
+					"price": 40,
+					"quantity": 1
+				},
+				{
+					"id": 2,
+					"name": "nameproduct con papas fritas",
+					"price": 35,
+					"quantity": 2
+				},
+				{
+					"id": 3,
+					"name": "papas fritas y arroz y platano combinados",
+					"price": 30,
+					"quantity": 1
+				} 
+			],
+
+			orderDish: [],
+			order:[]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -48,6 +71,63 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}catch(error){
 					console.log("Error loading message from backend ", error)
+				}
+			},
+
+
+			incrementDish : (id) => {
+				const store = getStore();
+				const transitory = store.list.map((product) =>
+					product.id === id
+					  ? { ...product, quantity: product.quantity + 1 }
+					  : product
+				  )
+				setStore({list: transitory})
+				console.log(store.list);
+				
+			  },
+
+			decrementDish : (id) => {
+				const store = getStore();
+				const transitory = store.list.map((product) =>
+					product.id === id && product.quantity>1
+					  ? { ...product, quantity: product.quantity - 1 }
+					  : product
+				  )
+				setStore({list: transitory})
+				console.log(store.list);
+				
+			  },
+
+			deleteDish : (id) => {
+				const store = getStore();
+				const newtransitory = store.list.filter((product) =>
+					product.id !== id
+				  )
+				setStore({list: newtransitory})
+				console.log(store.list);
+				
+			},
+
+			btnContinuar : async (instructionsnote) => {
+				// console.log(dataLogin);
+				
+				 // para pausar el proceso y que no se actualice la pag.
+				try{
+					const store = getStore();
+					const addNote = ({
+						dish: store.list,  // Copia las propiedades existentes
+						instructions: instructionsnote // Agrega la nueva propiedad
+					  });
+					setStore({order: addNote})
+
+					console.log(instructionsnote, typeof instructionsnote)
+					console.log(store.list);
+					console.log(store.order);
+					
+				}catch(e){
+					console.error(e);
+					
 				}
 			},
 

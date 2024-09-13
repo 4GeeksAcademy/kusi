@@ -30,9 +30,9 @@ export const Login = () => {
 
     const checkFocus = (e) => {
         if (inputRef1.current && dataLogin.email.trim() === "") {
-          e.preventDefault(); // Evitar el cambio de enfoque
+          e.preventDefault(); 
           e.stopPropagation();
-          inputRef1.current.focus(); // Mantener el foco en el primer campo
+          inputRef1.current.focus(); 
         }
       };
 
