@@ -35,13 +35,13 @@ export default function LandingPage() {
                     <div className="d-flex flex-column flex-lg-row gap-3 mt-4 mt-md-5">
                         <button
                             type="button"
-                            className="btn-login py-2 px-4 px-md-5 fs-4 rounded-pill"
+                            className="btn btn-danger py-2 px-4 px-md-5 fs-4 rounded-pill"
                         >
                             Iniciar sesión
                         </button>
                         <button
                             type="button"
-                            className="btn-signup py-2 px-4 px-md-5 fs-4 hover-white rounded-pill"
+                            className="btn btn-outline-dark py-2 px-4 px-md-5 fs-4 hover-white rounded-pill"
                         >
                             Registrarse
                         </button>
