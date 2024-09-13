@@ -1,19 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap');
 
-
 *{
     font-family: "ABeeZee", sans-serif;
 }
 
-
-.btn-login{
-    color: white;
+.btn-danger {
     background-color: #F44322;
-    border-color: #F44322;
 }
 
-.hover-white:hover {
-    color: white !important;
-    background-color: #F44322;
-    border-color: #F44322 !important;
+.btn-danger:hover {
+    background-color: #ce3217;
 }
