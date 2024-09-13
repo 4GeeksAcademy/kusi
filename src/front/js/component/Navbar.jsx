@@ -53,10 +53,10 @@ export const Navbar = () => {
                     </button>
                 </div>
                 
-                <div className="collapse navbar-collapse order-lg-2 w-100" id="navbarSupportedContent">
+                <div className="collapse navbar-collapse order-lg-2 w-100 pt-0" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                         {menuItems.map((item, index) => (
-                            <li className="nav-item py-0 my-0 px-md-5 mx-md-2"key={index}>
+                            <li className="nav-item px-0 py-0 my-0 px-lg-5 mx-lg-2"key={index}>
                                 <a className="nav-link fs-4" 
                                    style={{color: isActive === index ? "#F44322" : "black"}} 
                                    href={item.link} 

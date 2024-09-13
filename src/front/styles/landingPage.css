@@ -4,9 +4,7 @@
 *{
     font-family: "ABeeZee", sans-serif;
 }
-/* .landing-content, .landing-container{
-    font-family: "ABeeZee", sans-serif;
-} */
+
 
 .btn-login{
     color: white;
@@ -18,39 +16,4 @@
     color: white !important;
     background-color: #F44322;
     border-color: #F44322 !important;
-  }
-
-  /* @media (max-width: 1030px){
-    .landing-container{
-        background-color: yellow;
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .landing-img-2 {
-        display: flex;
-        justify-content: center;
-        background-color: pink;
-        width: 100%;
-        
-
-    }
-
-    .img-2{
-        align-items: end;
-    }
-
-    .landing-text {
-        background-color: aqua;
-    } */
-
-  /* } */
-
-/*
-    home.css: This website contains selectors only used in home.css
-
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+}

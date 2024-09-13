@@ -21,8 +21,9 @@
         right: 0;
         z-index: 1050;
         background-color: white;
+        box-shadow: 0px 3px 3px -3px #78858F;
         padding: 20px;
-        overflow-y: auto;
+        overflow: hidden;
     }
 
     .navbar-collapse.show {
