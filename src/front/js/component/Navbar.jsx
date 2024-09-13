@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 
-    const [ role, setRole ] = useState("admin")
+    const [ role, setRole ] = useState("chef")
     const [isActive, setIsActive ] = useState(0)
 
     const menuItemsByRole = {
@@ -48,9 +48,14 @@ export const Navbar = () => {
                     <button className="btn" type="button">
                         <FontAwesomeIcon className="fs-2" style={{color:"#F44322"}} icon={faCircleUser} />
                     </button>
-                    <button className="btn" type="button">
-                        <FontAwesomeIcon className="fs-2" style={{color:"#F44322"}} icon={faCartShopping} />
-                    </button>
+                    {
+                        role === "cliente" ?(
+                            <button className="btn" type="button">
+                                <FontAwesomeIcon className="fs-2" style={{color:"#F44322"}} icon={faCartShopping} />
+                            </button>
+                        ):("")
+                    }
+                    
                 </div>
                 
                 <div className="collapse navbar-collapse order-lg-2 w-100 pt-0" id="navbarSupportedContent">
