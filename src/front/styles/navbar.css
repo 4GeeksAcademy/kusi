@@ -1,0 +1,35 @@
+.navbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1030;
+    top: 0;
+}
+
+
+@media (max-width: 991px) {
+
+    .navbar-brand {
+        position: absolute;
+        left: 50%;
+        top: 30px;
+        transform: translateX(-50%);
+    }
+    .navbar-collapse {
+        position: fixed;
+        top: 100px;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+        background-color: white;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .navbar-collapse.show {
+        display: block;
+    }
+
+    .navbar-toggler {
+        z-index: 1100;
+    }
+}
