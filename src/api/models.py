@@ -92,13 +92,15 @@ class Order(db.Model):
             "status_id": self.status_id,
             "grand_total": self.grand_total,
             "special_instructions": self.special_instructions,
-            "created_at": self.created_at
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
         }
 
 class OrderDish(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
     dish_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    unit_price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
@@ -111,6 +113,8 @@ class OrderDish(db.Model):
             "id": self.id,
             "order_id": self.order_id,
             "dish_id": self.dish_id,
+            "unit_price": self.unit_price,
+            "quantity": self.quantity
         }
 
 class Dish(db.Model):
