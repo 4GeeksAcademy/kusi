@@ -18,11 +18,11 @@ html, body {
     cursor: pointer;
 }
 
-.container {
+.container-login {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center;     /* Centra verticalmente */
-    height: 100vh;           /* Usa toda la altura del viewport */
+    justify-content: center; 
+    align-items: center;    
+    height: 100vh;          
 }
 
 .inputLogin{

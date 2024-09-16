@@ -11,7 +11,7 @@ export const SignUp = () => {
 
 
     return (
-        <div className="container">
+        <div className="container-login">
             <form className="form-signup">
                     <div className="text-center justify-content-center align-items-center">
                         <div className="div-logo"><svg onClick={()=>navigate("/login")} width="150" height="117" viewBox="0 0 217 117" fill="none" xmlns="http://www.w3.org/2000/svg">

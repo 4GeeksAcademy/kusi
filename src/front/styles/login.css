@@ -29,7 +29,7 @@ html, body {
     cursor: pointer;
 }
 
-.container {
+.container-login {
     display: flex;
     justify-content: center; 
     align-items: center;    

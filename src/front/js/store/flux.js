@@ -77,15 +77,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			incrementDish : (id) => {
 				const store = getStore();
-				const transitory = store.list.map((product) =>
-					product.id === id
-					  ? { ...product, quantity: product.quantity + 1 }
-					  : product
-				  )
-				setStore({list: transitory})
-				console.log(store.list);
-				
-			  },
+				const transitory = store.list.find(product =>
+					product.id === id)
+					  if(transitory){ 
+						getActions().changePrice(id,transitory.quantity+1,transitory.price)
+					  }
+			},
 
 			decrementDish : (id) => {
 				const store = getStore();
@@ -98,6 +95,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(store.list);
 				
 			  },
+
+			changePrice : (id,quantity) => {
+				const store = getStore();
+				// const unitprice = price/quantity
+				const transitorylist = store.list.map((product) =>
+					product.id === id
+					  ? { ...product, quantity: quantity } 
+					  : product
+				  )
+				setStore({list: transitorylist})
+				console.log(store.list);
+				
+			  },
+
+			totalPrice: () => {
+				const store = getStore();
+				const total = store.list.reduce((total,product)=>total + product.price * product.quantity,0)
+				return total.toFixed(2);
+				
+			},
+			
+			  
 
 			deleteDish : (id) => {
 				const store = getStore();
@@ -116,14 +135,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try{
 					const store = getStore();
 					const addNote = ({
-						dish: store.list,  // Copia las propiedades existentes
-						instructions: instructionsnote // Agrega la nueva propiedad
+						dish: store.list, 
+						instructions: instructionsnote, 
+						amount: getActions().totalPrice()
 					  });
 					setStore({order: addNote})
 
-					console.log(instructionsnote, typeof instructionsnote)
-					console.log(store.list);
-					console.log(store.order);
+					// console.log(addNote.amount)
+					// console.log(store.list);
+					// console.log(store.order);
 					
 				}catch(e){
 					console.error(e);
