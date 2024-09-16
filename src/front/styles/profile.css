@@ -12,6 +12,11 @@
     cursor: url(https://icons.getbootstrap.com/assets/icons/pencil-fill.svg) 15 15, auto;
 }
 
+.arrow-img {
+    width: 6vh;
+    
+}
+
 @media (max-width: 992px) {
     .container-data {
         width: 100%;
@@ -21,5 +26,9 @@
 @media (max-width: 768px) {
     .profile-box-text, .group-profile-text {
         width: 100%;
+    }
+
+    .arrow-img {
+        margin-right: -50px;
     }
 }

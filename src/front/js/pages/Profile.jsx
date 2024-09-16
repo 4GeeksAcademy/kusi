@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import userImg from '../../assets/images/user.png';
+import arrowImg from '../../assets/images/arrow.png';
 import '../../styles/profile.css'
 
 
 export const Profile = () => {
 
-    const [ userRole, setUserRole ] = useState("admin")
-
+    const [ userRole, setUserRole ] = useState("customer")
+    
 
 
     const dataFake = {
@@ -68,11 +72,23 @@ export const Profile = () => {
 
 
     return(
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <div className="d-flex align-items-center w-100">
+                <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
+                    <Link to="/">
+                        <img className="arrow-img" src={arrowImg}/>
+                    </Link>
+                    
+                </div>
+                
+                <div className="d-flex justify-content-center align-items-center" style={{width:"80%", height:"100px"}}>
+                    <h1>Perfil</h1>
+                </div>
+            </div>
             <div className="container text-center">
-                <div className="row d-flex justify-content-center align-items-center  gap-3">
+                <div className="row d-flex justify-content-center align-items-center gap-3">
                     <div className="col-12 profile-box h-auto px-2 w-100 d-flex justify-content-center align-items-center">
-                        <div className="profile-box-text px-0 px-lg-5 d-flex flex-column flex-md-row justify-content-center align-items-center border">
+                        <div className=" rounded profile-box-text px-0 px-lg-5 py-3 py-md-3 d-flex flex-column flex-md-row justify-content-center align-items-center border">
                             <div className="w-50 w-lg-25 py-2 d-flex justify-content-center align-items-center">
                                 <img src={userImg} className="w-75"/>
                             </div>
@@ -80,16 +96,16 @@ export const Profile = () => {
                                <h4>{userData.name}</h4>
                                {
                                 userRole === "admin" || userRole === "chef" ? (
-                                    <p>{userData.position}</p>
+                                    <p style={{marginTop: "8px"}} >{userData.position}</p>
                                 ):("")
                                }
-                               <p>Miembro desde el {formattedDate}</p>
+                               <p style={{marginBottom:"-2px"}}>Miembro desde el {formattedDate}</p>
                             </div>
                         </div>
                     </div>
                     <div className="col-12 px-2 d-flex justify-content-center ">
                         <div className="group-profile w-100 d-flex justify-content-center">
-                            <div className="group-profile-text py-4 border">
+                            <div className="group-profile-text py-4 border rounded">
                                 <h4 className="text-start ms-4">Información personal</h4>
                                 <div className="d-flex flex-column flex-lg-row justify-content-evenly align-items-start">
 
