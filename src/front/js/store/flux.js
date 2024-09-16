@@ -98,7 +98,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			changePrice : (id,quantity) => {
 				const store = getStore();
-				// const unitprice = price/quantity
 				const transitorylist = store.list.map((product) =>
 					product.id === id
 					  ? { ...product, quantity: quantity } 
@@ -129,9 +128,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			btnContinuar : async (instructionsnote) => {
-				// console.log(dataLogin);
-				
-				 // para pausar el proceso y que no se actualice la pag.
+
 				try{
 					const store = getStore();
 					const addNote = ({

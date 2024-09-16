@@ -27,3 +27,19 @@ textarea {
 .container h1, h5 {
   font-family: ABeeZee;
 }
+
+.span-icon{
+  cursor: pointer;
+}
+
+#kusilogo{
+  height: 50px;
+  width: auto;
+}
+
+@media (max-width:470px){
+  #kusilogo{
+    height: 20px;
+    width: auto;
+  }
+}

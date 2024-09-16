@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext, useRef  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/shoppingCart.css";
-import emptycart from "../../img/emptycart.png"
+import emptycart from "../../img/emptycart.png";
+import bin from "../../img/bin.png";
+import minus from "../../img/minus.png";
+import plus from "../../img/plus.png";
+import kusilogo from "../../img/kusi-logo.png"
 
 
 import { Context } from "../store/appContext";
@@ -46,7 +50,12 @@ export const ShoppingCart = () => {
         return(
             <div>
                 <div>
-                    <div className="mx-3 mt-3" id="logo">logo</div>
+                    <div className="mx-3 mt-3" id="logo">
+                    <span onClick={()=>navigate("/")} className="span-icon">
+                                <img 
+                                  src={kusilogo} alt="" id="kusilogo" />
+                                </span>
+                    </div>
                 </div>
                  <div className="container mr-5 pr-5 p-0 mt-0">
                  <div className="text-center justify-content-center align-items-center mb-5" id="title"><h1>Mi pedido</h1></div> 
@@ -69,24 +78,27 @@ export const ShoppingCart = () => {
                             
                               <div className="col-8 col-lg-3 col-md-3 align-self-center">
                                 <div className="text-center p-0 m-0">
-                                  <button onClick={() => actions.decrementDish(item.id)} className="btn btn-quantity btn-sm me-2">-</button>
-                                  <span>{item.quantity}</span>
-                                  <button onClick={() => actions.incrementDish(item.id,item.quantity)} className="btn btn-quantity btn-sm ms-2">+</button>
+                                  <span onClick={() => actions.decrementDish(item.id)} className="span-icon"><img 
+                                    src={minus} alt=""  /></span>
+                                  <span className="px-1">{item.quantity}</span>
+                                  <span onClick={() => actions.incrementDish(item.id,item.quantity)} className="span-icon"><img 
+                                    src={plus} alt=""  /></span>
                                 </div>
                               </div>
                           
                               <div className="col-4 col-lg-1 col-md-1 align-self-center text-center">
-                                <button onClick={() => actions.deleteDish(item.id)} className="btn btn-quantity btn-sm">
-                                  X
-                                </button>
+                                <span onClick={() => actions.deleteDish(item.id)} className="span-icon">
+                                <img 
+                                  src={bin} alt="" id="bin" />
+                                </span>
                               </div>
                             </div>  
                         </div>
                       </li>))}
                     </ul>
                     <div className="container mb-5 text-center">
-                      <h5 className="text-end">Total a Pagar: S/. {actions.totalPrice()}</h5>
-                      <h5 className="text-start">Notas del pedido(opcional)</h5>
+                      <h5 className="text-end mb-3">Total a Pagar: S/. {actions.totalPrice()}</h5>
+                      <h5 className="text-start">Notas del pedido (opcional)</h5>
                       <textarea className="form-control" name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
                       <p className="text-end mb-1 text-secondary">{notes.length}-255</p>
                       <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button onClick={()=>goToPay()}>Continuar</button></div>
