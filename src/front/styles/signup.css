@@ -41,9 +41,7 @@ input:focus {
     outline: #F44322;
 }
 
-.div-icons {
-    margin: 10px;
-}
+
 
 button{
     margin-top: 10px;
@@ -59,4 +57,19 @@ button{
 .div-text{
     font-family: ABeeZee;
     font-size: 15px;
+}
+
+.m-2 img{
+    width: 31px;
+    height: 30px;
+}
+
+.div-logo{
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.div-logo img{
+    width: 150px;
+    height: auto;
 }

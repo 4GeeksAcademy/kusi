@@ -67,4 +67,27 @@ button{
 
 .div-logo{
     cursor: pointer;
+    margin-bottom: 30px;
 }
+
+.div-logo img{
+    width: 150px;
+    height: auto;
+}
+
+
+.div-icons img{
+  height: 30px;
+  width: auto;
+}
+
+.div-icons{
+    margin-right: 8px;
+    margin-bottom: 12px;
+}
+
+#padlock{
+    height: 30px;
+    width: 40px;
+}
+

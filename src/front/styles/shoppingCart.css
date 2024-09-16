@@ -42,7 +42,7 @@ textarea {
   width: auto;
 }
 
-@media (max-width:470px){
+@media (max-width:570px){
   #kusilogo{
     height: 20px;
     width: auto;
@@ -52,4 +52,16 @@ textarea {
     height: 200px;
     width: auto;
   }
+
+  .icon-right{
+    margin-right: 0;
+    padding-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .icon-left{
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
 }
