@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import "../../styles/navbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import logoKusi from '../../img/Kusi.png'
-import { Link } from "react-router-dom";
+import kusiLogo from '../../assets/images/kusi-logo.png';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
 
-    const [ role, setRole ] = useState("chef")
-    const [isActive, setIsActive ] = useState(0)
+    const [role, setRole] = useState('cliente');
+    const [activeTabIndex, setActiveTabIndex] = useState(0);
 
     const menuItemsByRole = {
         cliente: [
@@ -39,7 +39,7 @@ export const Navbar = () => {
                     </button>
                     <Link to="/">
                         <div className="navbar-brand ms-lg-3 mx-auto d-flex justify-content-center align-items-center" style={{}}>
-                            <img className="navbar-logo" src={logoKusi} alt="Logo Kusi" style={{maxHeight: "60px", width:"60%"}}/>
+                            <img className="navbar-logo" src={kusiLogo} alt="Logo Kusi" style={{maxHeight: "60px", width:"60%"}}/>
                         </div>
                     </Link>
                 </div>
@@ -63,9 +63,9 @@ export const Navbar = () => {
                         {menuItems.map((item, index) => (
                             <li className="nav-item px-0 py-0 my-0 px-lg-5 mx-lg-2"key={index}>
                                 <a className="nav-link fs-4" 
-                                   style={{color: isActive === index ? "#F44322" : "black"}} 
+                                   style={{color: activeTabIndex === index ? "#F44322" : "black"}} 
                                    href={item.link} 
-                                   onClick={() => setIsActive(index)}>
+                                   onClick={() => setActiveTabIndex(index)}>
                                     {item.title}
                                 </a>
                             </li>

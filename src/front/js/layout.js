@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import injectContext from './store/appContext';
 import LandingPage from './pages/LandingPage.jsx';
 import { Profile } from './pages/Profile.jsx';
+import { Navbar } from './component/Navbar.jsx';
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -10,6 +11,7 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
+            <Navbar/>
                 <Routes>
                     <Route element={<LandingPage />} path="/" />
                     <Route element={<Profile />} path="/profile" />

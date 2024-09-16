@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import userImg from '../../assets/images/user.png';
 import '../../styles/profile.css'
 
+
 export const Profile = () => {
 
     const [ userRole, setUserRole ] = useState("admin")
@@ -69,11 +70,11 @@ export const Profile = () => {
     return(
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="container text-center">
-                <div className="row d-flex justify-content-center align-items-center  gap-5">
-                    <div className="col-12 profile-box h-auto px-2 bg-primary w-100 d-flex justify-content-center align-items-center">
-                        <div className="profile-box-text bg-danger px-0 px-lg-5 d-flex flex-column flex-md-row justify-content-center align-items-center">
-                            <div className="w-50 w-lg-25 d-flex justify-content-center align-items-center">
-                                <img src={userImg} className="w-100"/>
+                <div className="row d-flex justify-content-center align-items-center  gap-3">
+                    <div className="col-12 profile-box h-auto px-2 w-100 d-flex justify-content-center align-items-center">
+                        <div className="profile-box-text px-0 px-lg-5 d-flex flex-column flex-md-row justify-content-center align-items-center border">
+                            <div className="w-50 w-lg-25 py-2 d-flex justify-content-center align-items-center">
+                                <img src={userImg} className="w-75"/>
                             </div>
                             <div className="w-100 d-flex flex-column justify-content-center text-center text-md-start ps-md-2 ps-lg-5">
                                <h4>{userData.name}</h4>
@@ -86,37 +87,45 @@ export const Profile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-12 bg-secondary px-2 d-flex justify-content-center">
+                    <div className="col-12 px-2 d-flex justify-content-center ">
                         <div className="group-profile w-100 d-flex justify-content-center">
-                            <div className="group-profile-text bg-success">
-                                <h4 className="text-start">Información personal</h4>
-                                <div className="d-flex justify-content-evenly align-items-start gap-5">
+                            <div className="group-profile-text py-4 border">
+                                <h4 className="text-start ms-4">Información personal</h4>
+                                <div className="d-flex flex-column flex-lg-row justify-content-evenly align-items-start">
 
                                     <div className="d-flex flex-column justify-content-center w-100">
-                                        <div className="w-50 ms-5">
-                                            <h5>Nombre</h5>
-                                            <input className="w-100" type="text" defaultValue={userData.name}/>  
+                                        <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
+                                            <h6 className="ms-1" style={{color:"#736F6F"}}>Nombre</h6>
+                                            <input className="input-data w-100 py-2 border-0" type="text" defaultValue={userData.name}/>  
                                         </div>
 
-                                        <div>
-                                            <h5>Correo</h5>
-                                            <input type="text" defaultValue={userData.email}/>  
+                                        <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
+                                            <h6 className="ms-1" style={{color:"#736F6F"}}>Correo</h6>
+                                            <input className="input-data w-100 py-2 border-0" type="text" defaultValue={userData.email}/>  
                                         </div>
 
                                     </div>
 
-                                    <div className="d-flex flex-column justify-content-center">
-                                        <div>
-                                            <h5>Teléfono</h5>
-                                            <input type="number" defaultValue={userData.phone}/>  
+                                    <div className="d-flex flex-column justify-content-center w-100">
+                                        <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
+                                            <h6 className="ms-1" style={{color:"#736F6F"}}>Teléfono</h6>
+                                            <input className="input-data w-100 py-2 border-0" type="number" defaultValue={userData.phone}/>  
                                         </div>
 
-                                        <div>
-                                            <h5>Contraseña</h5>
-                                            <input type="password" defaultValue={userData.password}/>  
+                                        <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
+                                            <h6 className="ms-1" style={{color:"#736F6F"}}>Contraseña</h6>
+                                            <input className="input-data w-100 py-2 border-0" type="password" defaultValue={userData.password}/>  
                                         </div>
                                     </div>
+
+                                    
                                 </div>
+                               <div className="w-100 py-4 text-start ps-5 ps-lg-4">
+                                    <button type="button" className="btn btn-danger py-1 px-2 px-md-4 rounded-pill">
+                                        Guardar
+                                    </button>
+                               </div>
+                                
                             </div>
                         </div>
                     </div>
