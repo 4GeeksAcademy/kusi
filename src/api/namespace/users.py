@@ -1,13 +1,18 @@
 from flask_restx import Resource  
-from api.models import db,User
+from api.models import db,User,Role
 from api.namespaces import api_user as api
 from api.api_models.user_model import user_model,user_create_model,user_update_model
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import jwt_required
+
+bcrypt = Bcrypt()
 
 @api.response(201, 'Successful')
 @api.response(500, 'Server error')
 @api.route('/')
 class UserAPI(Resource):
-    @api.doc('get_users')
+    method_decorators = [jwt_required()]
+    @api.doc(security="jsonWebToken")
     @api.marshal_list_with(user_model)
     def get(self):
         '''Get all users'''
@@ -17,13 +22,34 @@ class UserAPI(Resource):
         except Exception as error:
             return str(error),500
     
-    @api.doc('post_user')
+    method_decorators = [jwt_required()]
+    @api.doc(security="jsonWebToken")
     @api.expect(user_create_model)
     @api.marshal_with(user_model)
     def post(self):
         '''Create user'''
         try:
-            user = User(email=api.payload["email"],password=api.payload["password"],is_active=True)
+            
+            email=api.payload["email"]
+            user = User.query.filter_by(email=email).first()
+            if user:
+                return "User already exists",404
+            role_name=api.payload["role"]
+            role = Role.query.filter_by(name=role_name).first(),
+            if not role:
+                return "Rol not found",404
+            name=api.payload["name"]
+            email=api.payload["email"]
+            phone_number=api.payload["phone_number"]
+            password=api.payload["password"]
+            passwordHashed = bcrypt.generate_password_hash(password).decode('utf-8')
+            user = User(
+                role_id=role.id,
+                email=email,
+                name=name,
+                phone_number=phone_number,
+                hashed_password=passwordHashed
+                )
             db.session.add(user)
             db.session.commit()
             return user,201
@@ -36,7 +62,8 @@ class UserAPI(Resource):
 @api.response(404, 'User not found')
 @api.response(500, 'Server error')
 class UserAPI(Resource):
-    @api.doc('get_user')
+    method_decorators = [jwt_required()]
+    @api.doc(security="jsonWebToken")
     @api.marshal_with(user_model)
     def get(self, id):
         '''Get user by id'''
@@ -48,7 +75,8 @@ class UserAPI(Resource):
         except Exception as error:
             return str(error),500
     
-    @api.doc('put_user')
+    method_decorators = [jwt_required()]
+    @api.doc(security="jsonWebToken")
     @api.expect(user_update_model)
     @api.marshal_with(user_model)
     def put(self,id):
@@ -58,15 +86,21 @@ class UserAPI(Resource):
             if not user:
                 api.abort(404)
             user.email = api.payload["email"]
+            user.name=api.payload["name"]
+            user.phone_number=api.payload["phone_number"]
             user.is_active = api.payload["is_active"]
+            user.profile_picture_url=api.payload["profile_picture_url"]
+            password=api.payload["password"]
+            user.hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
             db.session.commit()
             return user,201
         except Exception as error:
             return str(error),500
 
-    @api.doc('delete_user')
+    method_decorators = [jwt_required()]
+    @api.doc(security="jsonWebToken")
     def delete(self,id):
-        '''Update user'''
+        '''Delete user'''
         try:
             user = User.query.get(id)
             if not user:
