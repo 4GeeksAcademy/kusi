@@ -1,0 +1,11 @@
+
+.profile-box-text, .group-profile-text{
+    width: 60%;
+}
+
+@media (max-width: 768px) {
+    .profile-box-text, .group-profile-text {
+        width: 100%;
+        background-color: aqua;
+    }
+}
