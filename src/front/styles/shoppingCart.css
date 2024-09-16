@@ -37,9 +37,19 @@ textarea {
   width: auto;
 }
 
+#emptycart {
+  height: 400px;
+  width: auto;
+}
+
 @media (max-width:470px){
   #kusilogo{
     height: 20px;
+    width: auto;
+  }
+
+  #emptycart {
+    height: 200px;
     width: auto;
   }
 }

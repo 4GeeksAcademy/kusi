@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { Link,useNavigate } from "react-router-dom";
-import "../../styles/signup.css";
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { Link,useNavigate } from 'react-router-dom';
+import '../../styles/signup.css';
 
-import { Context } from "../store/appContext";
+import { Context } from '../store/appContext';
 
 
 export const SignUp = () => {

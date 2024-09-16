@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext, useRef  } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "../../styles/shoppingCart.css";
-import emptycart from "../../img/emptycart.png";
-import bin from "../../img/bin.png";
-import minus from "../../img/minus.png";
-import plus from "../../img/plus.png";
-import kusilogo from "../../img/kusi-logo.png"
+import React, { useState, useEffect, useContext, useRef  } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../../styles/shoppingCart.css';
+import emptycart from '../../img/emptycart.png';
+import bin from '../../img/bin.png';
+import minus from '../../img/minus.png';
+import plus from '../../img/plus.png';
+import kusilogo from '../../img/kusi-logo.png'
 
 
 import { Context } from "../store/appContext";
@@ -34,9 +34,9 @@ export const ShoppingCart = () => {
 
     if(Object.keys(store.list).length === 0)
         { return(
-            <div className="text-center justify-content-center align-items-center mt-5">
+            <div className="container text-center justify-content-center align-items-center mt-5">
                 <h1>Tu carrito está vacío! </h1>
-                <div className="responsive-container">
+                <div className="container">
                     <img 
                         src={emptycart} alt="" id="emptycart" />
                 </div>
@@ -49,7 +49,7 @@ export const ShoppingCart = () => {
     else{
         return(
             <div>
-                <div>
+                <div className="container">
                     <div className="mx-3 mt-3" id="logo">
                     <span onClick={()=>navigate("/")} className="span-icon">
                                 <img 
