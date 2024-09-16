@@ -86,14 +86,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			decrementDish : (id) => {
 				const store = getStore();
-				const transitory = store.list.map((product) =>
-					product.id === id && product.quantity>1
-					  ? { ...product, quantity: product.quantity - 1 }
-					  : product
-				  )
-				setStore({list: transitory})
-				console.log(store.list);
-				
+				const transitory = store.list.find(product =>
+					product.id === id && product.quantity>1)
+						if(transitory){ 
+							getActions().changePrice(id,transitory.quantity-1,transitory.price)
+				 	 }
 			  },
 
 			changePrice : (id,quantity) => {
