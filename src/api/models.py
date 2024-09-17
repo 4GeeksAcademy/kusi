@@ -14,7 +14,6 @@ class Role(db.Model):
     name = db.Column(db.Enum(RoleName), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    users = db.relationship('User', backref='role')   
 
     def __repr__(self):
         return f"<Role {self.name.value}>"
@@ -37,7 +36,6 @@ class User(db.Model):
     salt = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    orders = db.relationship('Order', backref='user')
 
     def __repr__(self):
         return f"<User {self.email}>"
@@ -65,7 +63,6 @@ class OrderStatus(db.Model):
     name = db.Column(db.Enum(OrderStatusName), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now) 
-    orders = db.relationship('Order', backref='order_status')   
 
     def __repr__(self):
         return f"<OrderStatus {self.name.value}>"
@@ -84,7 +81,6 @@ class Order(db.Model):
     special_instructions = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    order_dishes = db.relationship('OrderDish', backref='order')
 
     def __repr__(self):
         return f"<Order {self.id}>"
@@ -132,8 +128,6 @@ class Dish(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    order_dishes = db.relationship('OrderDish', backref='dish')
-    dish_ingredients = db.relationship('DishIngredient', backref='dish')
 
     def __repr__(self):
         return f"<Dish {self.name}>"
@@ -155,7 +149,6 @@ class Ingredient(db.Model):
     name = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    dish_ingredients = db.relationship('DishIngredient', backref='ingredient')
 
     def __repr__(self):
         return f"<Ingredient {self.name}>"
