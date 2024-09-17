@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import os
 from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
-from api.utils import APIException, generate_sitemap
+from api.utils import InvalidAPIUsage, generate_sitemap
 from api.models import db
 from api.routes import api
 from api.admin import setup_admin
@@ -36,9 +36,9 @@ setup_commands(app)
 setup_swagger(app)
 app.register_blueprint(api, url_prefix='/api')
 
-@app.errorhandler(APIException)
-def handle_invalid_usage(error):
-    return jsonify(error.to_dict()), error.status_code
+@app.errorhandler(InvalidAPIUsage)
+def invalid_api_usage(e):
+    return jsonify(e.to_dict()), e.status_code
 
 @app.route('/')
 def sitemap():
