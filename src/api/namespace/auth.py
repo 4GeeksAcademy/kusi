@@ -1,36 +1,69 @@
-from flask_restx import Resource  
-from api.models import db,RoleName,Role,User,OrderStatusName,OrderStatus,Order,OrderDish,Dish,Ingredient,DishIngredient
-from api.namespaces import api_auth as api
-from api.api_models.user_model import user_create_model
+from datetime import timedelta
+from flask import jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
+from flask_restx import Resource
+from api.models import (
+    db,
+    Dish,
+    DishIngredient,
+    Ingredient,
+    Order,
+    OrderDish,
+    OrderStatus,
+    OrderStatusName,
+    Role,
+    RoleName,
+    User
+)
+from api.namespaces import api_auth as api
+from api.dto.users import credentials_dto
+from api.api_models.user_model import user_create_model
+from api.utils import InvalidAPIUsage
 
 bcrypt = Bcrypt()
 
-@api.response(201, 'Successful')
-@api.response(203, 'Invalid Login')
-@api.response(404, 'User not found')
-@api.response(500, 'Server error')
-@api.route('/login')
+@api.response(200, "OK")
+@api.response(401, "Unauthorized")
+@api.response(400, "Bad request")
+@api.response(404, "User not found")
+@api.response(500, "Internal server error")
+@api.route("/login")
 class Login(Resource):    
-    @api.doc('login')
-    @api.expect(user_create_model)
+    @api.doc("Login")
+    @api.expect(credentials_dto)
     def post(self):
-        '''Login user'''
-        try:
-            email=api.payload["email"]
-            password=api.payload["password"]
-            user = User.query.filter_by(email=email).first()
-            if not user:
-                return "User not found",404
-            is_password_valid = bcrypt.check_password_hash(user.hashed_password,password)
-            if not is_password_valid:
-                return "Invalid credentials",203
-            jwt_acces_token = create_access_token(email)
-            return jwt_acces_token,201
-        except Exception as error:
-            return str(error),500
+        """Given a valid email and password, a user is going to log into the application."""
+        payload = api.payload
         
+        email = payload.get("email")
+        if email is None:
+            raise InvalidAPIUsage("Missing email", status_code=400)
+
+        candidate_password = payload.get("password")
+        if candidate_password is None:
+            raise InvalidAPIUsage("Missing password", status_code=400)
+
+        user = User.query.filter_by(email=email).one_or_none()
+        if not user:
+            raise InvalidAPIUsage("User not found", status_code=404)
+        
+        hashed_salted_password, salt = user.hashed_password, user.salt
+        salted_candidate_password = f"{candidate_password}{salt}"
+        match = bcrypt.check_password_hash(
+            hashed_salted_password,
+            salted_candidate_password
+        )
+
+        if not match:
+            raise InvalidAPIUsage("Unauthorized", status_code=401)
+        
+        access_token = create_access_token(
+            identity=user.serialize(),
+            fresh=False,
+            expires_delta=timedelta(minutes=30)
+        )
+        return jsonify({ "access_token": access_token }), 200
 
 @api.route('/signup')
 class SignUp(Resource):    
