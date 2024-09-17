@@ -6,11 +6,19 @@
 .container-data {
     width: 75%;
 }
+.input-data-password {
+    border-style: solid;
+    border-color: #736F6F;
+    border-width: 2px;
+    outline: none;
+}
 
 .input-data {
     outline: none;
     cursor: url(https://icons.getbootstrap.com/assets/icons/pencil-fill.svg) 15 15, auto;
 }
+
+
 
 .arrow-img {
     width: 6vh;

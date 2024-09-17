@@ -12,72 +12,62 @@ import '../../styles/profile.css'
 export const Profile = () => {
 
     const {store, actions} = useContext(Context);
-    const [ userRole, setUserRole ] = useState("customer")
-    // const [ dataFake, setDataFake ] = useState({
-    //     role:{
-    //         customer: [
-    //             {
-    //                 name: "Gustabo",
-    //                 phone: 912754827,
-    //                 email: "gus@gmail.com",
-    //                 password: "holasoygustabo",
-    //                 registerDay: "2020-05-15"
-    //             },
-    //             {
-    //                 name: "Veronica",
-    //                 phone: 944345124,
-    //                 email: "vero@gmail.com",
-    //                 password: "holasoyvero",
-    //                 registerDay: "2024-09-07"
-    //             }
-    //         ],
-        
-    //         chef: [
-    //             {
-    //                 name: "Martin",
-    //                 phone: 914542547,
-    //                 email: "martin@gmail.com",
-    //                 password: "holasoymartin",
-    //                 registerDay: "2023-12-01",
-    //                 position: "Chef"
-    //             },
-    //             {
-    //                 name: "Marina",
-    //                 phone: 999453453,
-    //                 email: "marinan@gmail.com",
-    //                 password: "holasoymarina",
-    //                 registerDay: "2022-02-10",
-    //                 position: "Chef"
-    //             }
-    //         ],
-        
-    //         admin: [
-    //             {
-    //                 name: "Sebastian",
-    //                 phone: 914535454,
-    //                 email: "sebas@gmail.com",
-    //                 password: "holasoysebas",
-    //                 registerDay: "2017-11-02",
-    //                 position: "Administrador"
-    //             }
-    //         ],
-    //     },
-    // })
-    const [ userId, setUserId ] = useState(13)
+    const [ userId, setUserId ] = useState(8)
+    const [ userNewData, setUserNewData ] = useState({
+        email: '',
+        name: '',
+        phone_number: '',
+        is_active: true,
+        profile_picture_url: '',
+        password: ''
+    });
 
 
-    // const userData = dataFake.role[userRole]?.[0] || {};
+    const handleChange = (e) => {
+        setUserNewData({
+            ...userNewData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleUpdate = () => {
+        actions.updateUser(userId, userNewData);
+        console.log(store.dataUsersById)
+    };
+
+
     const userData = store.dataUsersById || {}
        
-    // const registerClient = new Date(userData.registerDay)
-    // const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    // const formattedDate = registerClient.toLocaleDateString('es-ES', options);
+    const registerClient = new Date(userData.created_at)
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = registerClient.toLocaleDateString('es-ES', options);
 
     useEffect(()=>{
+        actions.getUsers()
         actions.getUsersById(userId)
     }, [])
 
+    useEffect(() => {
+        if (store.dataUsersById) {
+            setUserNewData({
+                email: store.dataUsersById.email || '',
+                name: store.dataUsersById.name || '',
+                phone_number: store.dataUsersById.phone_number || '',
+                is_active: store.dataUsersById.is_active || true,
+                profile_picture_url: store.dataUsersById.profile_picture_url || '',
+                password: ''
+            });
+        }
+    }, [store.dataUsersById]);
+
+    const roleMapping = {
+        "RoleName.CHEF": "Chef",
+        "RoleName.ADMIN": "Administrador",
+        "RoleName.CLIENT": "Cliente"
+    }
+    console.log(store.dataUsers)
     console.log(store.dataUsersById)
+    
     return(
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
             <div className="d-flex align-items-center w-100">
@@ -95,18 +85,18 @@ export const Profile = () => {
             <div className="container text-center">
                 <div className="row d-flex justify-content-center align-items-center gap-3">
                     <div className="col-12 profile-box h-auto px-2 w-100 d-flex justify-content-center align-items-center">
-                        <div className=" rounded profile-box-text px-0 px-lg-5 py-3 py-md-3 d-flex flex-column flex-md-row justify-content-center align-items-center border">
+                        <div className=" rounded profile-box-text px-0 px-lg-5 py-3 py-md-3 d-flex flex-column flex-lg-row justify-content-center align-items-center border">
                             <div className="w-50 w-lg-25 py-2 d-flex justify-content-center align-items-center">
-                                <img src={userImg} className="w-75"/>
+                                <img src={userData?.profile_picture_url} onError={(e) => e.target.src = userImg} className="w-75"/>
                             </div>
-                            <div className="w-100 d-flex flex-column justify-content-center text-center text-md-start ps-md-2 ps-lg-5">
-                               <h4>{userData.name}</h4>
+                            <div className="w-100 d-flex flex-column justify-content-center text-center text-lg-start ps-md-2 ps-lg-5">
+                               <h4 style={{marginTop: "20px"}}>{userData?.name}</h4>
                                {
-                                userRole === "admin" || userRole === "chef" ? (
-                                    <p style={{marginTop: "8px"}} >{userData.role.name}</p>
+                                userData?.role?.name === "RoleName.CHEF" || userData?.role?.name === "RoleName.ADMIN" ? (
+                                    <p style={{marginTop: "-2px"}} >{roleMapping[userData?.role?.name]}</p>
                                 ):("")
                                }
-                               <p style={{marginBottom:"-2px"}}>Miembro desde el {userData.created_at}</p>
+                               <p style={{ marginTop:"-10px"}}>Miembro desde el {formattedDate}</p>
                             </div>
                         </div>
                     </div>
@@ -119,12 +109,12 @@ export const Profile = () => {
                                     <div className="d-flex flex-column justify-content-center w-100">
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}} >Nombre</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="text" name="name" defaultValue={userData.name}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="text" name="name" defaultValue={userData?.name} onChange={handleChange}/>  
                                         </div>
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Correo</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="text" name="email" defaultValue={userData.email}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="text" name="email" defaultValue={userData?.email} onChange={handleChange}/>  
                                         </div>
 
                                     </div>
@@ -132,19 +122,19 @@ export const Profile = () => {
                                     <div className="d-flex flex-column justify-content-center w-100">
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Teléfono</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="number" name="phone" defaultValue={userData.phone_number}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="number" name="phone" defaultValue={userData?.phone_number} onChange={handleChange}/>  
                                         </div>
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Contraseña</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="password" name="password" defaultValue={userData.id}/>  
+                                            <input className="input-data-password w-100 py-2 rounded-pill px-3" type="password" name="password" defaultValue={""} onChange={handleChange}/>
                                         </div>
                                     </div>
 
                                     
                                 </div>
                                <div className="w-100 py-4 text-start ps-5 ps-lg-4">
-                                    <button type="button" className="btn btn-danger py-1 px-2 px-md-4 rounded-pill">
+                                    <button type="button" className="btn btn-danger py-1 px-2 px-md-4 rounded-pill" onClick={handleUpdate}>
                                         Guardar
                                     </button>
                                </div>
