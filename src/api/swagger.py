@@ -6,6 +6,7 @@ from api.namespace.auth import api as auth
 from api.namespace.dishes import api as dishes
 from api.namespace.orders import api as orders
 from api.namespace.ingredients import api as ingredients
+from flask_cors import CORS
 
 def setup_swagger(app):
     api = Api(app,
@@ -23,3 +24,6 @@ def setup_swagger(app):
     api.add_namespace(dishes)
     api.add_namespace(orders)
     api.add_namespace(ingredients)
+    
+    CORS(app)
+
