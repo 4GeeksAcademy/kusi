@@ -8,3 +8,14 @@ credentials_dto = api.model(
         "password": fields.String
     }
 )
+
+signup_form_dto = api.model(
+    "SignUpForm",
+    {
+        "role": fields.Integer,
+        "email": fields.String,
+        "name": fields.String,
+        "phone_number": fields.String,
+        "password": fields.String
+    }
+)

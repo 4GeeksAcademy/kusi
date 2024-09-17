@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, send_from_directory
 from flask_migrate import Migrate
 from api.utils import InvalidAPIUsage, generate_sitemap
 from api.models import db
@@ -38,7 +38,7 @@ app.register_blueprint(api, url_prefix='/api')
 
 @app.errorhandler(InvalidAPIUsage)
 def invalid_api_usage(e):
-    return jsonify(e.to_dict()), e.status_code
+    return e.to_dict(), e.status_code
 
 @app.route('/')
 def sitemap():

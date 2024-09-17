@@ -16,10 +16,13 @@ from api.models import (
     RoleName,
     User
 )
+from api.dto.users import (
+    credentials_dto,
+    signup_form_dto
+)
 from api.namespaces import api_auth as api
-from api.dto.users import credentials_dto
-from api.api_models.user_model import user_create_model
 from api.utils import InvalidAPIUsage
+import secrets
 
 bcrypt = Bcrypt()
 
@@ -29,7 +32,7 @@ bcrypt = Bcrypt()
 @api.response(404, "User not found")
 @api.response(500, "Internal server error")
 @api.route("/login")
-class Login(Resource):    
+class Login(Resource):
     @api.doc("Login")
     @api.expect(credentials_dto)
     def post(self):
@@ -48,12 +51,15 @@ class Login(Resource):
         if not user:
             raise InvalidAPIUsage("User not found", status_code=404)
         
-        hashed_salted_password, salt = user.hashed_password, user.salt
-        salted_candidate_password = f"{candidate_password}{salt}"
-        match = bcrypt.check_password_hash(
-            hashed_salted_password,
-            salted_candidate_password
-        )
+        try:
+            hashed_salted_password, salt = user.hashed_salted_password, user.salt
+            salted_candidate_password = f"{candidate_password}{salt}"
+            match = bcrypt.check_password_hash(
+                hashed_salted_password,
+                salted_candidate_password
+            )
+        except Exception as e:
+            return { "message": str(e) }, 500
 
         if not match:
             raise InvalidAPIUsage("Unauthorized", status_code=401)
@@ -63,35 +69,62 @@ class Login(Resource):
             fresh=False,
             expires_delta=timedelta(minutes=30)
         )
-        return jsonify({ "access_token": access_token }), 200
+        return { "access_token": access_token }, 200
 
-@api.route('/signup')
+@api.response(201, "Created")
+@api.response(400, "Bad request")
+@api.response(409, "User already exists")
+@api.response(500, "Internal server error")
+@api.route("/signup")
 class SignUp(Resource):    
-    @api.doc('signup')
-    @api.expect(user_create_model)
+    @api.doc("Sign Up")
+    @api.expect(signup_form_dto)
     def post(self):
-        '''SignUp user'''
+        """Registers a new user given her info."""
+        payload = api.payload
+
+        role_id = payload.get("role")
+        if role_id is None:
+            raise InvalidAPIUsage("Missing role", status_code=400)
+
+        name = payload.get("name")
+        if name is None:
+            raise InvalidAPIUsage("Missing name", status_code=400)
+
+        phone_number = payload.get("phone_number")
+
+        password = payload.get("password")
+        if password is None:
+            raise InvalidAPIUsage("Missing password", status_code=400)
+        
+        email = payload.get("email")
+        if email is None:
+            raise InvalidAPIUsage("Missing email", status_code=400)
+
+        existing_user = User.query.filter_by(email=email).one_or_none()
+        if existing_user is not None:
+            raise InvalidAPIUsage("User already exists", 409)
+        
+        # See https://docs.python.org/3/library/secrets.html
+        salt = secrets.token_hex(16)
+        salted_password = f"{password}{salt}"
+        hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+
         try:
-            email=api.payload["email"]
-            user = User.query.filter_by(email=email).first()
-            if user:
-                return "User already exists",404
-            name=api.payload["name"]
-            email=api.payload["email"]
-            phone=api.payload["phone"]
-            password=api.payload["password"]
-            passwordHashed = bcrypt.generate_password_hash(password).decode('utf-8')
-            user = User(
+            new_user = User(
+                role_id=role_id,
                 email=email,
                 name=name,
-                phone_number=phone,
-                hashed_password=passwordHashed
-                )
-            db.session.add(user)
+                phone_number=phone_number,
+                is_active=True,
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            db.session.add(new_user)
             db.session.commit()
-            return "User created",201
-        except Exception as error:
-            return str(error),500
+            return new_user.serialize(), 201
+        except Exception as e:
+            return { "message": str(e) }, 500
         
 @api.route('/gettoken')
 class SignUp(Resource):    
@@ -110,7 +143,6 @@ class SignUp(Resource):
     def get(self):
         '''Generate Data (development)'''
         try:
-            #Delete old data
             DishIngredient.query.delete()
             OrderDish.query.delete()
             Ingredient.query.delete()
@@ -121,70 +153,79 @@ class SignUp(Resource):
             Role.query.delete()
             db.session.commit()
 
-            #Generate new data
-
-            #Role
-            rol_admin = Role(name=RoleName.ADMIN)
-            rol_chef = Role(name=RoleName.CHEF)
-            rol_client = Role(name=RoleName.CLIENT)
-            db.session.add(rol_admin)
-            db.session.add(rol_chef)
-            db.session.add(rol_client)
+            client_role = Role(
+                id=1,
+                name=RoleName.CLIENT.value
+            )
+            chef_role = Role(
+                id=2,
+                name=RoleName.CHEF.value
+            )
+            admin_role = Role(
+                id=3,
+                name=RoleName.ADMIN.value
+            )
+            db.session.add(client_role)
+            db.session.add(chef_role)
+            db.session.add(admin_role)
             db.session.commit()
 
             #User
-            passwordHashed = bcrypt.generate_password_hash("123456").decode('utf-8')
+            password = "abc123"
+            salt = secrets.token_hex(16)
+            salted_password = f"{password}{salt}"
+            hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode('utf-8')
 
-            user_angel = User(
-                role_id = rol_admin.id,
-                email = "angel@gmail.com",
+            angel = User(
+                role_id = admin_role.id,
+                email = "angel@4geeks.com",
                 name = "Angel",
                 phone_number="12345678",
                 profile_picture_url="https://www.lremanagementllc.com/wp-content/uploads/2019/06/default-avatar.png",
-                hashed_password=passwordHashed,
-                salt="unknow"
-                )
-            user_manuel = User(
-                role_id = rol_chef.id,
-                email = "manuel@gmail.com",
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            manuel = User(
+                role_id = chef_role.id,
+                email = "manuel@4geeks.com",
                 name = "Manuel",
                 phone_number="12345678",
                 profile_picture_url="https://www.lremanagementllc.com/wp-content/uploads/2019/06/default-avatar.png",
-                hashed_password=passwordHashed,
-                salt="unknow"
-                )
-            user_rossy = User(
-                role_id = rol_chef.id,
-                email = "rossy@gmail.com",
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            rossy = User(
+                role_id = chef_role.id,
+                email = "rossy@4geeks.com",
                 name = "Rossy",
                 phone_number="12345678",
                 profile_picture_url="https://www.lremanagementllc.com/wp-content/uploads/2019/06/default-avatar.png",
-                hashed_password=passwordHashed,
-                salt="unknow"
-                )
-            user_ruben = User(
-                role_id = rol_client.id,
-                email = "ruben@gmail.com",
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            ruben = User(
+                role_id = client_role.id,
+                email = "ruben@4geeks.com",
                 name = "Ruben",
                 phone_number="12345678",
                 profile_picture_url="https://www.lremanagementllc.com/wp-content/uploads/2019/06/default-avatar.png",
-                hashed_password=passwordHashed,
-                salt="unknow"
-                )
-            user_jhoel = User(
-                role_id = rol_client.id,
-                email = "jhoel@gmail.com",
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            jhoel = User(
+                role_id = client_role.id,
+                email = "jhoel@4geeks.com",
                 name = "Jhoel",
                 phone_number="12345678",
                 profile_picture_url="https://www.lremanagementllc.com/wp-content/uploads/2019/06/default-avatar.png",
-                hashed_password=passwordHashed,
-                salt="unknow"
-                )
-            db.session.add(user_angel)
-            db.session.add(user_manuel)
-            db.session.add(user_rossy)
-            db.session.add(user_ruben)
-            db.session.add(user_jhoel)
+                hashed_salted_password=hashed_salted_password,
+                salt=salt
+            )
+            db.session.add(angel)
+            db.session.add(manuel)
+            db.session.add(rossy)
+            db.session.add(ruben)
+            db.session.add(jhoel)
             db.session.commit()
             
             #Dish
@@ -339,25 +380,25 @@ class SignUp(Resource):
 
             #Order
             order_ruben_1 = Order(
-                client_id = user_ruben.id,
+                client_id = ruben.id,
                 status_id = order_status_pending.id,
                 grand_total=150.90,
                 special_instructions="Sin aji"
                 )
             order_ruben_2 = Order(
-                client_id = user_ruben.id,
+                client_id = ruben.id,
                 status_id = order_status_completed.id,
                 grand_total=94.50,
                 special_instructions=""
                 )
             order_jhoel_1 = Order(
-                client_id = user_jhoel.id,
+                client_id = jhoel.id,
                 status_id = order_status_pending.id,
                 grand_total=240.20,
                 special_instructions="Sin papa"
                 )
             order_jhoel_2 = Order(
-                client_id = user_jhoel.id,
+                client_id = jhoel.id,
                 status_id = order_status_in_progress.id,
                 grand_total=30,
                 special_instructions="Sin cebolla y sin aji"
