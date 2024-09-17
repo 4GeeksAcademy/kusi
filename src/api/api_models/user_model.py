@@ -1,5 +1,5 @@
 from flask_restx import fields  
-from api.namespace.users import api
+from api.namespaces import api_user as api
 
 role_model = api.model("Role",{
     "id": fields.Integer,
