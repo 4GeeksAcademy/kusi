@@ -85,13 +85,19 @@ class UserAPI(Resource):
             user = User.query.filter_by(id=id).first()
             if not user:
                 api.abort(404)
-            user.email = api.payload["email"]
-            user.name=api.payload["name"]
-            user.phone_number=api.payload["phone_number"]
-            user.is_active = api.payload["is_active"]
-            user.profile_picture_url=api.payload["profile_picture_url"]
-            password=api.payload["password"]
-            user.hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+            if "email" in api.payload:
+                user.email = api.payload["email"]
+            if "name" in api.payload:
+                user.name = api.payload["name"]
+            if "phone_number" in api.payload:
+                user.phone_number = api.payload["phone_number"]
+            if "is_active" in api.payload:
+                user.is_active = api.payload["is_active"]
+            if "profile_picture_url" in api.payload:
+                user.profile_picture_url = api.payload["profile_picture_url"]
+            if "password" in api.payload:
+                user.password = api.payload["password"]
+                user.hashed_password = bcrypt.generate_password_hash(api.payload["password"]).decode('utf-8')
             db.session.commit()
             return user,201
         except Exception as error:
