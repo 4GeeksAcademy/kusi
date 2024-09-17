@@ -8,14 +8,17 @@ authorizations = {
     }
 }
 
+api_fake = Namespace(
+    "fake",
+    description="Fake token and db population.",
+    authorizations=authorizations
+)
+
 api_auth = Namespace(
     "auth",
     description="Login, signup, JWT.",
     authorizations=authorizations
 )
-
-api_hello = Namespace('hello', description='Say hello',authorizations=authorizations)
-api_hello_auth = Namespace('helloAuth', description='Say hello with JWT authentication',authorizations=authorizations)
 
 api_user = Namespace('users', description='CRUD user',authorizations=authorizations)
 api_dish = Namespace('dishes', description='CRUD dish',authorizations=authorizations)
