@@ -32,7 +32,7 @@ class User(db.Model):
     phone_number = db.Column(db.String(20))
     is_active = db.Column(db.Boolean, nullable=False, default=True)
     profile_picture_url = db.Column(db.String(255))
-    hashed_password = db.Column(db.String(255), nullable=False)
+    hashed_salted_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
@@ -49,7 +49,7 @@ class User(db.Model):
             "phone_number": self.phone_number,
             "is_active": self.is_active,
             "profile_picture_url": self.profile_picture_url,
-            "created_at": self.created_at
+            "created_at": self.created_at.isoformat()
         }
 
 class OrderStatusName(str, Enum):
@@ -92,7 +92,7 @@ class Order(db.Model):
             "status_id": self.status_id,
             "grand_total": self.grand_total,
             "special_instructions": self.special_instructions,
-            "created_at": self.created_at,
+            "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at
         }
 
