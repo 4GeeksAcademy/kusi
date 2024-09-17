@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useContext } from 'react';
+import { Context } from '../store/appContext';
 import userImg from '../../assets/images/user.png';
 import arrowImg from '../../assets/images/arrow.png';
 import '../../styles/profile.css'
@@ -9,68 +11,73 @@ import '../../styles/profile.css'
 
 export const Profile = () => {
 
+    const {store, actions} = useContext(Context);
     const [ userRole, setUserRole ] = useState("customer")
-    
-
-
-    const dataFake = {
-        role:{
-            customer: [
-                {
-                    name: "Gustabo",
-                    phone: 912754827,
-                    email: "gus@gmail.com",
-                    password: "holasoygustabo",
-                    registerDay: "2020-05-15"
-                },
-                {
-                    name: "Veronica",
-                    phone: 944345124,
-                    email: "vero@gmail.com",
-                    password: "holasoyvero",
-                    registerDay: "2024-09-07"
-                }
-            ],
+    // const [ dataFake, setDataFake ] = useState({
+    //     role:{
+    //         customer: [
+    //             {
+    //                 name: "Gustabo",
+    //                 phone: 912754827,
+    //                 email: "gus@gmail.com",
+    //                 password: "holasoygustabo",
+    //                 registerDay: "2020-05-15"
+    //             },
+    //             {
+    //                 name: "Veronica",
+    //                 phone: 944345124,
+    //                 email: "vero@gmail.com",
+    //                 password: "holasoyvero",
+    //                 registerDay: "2024-09-07"
+    //             }
+    //         ],
         
-            chef: [
-                {
-                    name: "Martin",
-                    phone: 914542547,
-                    email: "martin@gmail.com",
-                    password: "holasoymartin",
-                    registerDay: "2023-12-01",
-                    position: "Chef"
-                },
-                {
-                    name: "Marina",
-                    phone: 999453453,
-                    email: "marinan@gmail.com",
-                    password: "holasoymarina",
-                    registerDay: "2022-02-10",
-                    position: "Chef"
-                }
-            ],
+    //         chef: [
+    //             {
+    //                 name: "Martin",
+    //                 phone: 914542547,
+    //                 email: "martin@gmail.com",
+    //                 password: "holasoymartin",
+    //                 registerDay: "2023-12-01",
+    //                 position: "Chef"
+    //             },
+    //             {
+    //                 name: "Marina",
+    //                 phone: 999453453,
+    //                 email: "marinan@gmail.com",
+    //                 password: "holasoymarina",
+    //                 registerDay: "2022-02-10",
+    //                 position: "Chef"
+    //             }
+    //         ],
         
-            admin: [
-                {
-                    name: "Sebastian",
-                    phone: 914535454,
-                    email: "sebas@gmail.com",
-                    password: "holasoysebas",
-                    registerDay: "2017-11-02",
-                    position: "Administrador"
-                }
-            ],
-        },
-    };
+    //         admin: [
+    //             {
+    //                 name: "Sebastian",
+    //                 phone: 914535454,
+    //                 email: "sebas@gmail.com",
+    //                 password: "holasoysebas",
+    //                 registerDay: "2017-11-02",
+    //                 position: "Administrador"
+    //             }
+    //         ],
+    //     },
+    // })
+    const [ userId, setUserId ] = useState(13)
 
-    const userData = dataFake.role[userRole]?.[0] || {};
+
+    // const userData = dataFake.role[userRole]?.[0] || {};
+    const userData = store.dataUsersById || {}
        
-    const registerClient = new Date(userData.registerDay)
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = registerClient.toLocaleDateString('es-ES', options);
+    // const registerClient = new Date(userData.registerDay)
+    // const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    // const formattedDate = registerClient.toLocaleDateString('es-ES', options);
 
+    useEffect(()=>{
+        actions.getUsersById(userId)
+    }, [])
 
+    console.log(store.dataUsersById)
     return(
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
             <div className="d-flex align-items-center w-100">
@@ -96,10 +103,10 @@ export const Profile = () => {
                                <h4>{userData.name}</h4>
                                {
                                 userRole === "admin" || userRole === "chef" ? (
-                                    <p style={{marginTop: "8px"}} >{userData.position}</p>
+                                    <p style={{marginTop: "8px"}} >{userData.role.name}</p>
                                 ):("")
                                }
-                               <p style={{marginBottom:"-2px"}}>Miembro desde el {formattedDate}</p>
+                               <p style={{marginBottom:"-2px"}}>Miembro desde el {userData.created_at}</p>
                             </div>
                         </div>
                     </div>
@@ -111,13 +118,13 @@ export const Profile = () => {
 
                                     <div className="d-flex flex-column justify-content-center w-100">
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
-                                            <h6 className="ms-1" style={{color:"#736F6F"}}>Nombre</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="text" defaultValue={userData.name}/>  
+                                            <h6 className="ms-1" style={{color:"#736F6F"}} >Nombre</h6>
+                                            <input className="input-data w-100 py-2 border-0" type="text" name="name" defaultValue={userData.name}/>  
                                         </div>
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Correo</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="text" defaultValue={userData.email}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="text" name="email" defaultValue={userData.email}/>  
                                         </div>
 
                                     </div>
@@ -125,12 +132,12 @@ export const Profile = () => {
                                     <div className="d-flex flex-column justify-content-center w-100">
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Teléfono</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="number" defaultValue={userData.phone}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="number" name="phone" defaultValue={userData.phone_number}/>  
                                         </div>
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Contraseña</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="password" defaultValue={userData.password}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="password" name="password" defaultValue={userData.id}/>  
                                         </div>
                                     </div>
 
