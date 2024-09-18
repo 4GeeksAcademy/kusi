@@ -27,7 +27,7 @@ export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) =>
                         <div className="row d-flex mt-3 mx-3">
                             <div className="col">
                                 <h4>{title}</h4>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam voluptatem, tempora molestias deleniti expedita dicta veritatis{description}</p>
+                                <p>{description}</p>
                                 <p>Ingredientes: Lorem ipsum dolor sit amet consectetur adipisicing elit. At illum fuga quibusdam laborum. Mollitia quo recusandae{ingredients}</p>
                             </div>
                         </div>
