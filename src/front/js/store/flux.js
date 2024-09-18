@@ -14,7 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNjYxMTk4MCwianRpIjoiZDE3NTZiNWMtOTJiNS00MTI0LTk3ZDItMGM3ZjViZTY0M2Q2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6Mywicm9sZV9pZCI6MiwiZW1haWwiOiJyb3NzeUA0Z2Vla3MuY29tIiwibmFtZSI6IlJvc3N5IiwicGhvbmVfbnVtYmVyIjoiKzUxIDMyMTY1NDk4NyIsImlzX2FjdGl2ZSI6dHJ1ZSwicHJvZmlsZV9waWN0dXJlX3VybCI6Imh0dHBzOi8vZW5jcnlwdGVkLXRibjAuZ3N0YXRpYy5jb20vaW1hZ2VzP3E9dGJuOkFOZDlHY1N1WGhFTzhrY05fWkhkNjF2Z3dNUmVVLWo0c0FkalQzdnNGdyZzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMTdUMjI6MjE6NTIuMTgxMzMyIn0sIm5iZiI6MTcyNjYxMTk4MCwiY3NyZiI6IjJiMjRlNzI5LWFlNmQtNDE1NC1iZjMxLTA1Njk4MzMzM2MwYSIsImV4cCI6MTcyNjYxOTE4MH0.y77XxN2IyPV9kIswIj66SrSi05UaTk4KD1OISXx06O8",
+			token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNjYyMzEyMCwianRpIjoiMzMxOWIzYjUtNDgzMS00Zjc0LWJlYjAtYzk3ZjY2ZmYzZDBjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6Mywicm9sZV9pZCI6MiwiZW1haWwiOiJyb3NzeUA0Z2Vla3MuY29tIiwibmFtZSI6IlJvc3N5IiwicGhvbmVfbnVtYmVyIjoiKzUxIDMyMTY1NDk4NyIsImlzX2FjdGl2ZSI6dHJ1ZSwicHJvZmlsZV9waWN0dXJlX3VybCI6Imh0dHBzOi8vZW5jcnlwdGVkLXRibjAuZ3N0YXRpYy5jb20vaW1hZ2VzP3E9dGJuOkFOZDlHY1N1WGhFTzhrY05fWkhkNjF2Z3dNUmVVLWo0c0FkalQzdnNGdyZzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMThUMDE6MjQ6NTguNjY2Mjg4In0sIm5iZiI6MTcyNjYyMzEyMCwiY3NyZiI6IjA5MDJiNGY5LTRlNTktNDczNC1iOWEzLTQ2YTRhMjVjNWU2NyIsImV4cCI6MTcyNjY0MTEyMH0.dGaoXgUkvVMnCXsbl4N8Wr1Un29zyn3b1tMHHrHHHyo",
 			dataUsers: [],
 			dataUsersById: [],
 		},
@@ -41,7 +41,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return data
 
 				}catch (e){
-					console.error(e)
+					console.error("Error al traer usuarios",e)
 				}
 			},
 
@@ -63,7 +63,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let data = await response.json()
 					setStore({dataUsersById: data})
 				}catch (e){
-
+					console.error("Error al traer el usuario", e)
 				}
 			},
 
@@ -97,8 +97,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					return data;
 
-				}catch (error) {
-                    console.error("Error actualizando el usuario:", error);
+				}catch (e) {
+                    console.error("Error al actualizar el usuario:", e);
                 }
 			},
 
@@ -119,6 +119,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
+			
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();

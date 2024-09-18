@@ -11,15 +11,14 @@ import '../../styles/profile.css'
 
 export const Profile = () => {
 
-    const {store, actions} = useContext(Context);
-    const [ userId, setUserId ] = useState(8)
-    const [ userNewData, setUserNewData ] = useState({
+    const { store, actions } = useContext(Context);
+    const [userId, setUserId] = useState(6);
+    const [userNewData, setUserNewData] = useState({
         email: '',
         name: '',
         phone_number: '',
         is_active: true,
         profile_picture_url: '',
-        password: ''
     });
 
 
@@ -27,25 +26,29 @@ export const Profile = () => {
         setUserNewData({
             ...userNewData,
             [e.target.name]: e.target.value
-        })
+        });
     }
 
-    const handleUpdate = () => {
-        actions.updateUser(userId, userNewData);
-        console.log(store.dataUsersById)
+    const handleUpdate = async () => {
+        try {
+            const updatedUser = await actions.updateUser(userId, userNewData);
+            console.log("Usuario actualizado con éxito", updatedUser)
+        } catch (e) {
+            console.error("Error al actualizar el usuario", e); //
+        }
     };
 
-
-    const userData = store.dataUsersById || {}
-       
-    const registerClient = new Date(userData.created_at)
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = registerClient.toLocaleDateString('es-ES', options);
-
-    useEffect(()=>{
-        actions.getUsers()
-        actions.getUsersById(userId)
-    }, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await actions.getUsers();
+                await actions.getUsersById(userId);
+            } catch (e) {
+                console.error("Error al obtener los datos del usuario", e); //
+            }
+        };
+        fetchData();
+    }, []);
 
     useEffect(() => {
         if (store.dataUsersById) {
@@ -55,21 +58,25 @@ export const Profile = () => {
                 phone_number: store.dataUsersById.phone_number || '',
                 is_active: store.dataUsersById.is_active || true,
                 profile_picture_url: store.dataUsersById.profile_picture_url || '',
-                password: ''
             });
         }
     }, [store.dataUsersById]);
+
+    const userData = store.dataUsersById || {};
+    const registerClient = new Date(userData.created_at);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = registerClient.toLocaleDateString('es-ES', options);
 
     const roleMapping = {
         "RoleName.CHEF": "Chef",
         "RoleName.ADMIN": "Administrador",
         "RoleName.CLIENT": "Cliente"
-    }
-    console.log(store.dataUsers)
-    console.log(store.dataUsersById)
+    };
+
     
     return(
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+        
             <div className="d-flex align-items-center w-100">
                 <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
                     <Link to="/">
