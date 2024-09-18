@@ -7,20 +7,35 @@ import { Context } from '../store/appContext';
 import userImg from '../../assets/images/user.png';
 import arrowImg from '../../assets/images/arrow.png';
 import '../../styles/profile.css'
+import { jwtDecode } from 'jwt-decode';
+
 
 
 export const Profile = () => {
 
     const { store, actions } = useContext(Context);
-    const [userId, setUserId] = useState(6);
+    const [userId, setUserId] = useState(7);
     const [userNewData, setUserNewData] = useState({
-        email: '',
-        name: '',
-        phone_number: '',
+        email: "",
+        name: "",
+        phone_number: "",
         is_active: true,
-        profile_picture_url: '',
+        profile_picture_url: "",
     });
 
+    // const token = store.token;
+    
+    // useEffect(() => {
+  
+    //     if (token) {
+    //         try {
+    //             const decodedToken = jwtDecode(token);
+    //             setUserId(decodedToken.sub);
+    //         } catch (error) {
+    //             console.error("Error decoding token:", error);
+    //         }
+    //     }
+    // },[token])
 
     const handleChange = (e) => {
         setUserNewData({
@@ -39,38 +54,48 @@ export const Profile = () => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await actions.getUsers();
-                await actions.getUsersById(userId);
-            } catch (e) {
-                console.error("Error al obtener los datos del usuario", e); //
-            }
-        };
-        fetchData();
-    }, []);
+        if (userId) {
+            const fetchData = async () => {
+                try {
+                    await actions.getUsers();
+                    await actions.getUsersById(userId);
+                } catch (e) {
+                    console.error("Error al obtener los datos del usuario", e);
+                }
+            };
+            fetchData();
+        }
+    }, [userId]);
 
     useEffect(() => {
         if (store.dataUsersById) {
             setUserNewData({
-                email: store.dataUsersById.email || '',
-                name: store.dataUsersById.name || '',
-                phone_number: store.dataUsersById.phone_number || '',
+                email: store.dataUsersById.email || "",
+                name: store.dataUsersById.name || "",
+                phone_number: store.dataUsersById.phone_number || "",
                 is_active: store.dataUsersById.is_active || true,
-                profile_picture_url: store.dataUsersById.profile_picture_url || '',
+                profile_picture_url: store.dataUsersById.profile_picture_url || "",
             });
         }
     }, [store.dataUsersById]);
 
     const userData = store.dataUsersById || {};
+
     const registerClient = new Date(userData.created_at);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedDate = registerClient.toLocaleDateString('es-ES', options);
 
-    const roleMapping = {
-        "RoleName.CHEF": "Chef",
-        "RoleName.ADMIN": "Administrador",
-        "RoleName.CLIENT": "Cliente"
+
+    const Roles = Object.freeze({
+        CLIENT: 1,
+        CHEF: 2,
+        ADMIN: 3,
+    });
+
+    const UserRoles = {
+        [Roles.CLIENT]: "Cliente",
+        [Roles.CHEF]: "Chef",
+        [Roles.ADMIN]: "Administrador",
     };
 
     
@@ -99,8 +124,8 @@ export const Profile = () => {
                             <div className="w-100 d-flex flex-column justify-content-center text-center text-lg-start ps-md-2 ps-lg-5">
                                <h4 style={{marginTop: "20px"}}>{userData?.name}</h4>
                                {
-                                userData?.role?.name === "RoleName.CHEF" || userData?.role?.name === "RoleName.ADMIN" ? (
-                                    <p style={{marginTop: "-2px"}} >{roleMapping[userData?.role?.name]}</p>
+                                userData?.role_id === 2 || userData?.role_id === 3 ? (
+                                    <p style={{marginTop: "-2px"}} >{UserRoles[userData?.role_id]}</p>
                                 ):("")
                                }
                                <p style={{ marginTop:"-10px"}}>Miembro desde el {formattedDate}</p>
@@ -129,7 +154,7 @@ export const Profile = () => {
                                     <div className="d-flex flex-column justify-content-center w-100">
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Teléfono</h6>
-                                            <input className="input-data w-100 py-2 border-0" type="number" name="phone" defaultValue={userData?.phone_number} onChange={handleChange}/>  
+                                            <input className="input-data w-100 py-2 border-0" type="text" name="phone_number" defaultValue={userData?.phone_number} onChange={handleChange}/>  
                                         </div>
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
