@@ -1,6 +1,13 @@
+import Swal from 'sweetalert2'
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			roles: Object.freeze({ 
+				CLIENT :1,
+				CHEF :2,
+				ADMIN :3
+			  }),
 			message: null,
 			demo: [
 				{
@@ -96,37 +103,99 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			logoRefresh: () => {
+				window.location.reload();
 			},
-
-			getMessage: async () => {
+			login: async (user,showModal=true) => {
 				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
+					
+					let resp = await fetch(process.env.BACKEND_URL + "/auth/login", {
+						method: 'POST',
+						body: JSON.stringify(user),
+						headers: {
+							'Content-Type': 'application/json',
+						  },	
+					})
+
+					let data = await resp.json()
+					
+					if(!showModal){
+
+						if (data.access_token) {
+							localStorage.setItem("token" , data.access_token)
+						}
+
+					} else {
+
+						if(resp.status == 404 || resp.status == 401){
+							console.log(data.message)
+							Swal.fire({
+								icon: "error",
+								title: "Error",
+								text: "Credenciales invalidas",
+							});
+						} else if(resp.status == 200){
+	
+							if (data.access_token) {
+								localStorage.setItem("token" , data.access_token)
+							}
+	
+							Swal.fire({
+								icon: "success",
+								title: "Bienvenido",
+								text: "Credenciales validas",
+							});
+						} else {
+							Swal.fire({
+								icon: "error",
+								title: "Error",
+								text: "Error desconocido",
+							});
+						}
+					}
+
+					
 				}catch(error){
-					console.log("Error loading message from backend", error)
+					console.log("Error: ", error)
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+			signup: async (user) => {
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+				try{
+					
+					let resp = await fetch(process.env.BACKEND_URL + "/auth/signup", {
+						method: 'POST',
+						body: JSON.stringify(user),
+						headers: {
+							'Content-Type': 'application/json',
+						  },	
+					})
+					
+					let data = await resp.json()
 
-				//reset the global store
+					if(resp.status == 409){
+						console.log(data.message)
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: "Email ya existe",
+						});
+					} else if(resp.status == 201){
+						localStorage.setItem("user_created" , true)
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: "Error desconocido",
+						});
+					}
+					
+				}catch(error){
+					console.log("Error: ", error)
+				}
+								//reset the global store
 				setStore({ demo: demo });
 			},
-
 			getDishes: async() =>{
 				fetch("https://crispy-guacamole-q77gjxqpwwgwf9v59-3001.app.github.dev/dishes/",{
 					method: "GET"
