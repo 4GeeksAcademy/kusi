@@ -6,10 +6,10 @@ import "../../styles/login.css";
 import { Context } from "../store/appContext";
 
 
-
 export const Login = () => {
     const { store, actions } = useContext(Context);
 	const navigate = useNavigate();
+
 
     const [dataLogin,setDataLogin] = useState({
 		email: "angel@4geeks.com",
@@ -36,6 +36,7 @@ export const Login = () => {
 
 
     return (
+
         <div className="container">
             
             <form onSubmit={sendLogin} className="form-login">
@@ -68,8 +69,8 @@ export const Login = () => {
                     <div className="d-flex text-center justify-content-center align-items-center">
                         <button type="submit">Ingresar</button>
                     </div>
-                    <div className="d-flex text-center justify-content-center align-items-center">
-                        <div className="div-text">¿Nuevo por aqui?</div>
+                    <div className="d-flex text-center justify-content-center align-items-center mt-2">
+                        <div className="div-text mx-1">¿Nuevo por aqui?</div>
                         <div className="div-link"><Link to="/signup" className="div-link"><span className="span">Regístrate</span></Link></div>
                     </div>
                 </div>

@@ -18,11 +18,11 @@ html, body {
     cursor: pointer;
 }
 
-.container {
+.container-login {
     display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center;     /* Centra verticalmente */
-    height: 100vh;           /* Usa toda la altura del viewport */
+    justify-content: center; 
+    align-items: center;    
+    height: 100vh;          
 }
 
 .inputLogin{
@@ -54,9 +54,26 @@ html, body {
     color: white;
     width: 200px;
     height: 50px;
+    border-width: 0;
+    cursor: pointer;
 }
 
 .div-text{
     font-family: ABeeZee;
     font-size: 15px;
+}
+
+.m-2 img{
+    width: 31px;
+    height: 30px;
+}
+
+.div-logo{
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.div-logo img{
+    width: 150px;
+    height: auto;
 }

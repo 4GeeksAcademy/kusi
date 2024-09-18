@@ -2,13 +2,24 @@ html, body {
     height: 100%;
     margin: 0;
 }
-.div-link  {
+
+
+.div-link a  {
     text-decoration: none;
     color: #F44322;
     font-weight: 400;
     font-family: ABeeZee;
     font-size: 15px;
 }
+
+.div-link a:hover  {
+    text-decoration: none;
+    color: #F44322;
+    font-weight: 800;
+    font-family: ABeeZee; 
+    cursor: pointer;
+}
+
 
 .div-link:hover {
     text-decoration: none;
@@ -18,7 +29,7 @@ html, body {
     cursor: pointer;
 }
 
-.container {
+.container-login {
     display: flex;
     justify-content: center; 
     align-items: center;    
@@ -61,4 +72,27 @@ html, body {
 
 .div-logo{
     cursor: pointer;
+    margin-bottom: 30px;
 }
+
+.div-logo img{
+    width: 150px;
+    height: auto;
+}
+
+
+.div-icons img{
+  height: 30px;
+  width: auto;
+}
+
+.div-icons{
+    margin-right: 8px;
+    margin-bottom: 12px;
+}
+
+#padlock{
+    height: 30px;
+    width: 40px;
+}
+

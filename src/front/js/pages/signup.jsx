@@ -53,7 +53,7 @@ export const SignUp = () => {
 
 
     return (
-        <div className="container">
+        <div className="container-login">
             <form onSubmit={sendSignUp} className="form-signup">
                     <div className="text-center justify-content-center align-items-center">
                         <div className="div-logo"><svg onClick={()=>navigate("/login")} width="150" height="117" viewBox="0 0 217 117" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,8 +95,8 @@ export const SignUp = () => {
                         <div className="d-flex text-center justify-content-center align-items-center">
                             <button type="submit">Registrar</button>
                         </div>
-                        <div className="d-flex text-center justify-content-center align-items-center">
-                            <div className="div-text">¿Ya tienes una cuenta?</div>
+                        <div className="d-flex text-center justify-content-center align-items-center m-2">
+                            <div className="div-text mx-1">¿Ya tienes una cuenta? </div>
                             <div className="div-link"><Link to="/login" className="div-link"><span className="span">Inicia Sesión</span></Link></div>
                         </div>
                     </div>
