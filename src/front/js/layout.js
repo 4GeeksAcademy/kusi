@@ -8,7 +8,6 @@ import { Menu } from "./pages/menu.jsx";
 import { Login } from "./pages/login.jsx";
 import { SignUp } from "./pages/signup.jsx";
 import { ShoppingCart } from "./pages/shoppingCart.jsx";
-import { Navbar } from './component/Navbar.jsx';
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -16,7 +15,6 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-                <Navbar/>
                 <Routes>
                     <Route element={<Development />} path="*" />
                     <Route element={<LandingPage />} path="/" />

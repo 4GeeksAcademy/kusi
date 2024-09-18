@@ -95,7 +95,7 @@ export const Profile = () => {
         
             <div className="d-flex align-items-center w-50">
                 <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
-                    <Link to="/">
+                    <Link to="/menu">
                         <img className="arrow-img" src={arrowImg}/>
                     </Link>
                     
@@ -110,7 +110,8 @@ export const Profile = () => {
                     <div className="col-12 profile-box h-auto px-2 w-100 d-flex justify-content-center align-items-center">
                         <div className=" rounded profile-box-text px-0 px-lg-5 py-3 py-md-3 d-flex flex-column flex-lg-row justify-content-center align-items-center border">
                             <div className="w-50 w-lg-25 py-2 d-flex justify-content-center align-items-center">
-                                <img src={userData?.profile_picture_url} onError={(e) => e.target.src = userImg} className="w-75"/>
+                                {/* <img src={userData?.profile_picture_url} onError={(e) => e.target.src = userImg} className="w-75"/> */}
+                                <img src={userData.profile_picture_url  === null ? "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" : userData.profile_picture_url} onError={(e) => e.target.src = userImg} className="w-75"/>
                             </div>
                             <div className="w-100 d-flex flex-column justify-content-center text-center text-lg-start ps-md-2 ps-lg-5">
                                <h4 style={{marginTop: "20px"}}>{userData?.name}</h4>

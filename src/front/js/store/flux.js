@@ -112,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Use getActions to call a function within a fuction
 			logoRefresh: () => {
 				window.location.reload();
-			  },
+			},
 			incrementDish : (id) => {
 				const store = getStore();
 				const transitory = store.list.find(product =>

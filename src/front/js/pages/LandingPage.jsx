@@ -33,8 +33,8 @@ export default function LandingPage() {
                             Descubre los auténticos sabores del Perú en cada bocado
                         </h1> 
                     </div>
-                    {/* {false?<></>: */}
-                    {localStorage.getItem("token")?<></>:
+                    {false?<></>:
+                    // {localStorage.getItem("token")?<></>:
                     <div className="d-flex flex-column flex-lg-row gap-3 mt-4 mt-md-5">
                         <Link to="/login" className="div-link">
                             <button

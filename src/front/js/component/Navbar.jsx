@@ -8,10 +8,6 @@ import kusiLogo from '../../assets/images/kusi-logo.png';
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-
-
-
-
 // TODO: Navbar should be imported in the main screen page.
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
