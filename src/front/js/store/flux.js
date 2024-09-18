@@ -18,21 +18,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 			list : [
 				{
-					"id": 1,
-					"name": "nameproduct con papas fritas y arroz y platano ",
-					"price": 40,
+					"dish_id": 1,
+					// "name": "nameproduct con papas fritas y arroz y platano ",
+					"unit_price": 30,
 					"quantity": 1
 				},
 				{
-					"id": 2,
-					"name": "nameproduct con papas fritas",
-					"price": 35,
+					"dish_id": 2,
+					// "name": "nameproduct con papas fritas",
+					"unit_price": 60,
 					"quantity": 2
 				},
 				{
-					"id": 3,
-					"name": "papas fritas y arroz y platano combinados",
-					"price": 30,
+					"dish_id": 3,
+					// "name": "papas fritas y arroz y platano combinados",
+					"unit_price": 80,
 					"quantity": 1
 				} 
 			],
@@ -51,7 +51,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				try{
 					
-					let resp = await fetch(process.env.BACKEND_URL + "/", {
+					let resp = await fetch(process.env.BACKEND_URL + "/auth/login", {
 						method: 'POST',
 						body: JSON.stringify(user),
 						headers: {
@@ -60,10 +60,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					let data = await resp.json()
 
-					if (data.email) {
-						localStorage.setItem("token" , data.token)
-						localStorage.setItem("name" , data.name)
-						localStorage.setItem("email" , data.email)
+					if (data) {
+						localStorage.setItem("token" , data)
+						localStorage.setItem("email" , user.email)
+						
+						
+					}
+					else {
+						Swal.fire("Oh no!", `Credenciales inválidas`, "error");
+					}
+					
+				}catch(error){
+					console.log("Error loading message from backend ", error)
+				}
+			},
+
+
+			SignUp: async (newuser) => {
+				const store = getStore();
+				try{
+					
+					let resp = await fetch(process.env.BACKEND_URL + "/auth/signup", {
+						method: 'POST',
+						body: JSON.stringify(newuser),
+						headers: {
+							'Content-Type': 'application/json',
+						  },	
+					})
+					let data = await resp.json()
+
+					if (data) {
+						Swal.fire("Usuario creado!", `Se registró satisfactoriamente`, "error");
 					}
 					else {
 						Swal.fire("Oh no!", ``, "error");
@@ -74,29 +101,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
 			incrementDish : (id) => {
 				const store = getStore();
 				const transitory = store.list.find(product =>
-					product.id === id)
+					product.dish_id === id)
 					  if(transitory){ 
-						getActions().changePrice(id,transitory.quantity+1,transitory.price)
+						getActions().changePrice(id,transitory.quantity+1,transitory.unit_price)
 					  }
 			},
 
 			decrementDish : (id) => {
 				const store = getStore();
 				const transitory = store.list.find(product =>
-					product.id === id && product.quantity>1)
+					product.dish_id === id && product.quantity>1)
 						if(transitory){ 
-							getActions().changePrice(id,transitory.quantity-1,transitory.price)
+							getActions().changePrice(id,transitory.quantity-1,transitory.unit_price)
 				 	 }
 			  },
 
 			changePrice : (id,quantity) => {
 				const store = getStore();
 				const transitorylist = store.list.map((product) =>
-					product.id === id
+					product.dish_id === id
 					  ? { ...product, quantity: quantity } 
 					  : product
 				  )
@@ -107,7 +133,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			totalPrice: () => {
 				const store = getStore();
-				const total = store.list.reduce((total,product)=>total + product.price * product.quantity,0)
+				const total = store.list.reduce((total,product)=>total + product.unit_price * product.quantity,0)
 				return total.toFixed(2);
 				
 			},
@@ -117,7 +143,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			deleteDish : (id) => {
 				const store = getStore();
 				const newtransitory = store.list.filter((product) =>
-					product.id !== id
+					product.dish_id !== id
 				  )
 				setStore({list: newtransitory})
 				console.log(store.list);
@@ -126,18 +152,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			btnContinuar : async (instructionsnote) => {
 
-				try{
+				
 					const store = getStore();
+					let token = localStorage.getItem("token");
 					const addNote = ({
-						dish: store.list, 
-						instructions: instructionsnote, 
-						amount: getActions().totalPrice()
+						client_id: "10", //cambiar id del store
+						dishes: store.list, 
+						special_instructions: instructionsnote, 
+						grand_total: getActions().totalPrice()   
 					  });
-					setStore({order: addNote})
 
-					// console.log(addNote.amount)
-					// console.log(store.list);
-					// console.log(store.order);
+
+					if (!token) {
+						Swal.fire("Hey!", "Primero debes iniciar sesión", "warning");
+						return
+					 }
+					
+					try{
+						let resp = await fetch(process.env.BACKEND_URL + "/orders", {
+							method: 'POST',
+							body: JSON.stringify(addNote),
+							headers: {
+								Authorization:`Bearer ${token}`
+							  },	
+						})
+						let data = await resp.json()
+						console.log(addNote);
+						setStore({...getStore(), order: addNote })
 					
 				}catch(e){
 					console.error(e);

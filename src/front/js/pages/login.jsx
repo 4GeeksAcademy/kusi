@@ -38,38 +38,26 @@ export const Login = () => {
       };
 
     const sendLogin = async (e) => {
-		// console.log(dataLogin);
+		
 		
 		e.preventDefault() 
 		try{
-			// await actions.Login(dataLogin)
-			// setDataLogin({
-			// 	email: "",
-			// 	password: ""
-			// })
-			// if ( localStorage.getItem("token")) {
-			// 	navigate("/")
-			// 	console.log(localStorage.getItem("token"));
-				
-			// }
             if (dataLogin.email !== "" && dataLogin.password !== "" ) {
-                // await actions.Login(dataLogin)
-                localStorage.setItem("email" , dataLogin.email)
-                localStorage.setItem("password" , dataLogin.password)
-                // console.log("datos guardados"+localStorage.getItem("email")+localStorage.getItem("password"))
+                await actions.Login(dataLogin)
                 setDataLogin({
                     email: "",
                     password: "",
                 })
-                navigate("/") // validar si hay token en localstorage para navigate a viewuser
-            }
+                if (localStorage.getItem("token")) {
+                    navigate("/") //cambiar a view menu
+                    }
+                }
             
 		}catch(e){
 			console.error(e);
 			
 		}
 	}
-
 
 
 
