@@ -16,12 +16,12 @@ export const Card = ({ id, imgSrc, title, time, price, description, ingredients,
                     <div>
                         <h5 className="card-title">{title}</h5>
                         <p className="card-text text-secondary">
-                            <div className="row">
-                                <div className="col-7">
+                            <div className="d-flex justify-content-between">
+                                <div className="">
                                     <span>S/.{priceDiscount.toFixed(2)}</span>
                                     <span className="px-2" style={{ color: '#BFBFBF', textDecoration: 'line-through' }}>S/.{price.toFixed(2)}</span>
                                 </div>
-                                <div className="col-5 text-end">
+                                <div className="">
                                     <i className="fa-regular fa-clock px-1"></i>{time} min
                                 </div>
                             </div>
@@ -36,6 +36,7 @@ export const Card = ({ id, imgSrc, title, time, price, description, ingredients,
                 title={title}
                 description={description}
                 ingredients={ingredients}
+                priceDiscount={priceDiscount}
             />
         </>
     );

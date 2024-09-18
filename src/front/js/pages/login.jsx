@@ -26,7 +26,7 @@ export const Login = () => {
 		try{
 			await actions.login(dataLogin)
             if(localStorage.getItem("token"))
-            navigate("/")
+            navigate("/menu")
 
 		}catch(e){
 			console.error(e);
@@ -37,7 +37,7 @@ export const Login = () => {
 
     return (
 
-        <div className="container">
+        <div className="container-login">
             
             <form onSubmit={sendLogin} className="form-login">
             
