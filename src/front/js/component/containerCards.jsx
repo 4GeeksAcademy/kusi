@@ -13,7 +13,7 @@ export const ContainerCards = () => {
                     <Card
                     id={dish.id}
                     imgSrc={dish.image_url}
-                    title={dish.title}
+                    title={dish.name}
                     time={dish.cooking_time}
                     price={dish.price}
                     discount={dish.discount_percentage}

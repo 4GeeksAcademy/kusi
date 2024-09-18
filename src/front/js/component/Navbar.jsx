@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import "../../styles/navbar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleUser, faCartShopping, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faCircleUser, faCartShopping, faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import kusiLogo from '../../assets/images/kusi-logo.png';
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -16,24 +16,28 @@ import { jwtDecode } from 'jwt-decode';
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
     const [activeTabIndex, setActiveTabIndex] = useState(0);
-    const [userId, setUserId] = useState(7);
+    const [userId, setUserId] = useState(0);
+    const [roleId, setRoleId] = useState(0);
     const navigate = useNavigate();
 
-    // const token = store.token;
-
-    // useEffect(() => {
+    useEffect(() => {
   
-    //     if (token) {
-    //         try {
-    //             const decodedToken = jwtDecode(token);
-    //             setUserId(decodedToken.sub);
-    //         } catch (error) {
-    //             console.error("Error decoding token:", error);
-    //         }
-    //     }
-    // },[token])
+        if (localStorage.getItem("token")) {
+            try {
+                const decodedToken = jwtDecode(localStorage.getItem("token"));
+                console.log(decodedToken.sub)
+                setUserId(decodedToken.sub.id);
+                setRoleId(decodedToken.sub.role_id);
+            } catch (error) {
+                console.error("Error decoding token:", error);
+            }
+        } else {
+            setRoleId(0);
+        }
+    },[localStorage.getItem("token")]);
 
     const Roles = Object.freeze({
+        GUEST: 0,
         CLIENT: 1,
         CHEF: 2,
         ADMIN: 3,
@@ -44,40 +48,53 @@ export const Navbar = () => {
         navigate("/profile");
     };
 
-    useEffect(() => {
-        if(userId){
-            const fetchData = async () => {
-                try {
-                    await actions.getUsers();
-                    await actions.getUsersById(userId)
-                } catch (e) {
-                    console.error("Error al obtener los datos del usuario", e);
-                }
-            };
-            fetchData();
-        }
-    }, [userId]);
+    const handleShoppingCart = () => {
+        navigate("/shopping-cart");
+    };
+
+    const logout = async () => {
+        await actions.logout();
+        if (!localStorage.getItem("token"))
+        navigate("/login");
+    };
+
+    // useEffect(() => {
+    //     if(userId){
+    //         const fetchData = async () => {
+    //             try {
+    //                 await actions.getUsersById(userId)
+    //             } catch (e) {
+    //                 console.error("Error al obtener los datos del usuario", e);
+    //             }
+    //         };
+    //         fetchData();
+    //     }
+    // }, [userId]);
 
 
     const menuItemsByRole = {
+        [Roles.GUEST]: [
+            { title: "Menú", link: "/menu" }
+        ],
         [Roles.CLIENT]: [
-            { title: "Menú", link: "#" },
-            { title: "Pedidos", link: "#" }
+            { title: "Menú", link: "/menu" },
+            { title: "Pedidos", link: "/orders" }
         ],
         [Roles.CHEF]: [
-            { title: "Pedidos", link: "#" }
+            { title: "Pedidos", link: "/orders" }
         ],
         [Roles.ADMIN]: [
-            { title: "Menú", link: "#" },
-            { title: "Pedidos", link: "#" },
-            { title: "Personal", link: "#" },
-            { title: "Reportes", link: "#" }
+            { title: "Menú", link: "/menu" },
+            { title: "Pedidos", link: "/orders" },
+            { title: "Personal", link: "/users" },
+            { title: "Reportes", link: "/reports" }
         ]
     };
 
 
-    const roleId = store.dataUsersById?.role_id;
+    //const roleId = store.dataUsersById?.role_id;
     const menuItems = menuItemsByRole[roleId] || menuItemsByRole[Roles.CLIENT];
+
 
     return (
         <nav className="navbar navbar-expand-lg bg-white" style={{ minHeight: "100px" }}>
@@ -93,17 +110,21 @@ export const Navbar = () => {
                     </Link>
                 </div>
 
-                <div className="navbar-nav flex-row ms-auto order-lg-last">
+                {localStorage.getItem("token")?
+                (<div className="navbar-nav flex-row ms-auto order-lg-last">
                     <button className="btn" type="button">
                         <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faCircleUser} onClick={handleViewProfile} />
                     </button>
                     {roleId === Roles.CLIENT && (
                         <button className="btn" type="button">
-                            <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faCartShopping} />
+                            <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faCartShopping} onClick={handleShoppingCart}/>
                         </button>
                     )}
-                </div>
-
+                    <button className="btn" type="button">
+                        <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faRightFromBracket} onClick={logout} />
+                    </button>
+                </div>):<></>
+                }
                 <div className="collapse navbar-collapse order-lg-2 w-100 pt-0" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                         {menuItems.length > 0 ? menuItems.map((item, index) => (

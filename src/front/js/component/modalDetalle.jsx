@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext,useState } from 'react';
+import { Context } from "../store/appContext";
 
-export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) => {
+export const ModalDetalle = ({ id, imgSrc, title, description, ingredients,priceDiscount }) => {
     const [amount, setAmount] = useState(1);
+    const { store, actions } = useContext(Context);
 
     const handleIncrement = () => {
         setAmount(amount + 1);
@@ -11,6 +13,22 @@ export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) =>
         if (amount > 1) {
             setAmount(amount - 1);
         }
+    };
+
+    const addToCart = (id,img,name,priceDiscount) => {
+        let dish = {
+            "dish_id": id,
+            "image": img,
+            "name": name,
+            "unit_price": priceDiscount,
+            "quantity": amount
+        }
+        let lista = [];
+        lista = store.list;
+        lista.push(dish)
+        console.log(lista)
+        actions.updateListCart(lista)
+        console.log(lista)
     };
 
     return (
@@ -40,7 +58,7 @@ export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) =>
                                     <i className="fa-solid fa-circle-plus"></i>
                                 </button>
                         </div>
-                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Agregar</button>
+                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}  onClick={()=>{addToCart(id,imgSrc,title,priceDiscount)}}>Agregar</button>
                     </div>
                 </div>
             </div>

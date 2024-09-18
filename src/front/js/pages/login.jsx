@@ -37,7 +37,7 @@ export const Login = () => {
 
     return (
 
-        <div className="container">
+        <div className="container-login">
             
             <form onSubmit={sendLogin} className="form-login">
             

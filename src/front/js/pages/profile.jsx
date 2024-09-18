@@ -14,7 +14,6 @@ import { jwtDecode } from 'jwt-decode';
 export const Profile = () => {
 
     const { store, actions } = useContext(Context);
-    const [userId, setUserId] = useState(7);
     const [userNewData, setUserNewData] = useState({
         email: "",
         name: "",
@@ -22,20 +21,6 @@ export const Profile = () => {
         is_active: true,
         profile_picture_url: "",
     });
-
-    // const token = store.token;
-    
-    // useEffect(() => {
-  
-    //     if (token) {
-    //         try {
-    //             const decodedToken = jwtDecode(token);
-    //             setUserId(decodedToken.sub);
-    //         } catch (error) {
-    //             console.error("Error decoding token:", error);
-    //         }
-    //     }
-    // },[token])
 
     const handleChange = (e) => {
         setUserNewData({
@@ -54,18 +39,24 @@ export const Profile = () => {
     };
 
     useEffect(() => {
-        if (userId) {
-            const fetchData = async () => {
-                try {
-                    await actions.getUsers();
-                    await actions.getUsersById(userId);
-                } catch (e) {
-                    console.error("Error al obtener los datos del usuario", e);
+        if (localStorage.getItem("token")) {
+            try {
+                const decodedToken = jwtDecode(localStorage.getItem("token"));
+                if (decodedToken.sub.id!=0) {
+                    const fetchData = async () => {
+                        try {
+                            await actions.getUsersById(decodedToken.sub.id);
+                        } catch (e) {
+                            console.error("Error al obtener los datos del usuario", e);
+                        }
+                    };
+                    fetchData();
                 }
-            };
-            fetchData();
+            } catch (error) {
+                console.error("Error decoding token:", error);
+            }
         }
-    }, [userId]);
+    }, []);
 
     useEffect(() => {
         if (store.dataUsersById) {
@@ -102,7 +93,7 @@ export const Profile = () => {
     return(
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
         
-            <div className="d-flex align-items-center w-100">
+            <div className="d-flex align-items-center w-50">
                 <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
                     <Link to="/">
                         <img className="arrow-img" src={arrowImg}/>
