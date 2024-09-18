@@ -26,7 +26,7 @@ export const Login = () => {
 		try{
 			await actions.login(dataLogin)
             if(localStorage.getItem("token"))
-            navigate("/")
+            navigate("/menu")
 
 		}catch(e){
 			console.error(e);
