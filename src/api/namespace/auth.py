@@ -51,7 +51,7 @@ class Login(Resource):
         access_token = create_access_token(
             identity=user.serialize(),
             fresh=False,
-            expires_delta=timedelta(minutes=30)
+            expires_delta=timedelta(minutes=300)
         )
         return { "access_token": access_token }, 200
 
