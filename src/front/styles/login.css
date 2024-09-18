@@ -1,0 +1,98 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+.div-link a  {
+    text-decoration: none;
+    color: #F44322;
+    font-weight: 400;
+    font-family: ABeeZee;
+    font-size: 15px;
+}
+
+.div-link a:hover  {
+    text-decoration: none;
+    color: #F44322;
+    font-weight: 800;
+    font-family: ABeeZee; 
+    cursor: pointer;
+}
+
+
+.div-link:hover {
+    text-decoration: none;
+    color: #F44322;
+    font-weight: 800;
+    font-family: ABeeZee; 
+    cursor: pointer;
+}
+
+.container-login {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    height: 100vh;          
+}
+
+.inputLogin{
+    border: none;
+    border-bottom: 2px solid #6E6969;    
+}
+
+.inputLogin::placeholder{
+    font-family: ABeeZee;
+    font-size: 14px;
+}
+
+.inputLogin:focus {
+    border: none; 
+    box-shadow: none; 
+}
+
+.form-login div {
+    margin: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form-login button{
+    border-radius: 25px;
+    background-color: #F44322;
+    color: white;
+    width: 200px;
+    height: 50px;
+}
+
+.div-text{
+    font-family: ABeeZee;
+    font-size: 15px;
+}
+
+.div-logo{
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.div-logo img{
+    width: 150px;
+    height: auto;
+}
+
+
+.div-icons img{
+  height: 30px;
+  width: auto;
+}
+
+.div-icons{
+    margin-right: 8px;
+    margin-bottom: 12px;
+}
+
+#padlock{
+    height: 30px;
+    width: 40px;
+}
+
