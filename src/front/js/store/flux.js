@@ -14,8 +14,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyNjYzMjc4NCwianRpIjoiYzczY2M3ZjMtYmI2Yi00MjI0LTg1Y2QtYzRmZDI2M2YyNThiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJpZCI6OSwicm9sZV9pZCI6MiwiZW1haWwiOiJyb3NzeUA0Z2Vla3MuY29tIiwibmFtZSI6IlJvc3N5IiwicGhvbmVfbnVtYmVyIjoiKzUxIDMyMTY1NDk4NyIsImlzX2FjdGl2ZSI6dHJ1ZSwicHJvZmlsZV9waWN0dXJlX3VybCI6Imh0dHBzOi8vZW5jcnlwdGVkLXRibjAuZ3N0YXRpYy5jb20vaW1hZ2VzP3E9dGJuOkFOZDlHY1N1WGhFTzhrY05fWkhkNjF2Z3dNUmVVLWo0c0FkalQzdnNGdyZzIiwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMThUMDM6NDU6MDUuMTMzNjA5In0sIm5iZiI6MTcyNjYzMjc4NCwiY3NyZiI6ImNiOGIyOGQzLWYzMGEtNGZiNS1hMzFlLTBjMWU3NDQ0YzgwOSIsImV4cCI6MTcyNjY1MDc4NH0.541QWpeJaGL7Xnsene0Y6sHiMtRVIidBnrjivnbniJU",
-			
 			dataUsers: [],
 			dataUsersById: [],
 		},
@@ -27,7 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(`${process.env.BACKEND_URL}/users/`,{
 						headers:{
 							"Access-Control-Allow-Origin": "*",
-							"Authorization": `Bearer ${store.token}`,
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
         					"Content-Type": "application/json"
 						}
 					})
@@ -54,7 +52,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(`${process.env.BACKEND_URL}/users/${id}`,{
 						headers:{
 							"Access-Control-Allow-Origin": "*",
-							"Authorization": `Bearer ${store.token}`,
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
         					"Content-Type": "application/json"
 						}
 					})
@@ -76,7 +74,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: "PUT",
 						headers:{
 							"Access-Control-Allow-Origin": "*",
-							"Authorization": `Bearer ${store.token}`,
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
         					"Content-Type": "application/json"
 						},
 						body: JSON.stringify({
