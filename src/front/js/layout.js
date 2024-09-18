@@ -13,10 +13,10 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                     <Routes>
-                        <Route element={<Menu />} path="/" />
                         <Route element={<LandingPage />} path="/" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<SignUp />} path="/signup" />
+                        <Route element={<Menu />} path="/menu" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
             </BrowserRouter>
