@@ -5,10 +5,6 @@ import LandingPage from './pages/LandingPage.jsx';
 import { Login } from "./pages/login.jsx";
 import { SignUp } from "./pages/signup.jsx";
 import { ShoppingCart } from "./pages/shoppingCart.jsx";
-import injectContext from "./store/appContext";
-
-import { Login } from "./pages/login.jsx";
-import { SignUp } from "./pages/signup.jsx";
 
 //create your first component
 const Layout = () => {

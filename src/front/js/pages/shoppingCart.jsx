@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useRef  } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/shoppingCart.css';
-import emptycart from '../../img/emptycart.png';
-import bin from '../../img/bin.png';
-import minus from '../../img/minus.png';
-import plus from '../../img/plus.png';
-import kusilogo from '../../img/kusi-logo.png'
+import emptycart from '../../assets/images/emptycart.png';
+import bin from '../../assets/images/bin.png';
+import minus from '../../assets/images/minus.png';
+import plus from '../../assets/images/plus.png';
+import kusilogo from '../../assets/images/kusi-logo.png'
 
 
 import { Context } from "../store/appContext";
