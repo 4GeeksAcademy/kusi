@@ -1,27 +1,45 @@
 from datetime import timedelta
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
-from flask_restx import Resource
+from flask_restx import fields, Resource
 from api.models import db, User
-from api.dto.users import credentials_dto, signup_form_dto
-from api.namespaces import api_auth
+from api.namespaces import auth_namespace
 from api.utils import InvalidAPIUsage
 import secrets
 
 bcrypt = Bcrypt()
 
-@api_auth.response(200, "OK")
-@api_auth.response(401, "Unauthorized")
-@api_auth.response(400, "Bad request")
-@api_auth.response(404, "User not found")
-@api_auth.response(500, "Internal server error")
-@api_auth.route("/login")
+credentials_dto = auth_namespace.model(
+    "Credentials",
+    {
+        "email": fields.String,
+        "password": fields.String
+    }
+)
+
+signup_form_dto = auth_namespace.model(
+    "SignUpForm",
+    {
+        "role": fields.Integer,
+        "email": fields.String,
+        "name": fields.String,
+        "phone_number": fields.String,
+        "password": fields.String
+    }
+)
+
+@auth_namespace.response(200, "OK")
+@auth_namespace.response(401, "Unauthorized")
+@auth_namespace.response(400, "Bad request")
+@auth_namespace.response(404, "User not found")
+@auth_namespace.response(500, "Internal server error")
+@auth_namespace.route("/login")
 class Login(Resource):
-    @api_auth.doc("Login")
-    @api_auth.expect(credentials_dto)
+    @auth_namespace.doc("Login")
+    @auth_namespace.expect(credentials_dto)
     def post(self):
         """Logs a user into Kusi given its credentials."""
-        payload = api_auth.payload
+        payload = auth_namespace.payload
         
         email = payload.get("email")
         if email is None:
@@ -55,17 +73,17 @@ class Login(Resource):
         )
         return { "access_token": access_token }, 200
 
-@api_auth.response(201, "Created")
-@api_auth.response(400, "Bad request")
-@api_auth.response(409, "User already exists")
-@api_auth.response(500, "Internal server error")
-@api_auth.route("/signup")
+@auth_namespace.response(201, "Created")
+@auth_namespace.response(400, "Bad request")
+@auth_namespace.response(409, "User already exists")
+@auth_namespace.response(500, "Internal server error")
+@auth_namespace.route("/signup")
 class SignUp(Resource):    
-    @api_auth.doc("Sign Up")
-    @api_auth.expect(signup_form_dto)
+    @auth_namespace.doc("Sign Up")
+    @auth_namespace.expect(signup_form_dto)
     def post(self):
         """Registers a new user given her info."""
-        payload = api_auth.payload
+        payload = auth_namespace.payload
 
         role_id = payload.get("role")
         if role_id is None:

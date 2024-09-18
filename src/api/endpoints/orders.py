@@ -1,19 +1,61 @@
-from flask_restx import Resource  
-from api.models import db,Dish,Order,User,OrderStatus,OrderStatusName,OrderDish
-from api.namespaces import api_order as api
-from api.api_models.order_model import order_model,order_create_model,order_update_model
+from flask_restx import fields, Resource
+from api.models import db, Dish, Order, OrderStatus, OrderStatusName, OrderDish
+from api.endpoints.dishes import dish_model
+from api.namespaces import orders_namespace
+from api.endpoints.users import user_model
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required
 
+order_status = orders_namespace.model("OrderStatus",{
+    "id": fields.Integer,
+    "name": fields.String
+})
+
+dish_order = orders_namespace.model("DishOrder",{
+    "dish_id": fields.Integer,
+    "dish": fields.Nested(dish_model),
+    "quantity": fields.Integer,
+    "unit_price": fields.Float
+})
+
+order_model = orders_namespace.model("Order",{
+    "id": fields.Integer,
+    "client_id": fields.Integer,
+    "user": fields.Nested(user_model),
+    "status_id": fields.Integer,
+    "order_status": fields.Nested(order_status),
+    "order_dishes": fields.List(fields.Nested(dish_order)),
+    "grand_total": fields.Float,
+    "special_instructions": fields.String,
+    "created_at": fields.DateTime,
+    "updated_at": fields.DateTime
+})
+
+dish_create_order = orders_namespace.model("DishCreateOrder",{
+    "dish_id": fields.Integer,
+    "quantity": fields.Integer,
+    "unit_price": fields.Float
+})
+
+order_create_model = orders_namespace.model("OrderCreate",{
+    "client_id": fields.Integer,
+    "dishes": fields.List(fields.Nested(dish_create_order)),
+    "special_instructions": fields.String
+})
+
+order_update_model = orders_namespace.model("OrderUpdate",{
+    "status": fields.String
+})
+
 bcrypt = Bcrypt()
 
-@api.response(201, 'Successful')
-@api.response(500, 'Server error')
-@api.route('/')
+@orders_namespace.response(201, 'Successful')
+@orders_namespace.response(500, 'Server error')
+@orders_namespace.route('/')
 class OrderAPI(Resource):
     method_decorators = [jwt_required()]
-    @api.doc(security="jsonWebToken")
-    @api.marshal_list_with(order_model)
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.marshal_list_with(order_model)
     def get(self):
         '''Get all orders'''
         try:
@@ -23,16 +65,16 @@ class OrderAPI(Resource):
             return str(error),500
     
     method_decorators = [jwt_required()]
-    @api.doc(security="jsonWebToken")
-    @api.expect(order_create_model) 
-    @api.marshal_with(order_model)
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.expect(order_create_model) 
+    @orders_namespace.marshal_with(order_model)
     def post(self):
         '''Create order'''
         try:
             
-            client_id=api.payload["client_id"]
-            dishes=api.payload["dishes"]
-            special_instructions=api.payload["special_instructions"]
+            client_id=orders_namespace.payload["client_id"]
+            dishes=orders_namespace.payload["dishes"]
+            special_instructions=orders_namespace.payload["special_instructions"]
             # user = User.query.filter_by(id=client_id).first()
             # if user:
             #     return "Client not found",404
@@ -68,15 +110,15 @@ class OrderAPI(Resource):
             return str(error),500
         
 
-@api.route('/<id>')
-@api.param('id', 'Order identifier')
-@api.response(201, 'Successful')
-@api.response(404, 'Order not found')
-@api.response(500, 'Server error')
+@orders_namespace.route('/<id>')
+@orders_namespace.param('id', 'Order identifier')
+@orders_namespace.response(201, 'Successful')
+@orders_namespace.response(404, 'Order not found')
+@orders_namespace.response(500, 'Server error')
 class OrderAPI(Resource):
     method_decorators = [jwt_required()]
-    @api.doc(security="jsonWebToken")
-    @api.marshal_with(order_model)
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.marshal_with(order_model)
     def get(self, id):
         '''Get order by id'''
         try:
@@ -88,8 +130,8 @@ class OrderAPI(Resource):
             return str(error),500
     
     method_decorators = [jwt_required()]
-    @api.doc(security="jsonWebToken")
-    @api.marshal_with(order_model)
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.marshal_with(order_model)
     def put(self,id):
         '''Update order'''
         try:

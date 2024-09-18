@@ -8,19 +8,38 @@ authorizations = {
     }
 }
 
-api_fake = Namespace(
-    "fake",
-    description="Fake token and db population.",
-    authorizations=authorizations
-)
-
-api_auth = Namespace(
+auth_namespace = Namespace(
     "auth",
     description="Login, signup, JWT.",
     authorizations=authorizations
 )
 
-api_user = Namespace('users', description='CRUD user',authorizations=authorizations)
-api_dish = Namespace('dishes', description='CRUD dish',authorizations=authorizations)
-api_order = Namespace('orders', description='CRUD order',authorizations=authorizations)
-api_ingredient = Namespace('ingredients', description='CRUD ingredient',authorizations=authorizations)
+dishes_namespace = Namespace(
+    "dishes",
+    description="Dishes CRUD.",
+    authorizations=authorizations
+)
+
+fake_namespace = Namespace(
+    "fake",
+    description="Fake token and db population.",
+    authorizations=authorizations
+)
+
+ingredients_namespace = Namespace(
+    "ingredients",
+    description="Ingredients CRUD.",
+    authorizations=authorizations
+)
+
+orders_namespace = Namespace(
+    "orders",
+    description="Orders CRUD.",
+    authorizations=authorizations
+)
+
+users_namespace = Namespace(
+    "users",
+    description="Users CRUD.",
+    authorizations=authorizations
+)

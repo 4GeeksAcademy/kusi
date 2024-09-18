@@ -13,7 +13,7 @@ from api.models import (
     RoleName,
     User
 )
-from api.namespaces import api_fake
+from api.namespaces import fake_namespace
 
 bcrypt = Bcrypt()
 
@@ -28,9 +28,9 @@ bcrypt = Bcrypt()
 # 6. Ingredient
 # 7. DishIngredient
 # 8. OrderDish
-@api_fake.route("/data")
+@fake_namespace.route("/data")
 class Fake(Resource):
-    @api_fake.doc("Populate DB")
+    @fake_namespace.doc("Populate DB")
     def get(self):
         """Populates the database with fake data."""
         Dish.query.delete()
