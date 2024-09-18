@@ -14,6 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			dishes: [],
 			dataUsers: [],
 			dataUsersById: [],
+			dataOrders: [],
 		},
 		actions: {
 			
@@ -189,6 +190,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}
 			},
+
+			orders: async () => {
+				const store = getStore();
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/orders`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Ocurrio un error al traer la data orders")
+					}
+
+					let data = await response.json()
+					setStore({dataOrders: data})
+					console.log(data)
+
+				}catch (e){
+					console.error(e)
+				}
+			},
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
