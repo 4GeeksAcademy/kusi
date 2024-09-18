@@ -1,31 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect} from "react";
 import { Card } from "../component/card.jsx";
 import { Context } from "../store/appContext";
 
 export const ContainerCards = () => {
-    const { store, actions } = useContext(Context);
+    const { store } = useContext(Context);
 
-    //ejemplo
-    const items = [
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-        { title: 'Pollo a la brasa', time: '25 mins', price: 'S/ 19.90', imgSrc: 'https://picsum.photos/200' },
-      ];
-      
     return (
         <div className="container-dishes mt-5 mx-auto">
             <div className="row">
-                {items.map((item, index) => (
-                <div key={index} className="col-12 col-sm-6 col-md-4 mb-4">
+                {store.dishes.map((dish, index) => (
+                <div key={index} className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-4">
                     <Card
-                    imgSrc={item.imgSrc}
-                    title={item.title}
-                    time={item.time}
-                    price={item.price}
+                    id={dish.id}
+                    imgSrc={dish.image_url}
+                    title={dish.title}
+                    time={dish.cooking_time}
+                    price={dish.price}
+                    discount={dish.discount_percentage}
+                    description={dish.description}
                     />
                 </div>
                 ))}

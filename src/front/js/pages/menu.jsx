@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import "../../styles/menu.css";
+import "../../styles/card.css";
 import { ContainerCards } from "../component/containerCards.jsx";
 
 export const Menu = () => {
