@@ -3,6 +3,7 @@ import plateAndFork from '../../assets/images/plate-and-fork.png';
 import plateAndKnife from '../../assets/images/plate-and-knife.png';
 import kusiLogo from '../../assets/images/kusi-logo.png';
 import '../../styles/landingPage.css';
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
     return (
@@ -32,20 +33,26 @@ export default function LandingPage() {
                             Descubre los auténticos sabores del Perú en cada bocado
                         </h1> 
                     </div>
+                    {localStorage.getItem("token")?<></>:
                     <div className="d-flex flex-column flex-lg-row gap-3 mt-4 mt-md-5">
-                        <button
-                            type="button"
-                            className="btn btn-danger py-2 px-4 px-md-5 fs-4 rounded-pill"
-                        >
-                            Iniciar sesión
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-outline-dark py-2 px-4 px-md-5 fs-4 hover-white rounded-pill"
-                        >
-                            Registrarse
-                        </button>
-                    </div> 
+                        <Link to="/login" className="div-link">
+                            <button
+                                type="button"
+                                className="btn btn-danger py-2 px-4 px-md-5 fs-4 rounded-pill"
+                            >
+                                Iniciar sesión
+                            </button>
+                        </Link>
+                        
+                        <Link to="/signup" className="div-link">
+                            <button
+                                type="button"
+                                className="btn btn-outline-dark py-2 px-4 px-md-5 fs-4 hover-white rounded-pill"
+                            >
+                                Registrarse
+                            </button>
+                        </Link>
+                    </div> }
                 </div>
                 <div className="landing-img-2 col-md-2 col-lg-1 d-none d-md-flex flex-column justify-content-start">
                     <img

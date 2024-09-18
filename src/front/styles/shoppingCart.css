@@ -1,0 +1,67 @@
+
+.btn-quantity{
+  background-color:#F44322;
+  border-color:#F44322;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  align-items: center;
+  font-size: 10px;
+  font-family: ABeeZee;
+  color: white;
+  border-radius: 30px;
+}
+
+.list-group-item {
+  border: none;
+  font-family: ABeeZee;
+}
+
+textarea {
+  width: 100%; 
+  max-width: 100%;
+  height: 100px; 
+  font-family: ABeeZee;
+}
+
+.container h1, h5 {
+  font-family: ABeeZee;
+}
+
+.span-icon{
+  cursor: pointer;
+}
+
+#kusilogo{
+  height: 50px;
+  width: auto;
+}
+
+#emptycart {
+  height: 400px;
+  width: auto;
+}
+
+@media (max-width:570px){
+  #kusilogo{
+    height: 20px;
+    width: auto;
+  }
+
+  #emptycart {
+    height: 200px;
+    width: auto;
+  }
+
+  .icon-right{
+    margin-right: 0;
+    padding-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .icon-left{
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+}

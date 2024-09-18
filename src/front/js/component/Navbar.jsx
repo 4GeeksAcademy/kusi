@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 
+// TODO: Navbar should be imported in the main screen page.
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
     const [activeTabIndex, setActiveTabIndex] = useState(0);
