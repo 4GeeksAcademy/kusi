@@ -33,7 +33,7 @@ export const Paypal = () => {
                                     return actions.order.create({
                                         purchase_units:[{
                                             amount:{
-                                                value: 20,  // store.order.grand_total
+                                                value:  store.order.grand_total
                                             }
                                         }]
                                     })
