@@ -17,14 +17,14 @@ from api.namespaces import fake_namespace
 
 bcrypt = Bcrypt()
 
-# We have to populate the DB in a topologicar order.
+# We have to populate the DB in a topological order.
 # The following order is a valid one:
 # 1. Role
 # 2. User
 # 3. OrderStatus
+# 5. Dish
 # TODO: Complete the following ones.
 # 4. Order
-# 5. Dish
 # 6. Ingredient
 # 7. DishIngredient
 # 8. OrderDish
@@ -33,14 +33,15 @@ class Fake(Resource):
     @fake_namespace.doc("Populate DB")
     def get(self):
         """Populates the database with fake data."""
-        Dish.query.delete()
+        # We have to clear the tables in the opposite order due to FK constraints.
+        OrderDish.query.delete()
         DishIngredient.query.delete()
         Ingredient.query.delete()
         Order.query.delete()
-        OrderDish.query.delete()
+        Dish.query.delete()        
         OrderStatus.query.delete()
-        Role.query.delete()
         User.query.delete()
+        Role.query.delete()
         db.session.commit()
 
         # Role
@@ -136,78 +137,115 @@ class Fake(Resource):
         db.session.add(cancelled)
         db.session.commit()
 
-        # Order
-        # dish_ceviche = Dish(
-        #     name = "Ceviche",
-        #     description = "Plato tipico de peru con pescado y limon",
-        #     image_url="https://trexperienceperu.com/sites/default/files/2024-05/ceviche.jpg",
-        #     price=30,
-        #     discount_percentage=10,
-        #     cooking_time=15,
-        #     quantity=50
-        #     )
-        # dish_pollo_a_la_brasa = Dish(
-        #     name = "Pollo a la brasa",
-        #     description = "Plato tipico de peru con pollo al carbon",
-        #     image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjezA9-4z0byMCywNsi3n3nBDUzsXJW2YaaA&s",
-        #     price=60,
-        #     discount_percentage=5,
-        #     cooking_time=5,
-        #     quantity=20
-        #     )
-        # dish_aji_de_gallina = Dish(
-        #     name = "Aji de gallina",
-        #     description = "Plato tipico de peru con gallina y aji",
-        #     image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSWTUO8hei_5TWAQ4lE92JDQwXCCCRbVcxrw&s",
-        #     price=20,
-        #     discount_percentage=15,
-        #     cooking_time=15,
-        #     quantity=80
-        #     )
-        # dish_estofado_de_carne = Dish(
-        #     name = "Estafado de carne",
-        #     description = "Plato tipico de peru con carne",
-        #     image_url="https://www.recetasnestle.com.pe/sites/default/files/srh_recipes/02d772e59776b9b3566382bbf306f795.jpg",
-        #     price=20,
-        #     discount_percentage=10,
-        #     cooking_time=15,
-        #     quantity=200
-        #     )
-        # dish_arroz_con_pollo = Dish(
-        #     name = "Arroz con pollo",
-        #     description = "Plato tipico de peru con arroz y pollo",
-        #     image_url="https://i.ytimg.com/vi/H6lgxgEWIs8/maxresdefault.jpg",
-        #     price=15,
-        #     discount_percentage=5,
-        #     cooking_time=15,
-        #     quantity=50
-        #     )
-        # dish_pollo_al_horno = Dish(
-        #     name = "Pollo al horno",
-        #     description = "Plato tipico de peru con pollo y salsa",
-        #     image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5VXgFC1udztiDcPU8A7LAPe4Pt8ZMUUitQ&s",
-        #     price=30,
-        #     discount_percentage=25,
-        #     cooking_time=25,
-        #     quantity=20
-        #     )
-        # dish_causa_rellena = Dish(
-        #     name = "Causa rellena",
-        #     description = "Plato tipico de peru papa y aji amarillo",
-        #     image_url="https://cdn0.recetasgratis.net/es/posts/8/6/2/causa_limena_31268_orig.jpg",
-        #     price=20,
-        #     discount_percentage=10,
-        #     cooking_time=10,
-        #     quantity=120
-        #     )
-        # db.session.add(dish_ceviche)
-        # db.session.add(dish_pollo_a_la_brasa)
-        # db.session.add(dish_aji_de_gallina)
-        # db.session.add(dish_estofado_de_carne)
-        # db.session.add(dish_arroz_con_pollo)
-        # db.session.add(dish_causa_rellena)
-        # db.session.add(dish_pollo_al_horno)
-        # db.session.commit()
+        ceviche = Dish(
+            id=1,
+            name="Ceviche",
+            description="Posiblemente, el plato más emblemático del Perú. Hecho con pescados y, dependiendo del gusto, mariscos, es bañado con aliños cítricos que no hacen más que resaltar el sabor.",
+            image_url="https://imag.bonviveur.com/ceviche-peruano-de-pescado.jpg",
+            price=51,
+            cooking_time=25,
+            quantity=50
+        )
+        lomo_saltado = Dish(
+            id=2,
+            name="Lomo saltado",
+            description="Un plato cuyo origen se remonta a la llegada de los chinos-cantoneses a Perú a partir del siglo XIX. El lomo es saltado en sartén hasta adquirir la cocción adecuada junto un poco de vinagre y algunas especias para luego pasar a ser acompañado por papas fritas y arroz.",
+            image_url="https://i.ytimg.com/vi/r2oGrH__hT0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBtRrQkJyQYxpAJD7aR3yN2BhJ0Cw",
+            price=57,
+            discount_percentage=15,
+            cooking_time=30,
+            quantity=25
+        )
+        aji_de_gallina = Dish(
+            id=3,
+            name="Ají de gallina",
+            description="Un plato que consiste en una crema con pechuga de gallina deshilachada y acompañada por papa cocida o arroz blanco.",
+            image_url="https://www.acozykitchen.com/wp-content/uploads/2023/10/aji_de_gallina_8-scaled.jpg",
+            price=32,
+            discount_percentage=10,
+            cooking_time=45,
+            quantity=25
+        )
+        causa = Dish(
+            id=4,
+            name="Causa limeña",
+            description="Este plato es hecho a base de papa amarilla (uno de los más de 3,000 tipos de papas que existe en el Perú) y su presentación por capas llama la atención. ",
+            image_url="https://cdn0.recetasgratis.net/es/posts/8/6/2/causa_limena_31268_orig.jpg",
+            price=31,
+            discount_percentage=20,
+            cooking_time=20,
+            quantity=50
+        )
+        pachamanca = Dish(
+            id=5,
+            name="Pachamanca",
+            description="El nombre proviene de las voces quechuas «Pacha» que significa «tierra» y «manka» que significa «olla», lo cual nos lleva a entender que su significado sería el de \"Olla de Tierra\". Y es que describe muy bien la forma de cocción de este plato. En donde los alimentos son cocinados mediante el contacto con piedras calientes dentro de un hoyo cavado bajo tierra.",
+            image_url="https://www.chullostravelperu.com/wp-content/uploads/2023/01/PACHAMANCA.jpg",
+            price=140,
+            discount_percentage=10,
+            cooking_time=120,
+            quantity=1
+        )
+        arroz_con_pollo = Dish(
+            id=6,
+            name="Arroz con pollo",
+            description="Este plato nacido en el siglo XVIII como opción al ya conocido arroz con pato de esa época, comenzó a conquistar las mesas de los peruanos. Se le suele acompañar de papa a la huancaína o salsa criolla. Y puede ser encontrado en cualquier restaurante del país.",
+            image_url="https://imgmedia.buenazo.pe/1200x660/buenazo/original/2022/10/24/60d89da6913c240e6725db08.jpg",
+            price=37,
+            cooking_time=35,
+            quantity=25,
+        )
+        carapulcra = Dish(
+            id=7,
+            name="Carapulcra con sopa seca",
+            description="Su nombre proviene de la palabra \"qala phurka\", que en aimara significa \"cocinar sobre piedras\". Y se basaba en la combinación de insumos como carne de llama o alpaca y mucho ají, que luego fueron parte de una interesante fusión con ingredientes españoles",
+            image_url="https://origin.cronosmedia.glr.pe/large/2021/01/15/lg_60023273c6959d0ec119a2ff.jpg",
+            price=25,
+            discount_percentage=20,
+            cooking_time=120,
+            quantity=25,
+        )
+        aguadito = Dish(
+            id=8,
+            name="Aguadito",
+            description="Consiste en una sopa de pollo espesa con arroz y otros vegetales. De una coloración verde debida al uso significativo de culantro en la sopa, es consumido tradicionalmente en invierno.",
+            image_url="https://aeronoticias.com.pe/noticiero/wp-content/uploads/2023/08/aguado.jpg",
+            price=32,
+            discount_percentage=30,
+            cooking_time=30,
+            quantity=25
+        )
+        tacu_tacu = Dish(
+            id=9,
+            name="Tacu Tacu",
+            description="Plato criollo que consiste en arroz cocido, menestras y sofrito a base de ají amarillo. Los cuales se mezclan hasta obtener una masa bajo el calor de la sartén.",
+            image_url="https://www.infobae.com/new-resizer/VwPhRfteUHhmGPIfAzht4b7ROHo=/arc-anglerfish-arc2-prod-infobae/public/EM3TYZTKMFCWJJ6XGSIHFF2EFU.jpg",
+            price=42,
+            discount_percentage=10,
+            cooking_time=25,
+            quantity=25
+        )
+        pollo_a_la_brasa = Dish(
+            id=10,
+            name="Pollo a la brasa",
+            description="Es un plato que consiste en pollo asado al carbón a través de un sistema rotatorio que permite una cocción uniforme. Es acompañado de papas fritas y actualmente es un ícono cultural peruano.",
+            image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjezA9-4z0byMCywNsi3n3nBDUzsXJW2YaaA&s",
+            price=34,
+            cooking_time=90,
+            quantity=25
+        )
+
+        db.session.add(ceviche)
+        db.session.add(lomo_saltado)
+        db.session.add(aji_de_gallina)
+        db.session.add(causa)
+        db.session.add(pachamanca)
+        db.session.add(arroz_con_pollo)
+        db.session.add(carapulcra)
+        db.session.add(aguadito)
+        db.session.add(tacu_tacu)
+        db.session.add(pollo_a_la_brasa)
+        db.session.commit()
         
         # #Ingredient
         # ingredient_pollo = Ingredient(name="Pollo")
