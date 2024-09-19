@@ -26,12 +26,6 @@ fake_namespace = Namespace(
     authorizations=authorizations
 )
 
-ingredients_namespace = Namespace(
-    "ingredients",
-    description="Ingredients CRUD.",
-    authorizations=authorizations
-)
-
 orders_namespace = Namespace(
     "orders",
     description="Orders CRUD.",
