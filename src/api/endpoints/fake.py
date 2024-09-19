@@ -22,22 +22,22 @@ bcrypt = Bcrypt()
 # 1. Role
 # 2. User
 # 3. OrderStatus
-# 5. Dish
+# 4. Dish
+# 5. Ingredient
+# 6. DishIngredient
 # TODO: Complete the following ones.
-# 4. Order
-# 6. Ingredient
-# 7. DishIngredient
+# 7. Order
 # 8. OrderDish
 @fake_namespace.route("/data")
 class Fake(Resource):
     @fake_namespace.doc("Populate DB")
     def get(self):
         """Populates the database with fake data."""
-        # We have to clear the tables in the opposite order due to FK constraints.
+        # We have to clear the tables in a reverse topological order due to FK constraints.
         OrderDish.query.delete()
+        Order.query.delete()
         DishIngredient.query.delete()
         Ingredient.query.delete()
-        Order.query.delete()
         Dish.query.delete()        
         OrderStatus.query.delete()
         User.query.delete()
@@ -246,73 +246,308 @@ class Fake(Resource):
         db.session.add(tacu_tacu)
         db.session.add(pollo_a_la_brasa)
         db.session.commit()
-        
-        # #Ingredient
-        # ingredient_pollo = Ingredient(name="Pollo")
-        # ingredient_pescado = Ingredient(name="Pescado")
-        # ingredient_gallina = Ingredient(name="Gallina")
-        # ingredient_carne = Ingredient(name="Carne")
-        # ingredient_cebolla = Ingredient(name="Cebolla")
-        # ingredient_lechuga = Ingredient(name="Lechuga")
-        # ingredient_limon = Ingredient(name="Limon")
-        # ingredient_aji = Ingredient(name="Aji")
-        # ingredient_arroz = Ingredient(name="Arroz")
-        # ingredient_papa_sancochada = Ingredient(name="Papa sancochada")
-        # ingredient_papa_frita = Ingredient(name="Papa frita")
-        # ingredient_huevo = Ingredient(name="Huevo")
-        # ingredient_aceituna = Ingredient(name="Aceituna")
-        # ingredient_zanahoria = Ingredient(name="Zanahoria")
-        # ingredient_mayonesa = Ingredient(name="Mayonesa")
-        # db.session.add(ingredient_pollo)
-        # db.session.add(ingredient_pescado)
-        # db.session.add(ingredient_gallina)
-        # db.session.add(ingredient_carne)
-        # db.session.add(ingredient_cebolla)
-        # db.session.add(ingredient_lechuga)
-        # db.session.add(ingredient_limon)
-        # db.session.add(ingredient_aji)
-        # db.session.add(ingredient_arroz)
-        # db.session.add(ingredient_papa_sancochada)
-        # db.session.add(ingredient_papa_frita)
-        # db.session.add(ingredient_huevo)
-        # db.session.add(ingredient_aceituna)
-        # db.session.add(ingredient_zanahoria)
-        # db.session.add(ingredient_mayonesa)
-        # db.session.commit()
-        
-        # #DishIngredient
-        # dish_ingredient_ceviche_pescado = DishIngredient(
-        #     dish_id=dish_ceviche.id,
-        #     ingredient_id = ingredient_pescado.id
-        #     )
-        # dish_ingredient_ceviche_limon = DishIngredient(
-        #     dish_id=dish_ceviche.id,
-        #     ingredient_id = ingredient_limon.id
-        #     )
-        # dish_ingredient_ceviche_cebolla = DishIngredient(
-        #     dish_id=dish_ceviche.id,
-        #     ingredient_id = ingredient_cebolla.id
-        #     )
-        # dish_ingredient_ceviche_lechuga = DishIngredient(
-        #     dish_id=dish_ceviche.id,
-        #     ingredient_id = ingredient_lechuga.id
-        #     )
-        # dish_ingredient_pollo_a_la_brasa_pollo = DishIngredient(
-        #     dish_id=dish_pollo_a_la_brasa.id,
-        #     ingredient_id = ingredient_pollo.id
-        #     )
-        # dish_ingredient_pollo_a_la_brasa_papa_frita = DishIngredient(
-        #     dish_id=dish_pollo_a_la_brasa.id,
-        #     ingredient_id = ingredient_papa_frita.id
-        #     )
-        # db.session.add(dish_ingredient_ceviche_pescado)
-        # db.session.add(dish_ingredient_ceviche_limon)
-        # db.session.add(dish_ingredient_ceviche_cebolla)
-        # db.session.add(dish_ingredient_ceviche_lechuga)
-        # db.session.add(dish_ingredient_pollo_a_la_brasa_pollo)
-        # db.session.add(dish_ingredient_pollo_a_la_brasa_papa_frita)
-        # db.session.commit()
 
+        pescado = Ingredient(name="Pescado")
+        cebolla = Ingredient(name="Cebolla")
+        aji_limo = Ingredient(name="Ají limo")
+        culantro = Ingredient(name="Culantro")
+        limon = Ingredient(name="Limón")
+        ajo = Ingredient(name="Ajo")
+        pimienta = Ingredient(name="Pimienta")
+        sal = Ingredient(name="Sal")
+        camote = Ingredient(name="Camote")
+        choclo = Ingredient(name="Choclo")
+        lechuga = Ingredient(name="Lechuga")
+        lomo = Ingredient(name="Lomo")
+        tomate = Ingredient(name="Tomate")
+        aji_amarillo = Ingredient(name="Ají amarillo")
+        sillao = Ingredient(name="Sillao")
+        vinagre = Ingredient(name="Vinagre")
+        papa_amarilla = Ingredient(name="Papa amarilla")
+        aceite_vegetal = Ingredient(name="Aceite vegetal")
+        comino = Ingredient(name="Comino")
+        gallina = Ingredient(name="Gallina")
+        laurel = Ingredient(name="Laurel")
+        leche = Ingredient(name="Leche")
+        pecanas = Ingredient(name="Pecanas")
+        pan = Ingredient(name="Pan")
+        aceitunas = Ingredient(name="Aceitunas")
+        huevo = Ingredient(name="Huevo")
+
+        db.session.add(pescado)
+        db.session.add(cebolla)
+        db.session.add(aji_limo)
+        db.session.add(culantro)
+        db.session.add(limon)
+        db.session.add(ajo)
+        db.session.add(pimienta)
+        db.session.add(sal)
+        db.session.add(camote)
+        db.session.add(choclo)
+        db.session.add(lechuga)
+        db.session.add(lomo)
+        db.session.add(tomate)
+        db.session.add(aji_amarillo)
+        db.session.add(sillao)
+        db.session.add(vinagre)
+        db.session.add(papa_amarilla)
+        db.session.add(aceite_vegetal)
+        db.session.add(comino)
+        db.session.add(gallina)
+        db.session.add(laurel)
+        db.session.add(leche)
+        db.session.add(pecanas)
+        db.session.add(pan)
+        db.session.add(aceitunas)
+        db.session.add(huevo)
+        db.session.commit()
+
+        # Ingredients of ceviche
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=pescado.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=culantro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=limon.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=camote.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=choclo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ceviche.id,
+                ingredient_id=lechuga.id
+            )
+        )
+
+        # Ingredients of lomo saltado
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=lomo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=tomate.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=sillao.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=culantro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=vinagre.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=papa_amarilla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=lomo_saltado.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Ingredients of ají de gallina
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=gallina.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=laurel.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=leche.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=pecanas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=pan.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=papa_amarilla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=aceitunas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=aji_de_gallina.id,
+                ingredient_id=huevo.id
+            )
+        )
+        db.session.commit()
         # #Order
         # order_ruben_1 = Order(
         #     client_id = ruben.id,
