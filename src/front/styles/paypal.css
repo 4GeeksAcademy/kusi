@@ -1,0 +1,20 @@
+.container-logo {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    border-radius: 20px;
+
+}
+
+
+@media (max-width:570px) {
+    .container-logo img{
+        width: 200px;
+        height: auto;
+    }
+
+    .arrow-img{
+        width: 20px;
+        height: auto;
+    }
+}

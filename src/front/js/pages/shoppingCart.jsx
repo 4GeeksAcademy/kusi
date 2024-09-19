@@ -24,7 +24,7 @@ export const ShoppingCart = () => {
 
 		try{
             actions.btnContinuar(notes);
-            navigate("/menu")
+            navigate("/paypal")
             setNotes("")   
 		}catch(e){
 			console.error(e);

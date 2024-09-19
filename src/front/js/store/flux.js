@@ -159,6 +159,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				
 					const store = getStore();
 					let token = localStorage.getItem("token");
+					try{
 					const addNote = ({
 						client_id: "10", //cambiar id del store
 						dishes: store.list, 
@@ -172,15 +173,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return
 					 }
 					
-					try{
-						let resp = await fetch(process.env.BACKEND_URL + "/orders", {
-							method: 'POST',
-							body: JSON.stringify(addNote),
-							headers: {
-								Authorization:`Bearer ${token}`
-							  },	
-						})
-						let data = await resp.json()
 						console.log(addNote);
 						setStore({...getStore(), order: addNote })
 					
@@ -189,9 +181,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}
 			},
+
+			createOrder: async () => {
+				const store = getStore();
+				let token = localStorage.getItem("token");
+				try{
+					let resp = await fetch(process.env.BACKEND_URL + "/orders", {
+						method: 'POST',
+						body: JSON.stringify(store.order),
+						headers: {
+							Authorization:`Bearer ${token}`
+						  },	
+					})
+					let data = await resp.json()
+					console.log(data);
+					
+					
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
+
+			
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+
 			login: async (user,showModal=true) => {
 				try{
 					
