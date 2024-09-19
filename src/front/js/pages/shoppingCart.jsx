@@ -40,7 +40,7 @@ export const ShoppingCart = () => {
                     <img 
                         src={emptycart} alt="" id="emptycart" />
                 </div>
-                <div className="text-center justify-content-center align-items-center mb-3"><button onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
+                <div className="text-center justify-content-center align-items-center mb-3"><button className="btn btn-danger" onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
             </div>
             
         )
@@ -99,7 +99,7 @@ export const ShoppingCart = () => {
                       <h5 className="text-start">Notas del pedido (opcional)</h5>
                       <textarea className="form-control" name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
                       <p className="text-end mb-1 text-secondary">{notes.length}/255</p>
-                      <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button onClick={()=>goToPay()}>Continuar</button></div>
+                      <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button className="btn btn-danger" onClick={()=>goToPay()}>Continuar</button></div>
                     </div>
                    </div>
                 

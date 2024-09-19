@@ -11,6 +11,13 @@ export const Paypal = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
+    const initialOptions = {
+        clientId: "Ac7E9i0U-pGyDbSpJt2w1mQdUQHFKQL2K4EmkAxpVKU3rYT1VrgXO31C65XAH5h-Bai1QBQdOSdRCT7y",
+        currency: "USD",
+        intent: "capture",
+        locale: "es_PE"
+    };
+
 
     return(
         <div className="container">
@@ -19,9 +26,9 @@ export const Paypal = () => {
             </div>
             <div className="container text-center justify-content-center align-items-center">
                 <h2 className="mt-3 mb-5">Elige tu método de pago:</h2>
-                    <div className="container d-flex text-center justify-content-center align-items-center"> 
-                        <PayPalScriptProvider options={{ clientId: "Ac7E9i0U-pGyDbSpJt2w1mQdUQHFKQL2K4EmkAxpVKU3rYT1VrgXO31C65XAH5h-Bai1QBQdOSdRCT7y" }}>
-                            <PayPalButtons style={{ layout: "vertical" }}
+                    <div className="container d-flex text-center justify-content-center align-items-center paypal"> 
+                        <PayPalScriptProvider options={initialOptions}>
+                            <PayPalButtons style={{ layout: "vertical", color: "silver", shape: "pill", }}
                                 createOrder={(data,actions)=>{
                                     return actions.order.create({
                                         purchase_units:[{
@@ -32,12 +39,15 @@ export const Paypal = () => {
                                     })
                                 }}
 
-                                onApprove={(_,actions)=>{
-                                    return actions.order.capture().then(details=>{
+                                onApprove={(_,actionsp)=>{
+                                    return actionsp.order.capture().then(details=>{
+                                        
                                         console.log("COMPRA EXITOSA");
                                         console.log(details);
                                         navigate("/payment-made")
+                                        actions.createOrder();
                                     })
+                                    
                                 }}
                                
                             />
