@@ -1,7 +1,7 @@
 import React, { useContext,useState } from 'react';
 import { Context } from "../store/appContext";
 
-export const ModalDetalle = ({ id, imgSrc, title, description, ingredients,priceDiscount }) => {
+export const DishDetail = ({ id, imgSrc, title, description, ingredients,priceDiscount }) => {
     const [amount, setAmount] = useState(1);
     const { store, actions } = useContext(Context);
 

@@ -1,14 +1,13 @@
 import React, { useContext,useEffect } from "react";
 import "../../styles/menu.css";
 import "../../styles/card.css";
-import { ContainerCards } from "../component/containerCards.jsx";
+import { DishCardsTable } from "../component/DishCardsTable.jsx";
 import { Navbar } from "../component/Navbar.jsx";
-import { Context } from "../store/appContext";
+import { Context } from "../store/appContext.js";
 
 export const Menu = () => {
+    const { actions } = useContext(Context);
 
-    const { store, actions } = useContext(Context);
-	
 	useEffect(() => {
 		actions.getDishes();
 	}, []);
@@ -17,7 +16,7 @@ export const Menu = () => {
 		<>
 			<Navbar />
 			<div className="container d-flex justify-content-center align-items-center w-auto mt-3">
-				<ContainerCards/>
+				<DishCardsTable />
 			</div>
 		</>
 	);
