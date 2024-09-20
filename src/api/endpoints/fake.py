@@ -273,6 +273,10 @@ class Fake(Resource):
         pan = Ingredient(name="Pan")
         aceitunas = Ingredient(name="Aceitunas")
         huevo = Ingredient(name="Huevo")
+        atun = Ingredient(name="Atún")
+        mayonesa = Ingredient(name="Mayonesa")
+        palta = Ingredient(name="Palta")
+        perejil = Ingredient(name="Perejil")
 
         db.session.add(pescado)
         db.session.add(cebolla)
@@ -300,6 +304,10 @@ class Fake(Resource):
         db.session.add(pan)
         db.session.add(aceitunas)
         db.session.add(huevo)
+        db.session.add(atun)
+        db.session.add(mayonesa)
+        db.session.add(palta)
+        db.session.add(perejil)
         db.session.commit()
 
         # Ingredients of ceviche
@@ -545,6 +553,94 @@ class Fake(Resource):
             DishIngredient(
                 dish_id=aji_de_gallina.id,
                 ingredient_id=huevo.id
+            )
+        )
+
+        # Ingredients of causa
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=papa_amarilla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=limon.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=atun.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=mayonesa.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=culantro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=palta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=causa.id,
+                ingredient_id=perejil.id
+            )
+        )
+
+        # Ingredients of pachamanca
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=cebolla.id
             )
         )
         db.session.commit()

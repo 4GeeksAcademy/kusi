@@ -9,7 +9,7 @@ import secrets
 
 bcrypt = Bcrypt()
 
-credentials_dto = auth_namespace.model(
+credentials = auth_namespace.model(
     "Credentials",
     {
         "email": fields.String,
@@ -17,7 +17,7 @@ credentials_dto = auth_namespace.model(
     }
 )
 
-signup_form_dto = auth_namespace.model(
+sign_up_form = auth_namespace.model(
     "SignUpForm",
     {
         "role": fields.Integer,
@@ -36,7 +36,7 @@ signup_form_dto = auth_namespace.model(
 @auth_namespace.route("/login")
 class Login(Resource):
     @auth_namespace.doc("Login")
-    @auth_namespace.expect(credentials_dto)
+    @auth_namespace.expect(credentials)
     def post(self):
         """Logs a user into Kusi given its credentials."""
         payload = auth_namespace.payload
@@ -80,7 +80,7 @@ class Login(Resource):
 @auth_namespace.route("/signup")
 class SignUp(Resource):    
     @auth_namespace.doc("Sign Up")
-    @auth_namespace.expect(signup_form_dto)
+    @auth_namespace.expect(sign_up_form)
     def post(self):
         """Registers a new user given her info."""
         payload = auth_namespace.payload

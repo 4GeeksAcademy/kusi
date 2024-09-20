@@ -1,6 +1,5 @@
 from flask_restx import fields, Resource
 from api.models import db, Dish, Order, OrderStatus, OrderStatusName, OrderDish
-from api.endpoints.dishes import dish_model
 from api.namespaces import orders_namespace
 from api.endpoints.users import user_model
 from flask_bcrypt import Bcrypt
@@ -13,7 +12,6 @@ order_status = orders_namespace.model("OrderStatus",{
 
 dish_order = orders_namespace.model("DishOrder",{
     "dish_id": fields.Integer,
-    "dish": fields.Nested(dish_model),
     "quantity": fields.Integer,
     "unit_price": fields.Float
 })

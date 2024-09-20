@@ -8,30 +8,6 @@ from api.utils import InvalidAPIUsage
 
 bcrypt = Bcrypt()
 
-ingredient_model = dishes_namespace.model("Ingredient",{
-    "id": fields.Integer,
-    "name": fields.String,
-})
-
-dish_ingredient = dishes_namespace.model("DishIngredient",{
-    "dish_id": fields.Integer,
-    "ingredient_id": fields.Integer,
-    "ingredient": fields.List(fields.Nested(ingredient_model)),
-})
-
-
-dish_model = dishes_namespace.model("Dish",{
-    "id": fields.Integer,
-    "name": fields.String,
-    "description": fields.String,
-    "image_url": fields.String,
-    "price": fields.Float,
-    "discount_percentage": fields.Integer,
-    "cooking_time": fields.Integer,
-    "quantity": fields.Integer,
-    "dish_ingredients": fields.List(fields.Nested(dish_ingredient)),
-})
-
 @dishes_namespace.response(200, "OK")
 @dishes_namespace.response(500, "Internal server error")
 @dishes_namespace.route("/")
@@ -46,12 +22,24 @@ class FetchDishes(Resource):
         except Exception as e:
             return { "message": str(e) }, 500
 
+new_dish = dishes_namespace.model(
+    "Dish",
+    {
+        "name": fields.String,
+        "description": fields.String,
+        "price": fields.Float,
+        "discount_percentage": fields.Integer,
+        "cooking_time": fields.Integer,
+        "quantity": fields.Integer 
+    }
+)
+
 @dishes_namespace.response(200, "OK")
 @dishes_namespace.response(404, "Dish not found")
 @dishes_namespace.response(422, "Unprocessable entity")
 @dishes_namespace.response(500, "Internal server error")
 @dishes_namespace.route("/<int:dish_id>")
-class FetchDishById(Resource):
+class FetchAndUpdateDishById(Resource):
     @jwt_required()
     @dishes_namespace.doc(security="jsonWebToken")
     def get(self, dish_id):
@@ -73,24 +61,6 @@ class FetchDishById(Resource):
         except Exception as e:
             return { "message": str(e) }, 500
 
-new_dish = dishes_namespace.model(
-    "Dish",
-    {
-        "name": fields.String,
-        "description": fields.String,
-        "price": fields.Float,
-        "discount_percentage": fields.Integer,
-        "cooking_time": fields.Integer,
-        "quantity": fields.Integer 
-    }
-)
-
-@dishes_namespace.response(200, "OK")
-@dishes_namespace.response(404, "Dish not found")
-@dishes_namespace.response(422, "Unprocessable entity")
-@dishes_namespace.response(500, "Internal server error")
-@dishes_namespace.route("/<int:dish_id>")
-class UpdateDishById(Resource):
     @jwt_required()
     @dishes_namespace.doc(security="jsonWebToken")
     @dishes_namespace.expect(new_dish)
