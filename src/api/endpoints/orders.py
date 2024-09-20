@@ -36,6 +36,71 @@ new_order = orders_namespace.model(
     }
 )
 
+@orders_namespace.response(200, "OK")
+@orders_namespace.response(201, "Order created")
+@orders_namespace.response(403, "Forbidden")
+@orders_namespace.response(404, "Not found")
+@orders_namespace.response(422, "Unprocessable entity")
+@orders_namespace.response(500, "Internal server error")
+@orders_namespace.route("/")
+class CreateOrder(Resource):
+    @jwt_required()
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.expect(new_order)
+    def post(self):
+        """Creates an order given some dishes and special instructions."""
+        current_user = get_jwt_identity()
+        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
+        if current_user["role_id"] != client_role.id:
+            raise InvalidAPIUsage("Only client can create orders", 403)
+
+        client_id = current_user["id"]
+        client = User.query.get(client_id)
+        if client is None:
+            raise InvalidAPIUsage("User not found", 404)
+        
+        payload = orders_namespace.payload
+        dishes = payload.get("dishes")
+        if dishes is None:
+            raise InvalidAPIUsage("Missing dishes", 422)
+
+        for dish in dishes:
+            dish_id = dish["id"]
+            existing_dish = Dish.query.get(dish_id)
+            if existing_dish is None:
+                raise InvalidAPIUsage(f"Dish {dish_id} does not exist", 404)
+            if dish["quantity"] > existing_dish.quantity:
+                raise InvalidAPIUsage(f"{existing_dish.quantity} {existing_dish.name}(s) left", 422)
+        
+        # First, we create the order.
+        special_instructions = payload.get("special_instructions")
+        pending_status = OrderStatus.query.filter_by(name=OrderStatusName.PENDING.value).one_or_none()
+        grand_total = reduce(lambda s, dish: s + dish["unit_price"] * dish["quantity"], dishes, 0)
+        order = Order(
+            client_id=client_id,
+            status_id=pending_status.id,
+            grand_total=grand_total,
+            special_instructions=special_instructions
+        )
+        db.session.add(order)
+        db.session.commit()
+        
+        # Then, we proceed to link each dish with the created order.
+        for dish in dishes:
+            existing_dish = Dish.query.get(dish["id"])
+            db.session.add(
+                OrderDish(
+                    order_id=order.id,
+                    dish_id=dish_id,
+                    unit_price=dish["unit_price"],
+                    quantity=dish["quantity"]
+                )
+            )
+            existing_dish.quantity -= dish["quantity"]
+            db.session.commit()
+
+        return order.serialize(), 201
+
 @orders_namespace.response(204, "No content")
 @orders_namespace.response(403, "Forbidden")
 @orders_namespace.response(404, "Not found")
