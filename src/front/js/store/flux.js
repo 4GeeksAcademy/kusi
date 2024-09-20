@@ -85,6 +85,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			getUsers: async () => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/users`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error trayendo los usuarios")
+					}
+					let data = await response.json()
+					setStore({dataUsers: data})
+				}catch (e){
+					console.error("Error al traer usuarios", e)
+				}
+			},
+
 			getUsersById: async (id) => {
 				const store = getStore()
 

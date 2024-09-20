@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassStart, faFire, faBan, faUtensils, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,7 @@ export const Orders = () => {
     const { store, actions } = useContext(Context);
     const [ordersData, setOrdersData] = useState([]);
     const [ordersDataById , setOrdersDataById] = useState([]);
+    const [clientsData, setClientsData] = useState([])
     const [roleId, setRoleId] = useState()
     const navigate = useNavigate()
 
@@ -18,10 +19,15 @@ export const Orders = () => {
         const fetchData = async () => {
             await actions.orders();
             setOrdersData(store.dataOrders);
-            setOrdersDataById(store.dataOrdersById)
+
+            await actions.getUsers();
+            setClientsData(store.dataUsers)
         };
         fetchData();
     }, []);
+
+    console.log(clientsData)
+
 
     useEffect(() => {
   
@@ -36,7 +42,7 @@ export const Orders = () => {
         } else {
             setRoleId(0);
         }
-    },[localStorage.getItem("token")]);
+    },[]);
 
 
     const Status = Object.freeze ({
@@ -113,7 +119,7 @@ export const Orders = () => {
                                             </td>
                                             <td>#{item.id}</td>
                                             <td>{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
-                                            <td>{item.user?.name || "Desconocido"}</td>
+                                            <td>{clientsData.find(client => client.id === item.client_id)?.name}</td>
                                             <td>S/.{item.grand_total.toFixed(2)}</td>
                                             <td>
                                                 <p
