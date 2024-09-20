@@ -12,6 +12,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			orderDish: [],
 			order:[],
 			dishes: [],
+			dataDishesById: [],
 			dataUsers: [],
 			dataUsersById: [],
 			dataOrders: [],
@@ -56,6 +57,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Dishes complete")
 				}
 			},
+
+			getDishesById: async (id) => {
+				const store = getStore()
+				if(store.dishes){
+					try {
+						let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}`,{
+							headers:{
+								"Access-Control-Allow-Origin": "*",
+								"Authorization": `Bearer ${localStorage.getItem("token")}`,
+								"Content-Type": "application/json"
+							}
+						})
+	
+						let data = await response.json()
+
+						if(response.status == 201){
+							await setStore({dataDishesById: data})
+							console.log(store.dataDishesById)
+						} 
+	
+					}catch (e){
+						console.error("Error al traer los Dishes", e)
+					}
+				} else {
+					console.log("Dishes complete")
+				}
+			},
+
 			getUsersById: async (id) => {
 				const store = getStore()
 
