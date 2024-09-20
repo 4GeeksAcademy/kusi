@@ -19,6 +19,62 @@ from api.utils import InvalidAPIUsage
 
 bcrypt = Bcrypt()
 
+new_order_dish = orders_namespace.model(
+    "NewOrderDish",
+    {
+        "id": fields.Integer,
+        "quantity": fields.Integer,
+        "unit_price": fields.Float
+    }
+)
+
+new_order = orders_namespace.model(
+    "NewOrder",
+    {
+        "dishes": fields.List(fields.Nested(new_order_dish)),
+        "special_instructions": fields.String
+    }
+)
+
+@orders_namespace.response(204, "No content")
+@orders_namespace.response(403, "Forbidden")
+@orders_namespace.response(404, "Not found")
+@orders_namespace.response(422, "Unprocessable entity")
+@orders_namespace.response(500, "Internal server error")
+@orders_namespace.route("/validate")
+class ValidateOrder(Resource):
+    @jwt_required()
+    @orders_namespace.doc(security="jsonWebToken")
+    @orders_namespace.expect(new_order)
+    def post(self):
+        """Validates order before checkout."""
+        current_user = get_jwt_identity()
+        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
+        if current_user["role_id"] != client_role.id:
+            raise InvalidAPIUsage("Only client can create orders", 403)
+
+        client_id = current_user["id"]
+        client = User.query.get(client_id)
+        if client is None:
+            raise InvalidAPIUsage("User not found", 404)
+        
+        payload = orders_namespace.payload
+        dishes = payload.get("dishes")
+        if dishes is None:
+            raise InvalidAPIUsage("Missing dishes", 422)
+
+        for dish in dishes:
+            dish_id = dish["id"]
+            existing_dish = Dish.query.get(dish_id)
+            if existing_dish is None:
+                raise InvalidAPIUsage(f"Dish {dish_id} does not exist", 404)
+            if dish["quantity"] > existing_dish.quantity:
+                raise InvalidAPIUsage(f"{existing_dish.quantity} {existing_dish.name}(s) left", 422)
+            if dish["unit_price"] < 0:
+                raise InvalidAPIUsage(f"Cost of {existing_dish.name} should be non-negative", 422)
+
+        return (""), 204
+
 @orders_namespace.response(200, "OK")
 @orders_namespace.response(201, "Order created")
 @orders_namespace.response(403, "Forbidden")
