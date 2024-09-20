@@ -3,16 +3,18 @@ import { Context } from "../store/appContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassStart, faFire, faBan, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "../component/Navbar.jsx";
+import { useNavigate } from "react-router-dom";
 import "../../styles/orders.css"
 
 export const Orders = () => {
     const { store, actions } = useContext(Context);
     const [ordersData, setOrdersData] = useState([]);
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchData = async () => {
             await actions.orders();
-            setOrdersData(store.dataOrders);
+            setOrdersData(store.dataOrdersById);
         };
         fetchData();
     }, []);
@@ -48,13 +50,17 @@ export const Orders = () => {
         );
     };
 
+    const handleDetails = (orderId) => {
+        navigate(`/orders/${orderId}`)
+    }
+
     return (
         <div>
             <Navbar/>
         
             <div className="container d-flex justify-content-center align-items-center vh-100">
                 {ordersData.length > 0 ? (
-                    <table className="table table-hover text-center border-danger">
+                    <table className="table table-hover text-center">
                         <thead >
                             <tr>
                                 <th>N° ORDEN</th>
@@ -66,8 +72,8 @@ export const Orders = () => {
                             </tr>
                         </thead>
                         <tbody>
-                                ordersData.map((item) => {
-                                    <tr key={item.id} >
+                               {ordersData.map((item) => (
+                                    <tr key={item.id} onClick={() => handleDetails(item.id)}>
                                         <td>#{item.id}</td>
                                         <td>{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
                                         <td>{item.user?.name || "Desconocido"}</td>
@@ -92,7 +98,7 @@ export const Orders = () => {
                                             </button>
                                         </td>
                                     </tr>
-                                })
+                                ))}
                         </tbody>
                     </table>
                     ):(

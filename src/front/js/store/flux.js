@@ -15,6 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			dataUsers: [],
 			dataUsersById: [],
 			dataOrders: [],
+			dataOrdersById: [],
 		},
 		actions: {
 			
@@ -212,6 +213,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				}catch (e){
 					console.error(e)
+				}
+			},
+
+
+			getOrdersById: async (id) => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/orders/${id}`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error trayendo el id "+id)
+					}
+					let data = await response.json()
+					setStore({dataOrdersById: data})
+				}catch (e){
+					console.error("Error al traer la orden del usuario", e)
 				}
 			},
 
