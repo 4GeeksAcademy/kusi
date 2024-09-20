@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 921dea5f2459
+Revision ID: 398040cd4a5a
 Revises: 
-Create Date: 2024-09-18 20:30:28.205391
+Create Date: 2024-09-20 15:06:48.722212
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '921dea5f2459'
+revision = '398040cd4a5a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,10 +21,10 @@ def upgrade():
     op.create_table('dish',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('description', sa.String(length=255), nullable=False),
-    sa.Column('image_url', sa.String(length=255), nullable=True),
+    sa.Column('description', sa.String(length=511), nullable=False),
+    sa.Column('image_url', sa.String(length=1023), nullable=True),
     sa.Column('price', sa.Float(), nullable=False),
-    sa.Column('discount_percentage', sa.Integer(), nullable=False),
+    sa.Column('discount_percentage', sa.Integer(), nullable=True),
     sa.Column('cooking_time', sa.Integer(), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -73,7 +73,7 @@ def upgrade():
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('phone_number', sa.String(length=20), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('profile_picture_url', sa.String(length=255), nullable=True),
+    sa.Column('profile_picture_url', sa.String(length=1023), nullable=True),
     sa.Column('hashed_salted_password', sa.String(length=255), nullable=False),
     sa.Column('salt', sa.String(length=255), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),

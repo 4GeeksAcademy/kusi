@@ -1,7 +1,7 @@
 from flask_restx import Namespace
 
 authorizations = {
-    "jsonWebToken":{
+    "jsonWebToken": {
         "type": "apiKey",
         "in": "header",
         "name": "authorization"
@@ -23,12 +23,6 @@ dishes_namespace = Namespace(
 fake_namespace = Namespace(
     "fake",
     description="Fake token and db population.",
-    authorizations=authorizations
-)
-
-ingredients_namespace = Namespace(
-    "ingredients",
-    description="Ingredients CRUD.",
     authorizations=authorizations
 )
 
