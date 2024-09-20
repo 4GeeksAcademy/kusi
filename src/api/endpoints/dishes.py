@@ -1,8 +1,7 @@
-from flask import request
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Resource, fields
-from api.models import db, Dish, DishIngredient, Ingredient
+from api.models import db, Dish, DishIngredient, Ingredient, Role, RoleName
 from api.namespaces import dishes_namespace
 from api.utils import InvalidAPIUsage
 
@@ -35,6 +34,7 @@ new_dish = dishes_namespace.model(
 )
 
 @dishes_namespace.response(200, "OK")
+@dishes_namespace.response(403, "Forbidden")
 @dishes_namespace.response(404, "Dish not found")
 @dishes_namespace.response(422, "Unprocessable entity")
 @dishes_namespace.response(500, "Internal server error")
@@ -66,6 +66,11 @@ class FetchAndUpdateDishById(Resource):
     @dishes_namespace.expect(new_dish)
     def put(self, dish_id):
         """Updates the quantity of specified dish if the user has admin role."""
+        current_user = get_jwt_identity()
+        admin_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
+        if current_user["role_id"] != admin_role.id:
+            raise InvalidAPIUsage("Only admins can update dishes", 403)
+
         dish = Dish.query.filter_by(id=dish_id).one_or_none()
         if dish is None:
             raise InvalidAPIUsage(f"Dish {dish_id} not found", 404)
