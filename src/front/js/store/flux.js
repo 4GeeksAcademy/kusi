@@ -161,18 +161,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let token = localStorage.getItem("token");
 					try{
 					const addNote = ({
-						client_id: "10", //cambiar x el token
 						dishes: store.list, 
 						special_instructions: instructionsnote, 
-						grand_total: getActions().totalPrice()   
 					  });
 
 
 					if (!token) {
+						
 						Swal.fire("Hey!", "Primero debes iniciar sesión", "warning");
 						return
 					 }
-					
+					    localStorage.setItem("grand_total", getActions().totalPrice() )
 						console.log(addNote);
 						setStore({...getStore(), order: addNote })
 					
@@ -186,17 +185,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				let token = localStorage.getItem("token");
 				try{
-					// let resp = await fetch(process.env.BACKEND_URL + "/orders", {
-					// 	method: 'POST',
-					// 	body: JSON.stringify(store.order),
-					// 	headers: {
-					// 		Authorization:`Bearer ${token}`
-					// 	  },	
-					// })
-					// let data = await resp.json()
-					// console.log(data);
+					let resp = await fetch(`${process.env.BACKEND_URL}/orders/`, {
+						method: 'POST',
+						body: JSON.stringify(store.order),
+						headers: {
+							"Authorization":`Bearer ${token}`,
+							"Content-Type": "application/json"
+						  },	
+					})
+					let data = await resp.json()
+					console.log(data);
 					console.log(store.order);
-					
+					console.log(token);
 					
 					
 				}catch(e){
@@ -205,6 +205,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+
+			recoverPassword: async (email) => {
+				try{
+					let resp = await fetch(process.env.BACKEND_URL + "/", {
+						method: 'POST',
+						body: JSON.stringify(email),
+					})
+					let data = await resp.json()
+					console.log(data);					
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
 			
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
