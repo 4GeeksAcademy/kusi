@@ -49,6 +49,10 @@ export const Paypal = () => {
                                     })
                                     
                                 }}
+
+                                onError= {(err) => {
+                                    navigate("/payment-not-made");
+                                }}
                                
                             />
                         </PayPalScriptProvider>

@@ -175,7 +175,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				let token = localStorage.getItem("token");
 				try{
-					let resp = await fetch(`${process.env.BACKEND_URL}/orders/`, {
+					let resp = await fetch(`${process.env.BACKEND_URL}/orders`, {
 						method: 'POST',
 						body: JSON.stringify(store.order),
 						headers: {
