@@ -33,7 +33,7 @@ export const Paypal = () => {
                                     return actions.order.create({
                                         purchase_units:[{
                                             amount:{
-                                                value:  153
+                                                value:  localStorage.getItem("amount")
                                             }
                                         }]
                                     })

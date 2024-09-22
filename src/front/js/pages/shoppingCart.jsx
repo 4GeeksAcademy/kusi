@@ -20,15 +20,11 @@ export const ShoppingCart = () => {
 		setNotes(txt)
 	}
 
-    const goToPay = () => {
-
-		try{
-            actions.btnContinuar(notes);
-            navigate("/paypal")
+    const goToPay = async () => {
+            await actions.btnContinuar(notes);
+            // navigate("/paypal")
             setNotes("")   
-		}catch(e){
-			console.error(e);
-		}
+		
 	}
      
 
@@ -58,16 +54,16 @@ export const ShoppingCart = () => {
                         <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1></div>
                   </div> 
                   <ul className="p-0">{store.list.map(item => (
-                      <li className="list-group-item d-flex align-items-center justify-content-center">
+                      <li key={item.id} className="list-group-item d-flex align-items-center justify-content-center">
                       <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
 
                           <div className="col-3 col-sm-3 col-md-3 d-flex justify-content-center">
-                            <img src={item.image} alt={item.dish_id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
+                            <img src={item.image} alt={item.id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
                           </div>
                             <div className="row col-9 col-sm-9 col-md-9">
                    
                               <div className="col-8 col-lg-6 col-md-6 text-start icon-left">
-                                {item.name}
+                                {/* {item.name} */}
                               </div>
                           
                               <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
@@ -76,16 +72,16 @@ export const ShoppingCart = () => {
                             
                               <div className="col-8 col-lg-3 col-md-3 align-self-center text-start icon-left">
                                 <div className="text-start icon-left p-0 m-0">
-                                  <span onClick={() => actions.decrementDish(item.dish_id)} className="span-icon"><img 
+                                  <span onClick={() => actions.decrementDish(item.id)} className="span-icon"><img 
                                     src={minus} alt=""  /></span>
                                   <span className="px-1">{item.quantity}</span>
-                                  <span onClick={() => actions.incrementDish(item.dish_id,item.quantity)} className="span-icon"><img 
+                                  <span onClick={() => actions.incrementDish(item.id,item.quantity)} className="span-icon"><img 
                                     src={plus} alt=""  /></span>
                                 </div>
                               </div>
                           
                               <div className="col-4 col-lg-1 col-md-1 align-self-center text-end icon-right">
-                                <span onClick={() => actions.deleteDish(item.dish_id)} className="span-icon">
+                                <span onClick={() => actions.deleteDish(item.id)} className="span-icon">
                                 <img 
                                   src={bin} alt="" id="bin" />
                                 </span>
