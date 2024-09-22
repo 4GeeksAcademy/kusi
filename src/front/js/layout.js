@@ -2,9 +2,8 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import injectContext from './store/appContext';
 import LandingPage from './pages/LandingPage.jsx';
-import Development from "./pages/development.jsx";
 import { Profile } from './pages/profile.jsx';
-import { Menu } from "./pages/menu.jsx";
+import { Menu } from "./pages/Menu.jsx";
 import { Login } from "./pages/login.jsx";
 import { SignUp } from "./pages/signup.jsx";
 import { ShoppingCart } from "./pages/shoppingCart.jsx";
@@ -21,7 +20,6 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <Routes>
-                    <Route element={<Development />} path="*" />
                     <Route element={<LandingPage />} path="/" />
                     <Route element={<Profile />} path="/profile" />
                     <Route element={<Login />} path="/login" />

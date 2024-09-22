@@ -31,8 +31,8 @@ class User(db.Model):
     name = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20))
     is_active = db.Column(db.Boolean, nullable=False, default=True)
-    profile_picture_url = db.Column(db.String(255))
-    hashed_password = db.Column(db.String(255), nullable=False)
+    profile_picture_url = db.Column(db.String(1023))
+    hashed_salted_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
@@ -49,7 +49,7 @@ class User(db.Model):
             "phone_number": self.phone_number,
             "is_active": self.is_active,
             "profile_picture_url": self.profile_picture_url,
-            "created_at": self.created_at
+            "created_at": self.created_at.isoformat()
         }
 
 class OrderStatusName(str, Enum):
@@ -62,7 +62,7 @@ class OrderStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Enum(OrderStatusName), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)    
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now) 
 
     def __repr__(self):
         return f"<OrderStatus {self.name.value}>"
@@ -92,7 +92,7 @@ class Order(db.Model):
             "status_id": self.status_id,
             "grand_total": self.grand_total,
             "special_instructions": self.special_instructions,
-            "created_at": self.created_at,
+            "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at
         }
 
@@ -120,10 +120,10 @@ class OrderDish(db.Model):
 class Dish(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.String(255), nullable=False)
-    image_url = db.Column(db.String(255))
+    description = db.Column(db.String(511), nullable=False)
+    image_url = db.Column(db.String(1023))
     price = db.Column(db.Float, nullable=False)
-    discount_percentage = db.Column(db.Integer, nullable=False)
+    discount_percentage = db.Column(db.Integer)
     cooking_time = db.Column(db.Integer)
     quantity = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -165,7 +165,7 @@ class DishIngredient(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey("ingredient.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-
+    
     def __repr__(self):
         return f"<DishIngredient {self.id}>"
     
