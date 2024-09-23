@@ -193,6 +193,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							if (resp.status === 204) {
 							  setStore({ ...getStore(), order: addNote });
 							  localStorage.setItem("amount", getActions().totalPrice());
+							  localStorage.setItem("order", JSON.stringify(addNote));
 							  console.log(store.order);
 							  window.location.href = "/paypal";
 							} else {
@@ -237,12 +238,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			createOrder: async () => {
 				const store = getStore();
+				let order = localStorage.getItem("order");
 				localStorage.removeItem("amount");
 				let token = localStorage.getItem("token");
 				try{
 					let resp = await fetch(`${process.env.BACKEND_URL}/orders/`, {
 						method: 'POST',
-						body: JSON.stringify(store.order),
+						body: order,
 						headers: {
 							"Authorization":`Bearer ${token}`,
 							"Content-Type": "application/json",
@@ -251,6 +253,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					let data = await resp.json()
 					console.log(data);
+					localStorage.removeItem("order");
 					
 					
 				}catch(e){
