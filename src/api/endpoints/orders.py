@@ -1,8 +1,8 @@
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import fields, Resource
-from functools import reduce
-from api.endpoints.users import user_model
+from sqlalchemy import desc, or_
+from functools import cmp_to_key, reduce
 from api.models import (
     db,
     Dish,
@@ -76,13 +76,56 @@ class CreateAndFetchOrder(Resource):
     def get(self):
         """Fetches all the orders."""
         current_user = get_jwt_identity()
+        user_id = current_user["id"]
         role_id = current_user["role_id"]
+
         client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
-        if role_id == client_role.id:
-            raise InvalidAPIUsage("Forbidden", 403)
+        chef_role = Role.query.filter_by(name=RoleName.CHEF.value).one_or_none()
+        admin_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
+
+        pending = OrderStatus.query.filter_by(name=OrderStatusName.PENDING.value).one_or_none()
+        in_progress = OrderStatus.query.filter_by(name=OrderStatusName.IN_PROGRESS.value).one_or_none()
+        completed = OrderStatus.query.filter_by(name=OrderStatusName.COMPLETED.value).one_or_none()
 
         try:
-            orders = list(map(lambda order: order.serialize(), Order.query.all()))
+            if role_id == admin_role.id:
+                orders = list(
+                    map(
+                        lambda order: order.serialize(),
+                        Order.query.order_by(desc(Order.updated_at)).all(),
+                    )
+                )
+            elif role_id == chef_role.id:
+                orders = list(
+                    map(
+                        lambda order: order.serialize(),
+                        Order.query.filter(or_(Order.chef_id == None, Order.chef_id == user_id)).all(),
+                    )
+                )
+                def less_than_chef(a, b):
+                    if a.status_id == b.status_id:
+                        return a.updated_at > b.updated_at
+                    return (
+                        a.status_id == in_progress.id or
+                        a.status_id == pending.id and b.status_id == completed.id
+                    )
+                orders.sort(key=cmp_to_key(less_than_chef))
+            elif role_id == client_role.id:
+                orders = list(
+                    map(
+                        lambda order: order.serialize(),
+                        Order.query.filter(Order.client_id == user_id).all(),
+                    )
+                )
+                def less_than_client(a, b):
+                    if a.status_id == b.status_id:
+                        return a.updated_at > b.updated_at
+                    return (
+                        b.status_id == completed.id or
+                        a.status_id != completed.id and a.updated_at > b.updated_at
+                    )
+                orders.sort(key=cmp_to_key(less_than_client))
+
             return orders, 200
         except Exception as e:
             return { "message": str(e) }, 500
@@ -207,6 +250,8 @@ class FetchOrderById(Resource):
         try:
             response = order.serialize()
             response["client"] = User.query.get(order.client_id).serialize()
+            if order.chef_id is not None:
+                response["chef"] = User.query.get(order.chef_id).serialize()
             response["dishes"] = list(
                 map(
                     lambda dish: dish.serialize(),
