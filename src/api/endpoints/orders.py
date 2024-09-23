@@ -36,6 +36,33 @@ new_order = orders_namespace.model(
     }
 )
 
+def validate_new_order(current_user, payload):
+    client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
+    if current_user["role_id"] != client_role.id:
+        raise InvalidAPIUsage("Only client can create orders", 403)
+
+    client_id = current_user["id"]
+    client = User.query.get(client_id)
+    if client is None:
+        raise InvalidAPIUsage("User not found", 404)
+    
+    payload = orders_namespace.payload
+    dishes = payload.get("dishes")
+    if dishes is None:
+        raise InvalidAPIUsage("Missing dishes", 422)
+
+    for dish in dishes:
+        dish_id = dish.get("id")
+        if dish_id is None:
+            raise InvalidAPIUsage(f"Missing dish ID", 422)
+        existing_dish = Dish.query.get(dish_id)
+        if existing_dish is None:
+            raise InvalidAPIUsage(f"Dish {dish_id} does not exist", 404)
+        if dish["quantity"] > existing_dish.quantity:
+            raise InvalidAPIUsage(f"{existing_dish.quantity} {existing_dish.name}(s) left", 422)
+        if dish["unit_price"] < 0:
+            raise InvalidAPIUsage(f"Cost of {existing_dish.name} should be non-negative", 422)
+
 @orders_namespace.response(200, "OK")
 @orders_namespace.response(201, "Order created")
 @orders_namespace.response(403, "Forbidden")
@@ -43,41 +70,39 @@ new_order = orders_namespace.model(
 @orders_namespace.response(422, "Unprocessable entity")
 @orders_namespace.response(500, "Internal server error")
 @orders_namespace.route("/")
-class CreateOrder(Resource):
+class CreateAndFetchOrder(Resource):
+    @jwt_required()
+    @orders_namespace.doc(security="jsonWebToken")
+    def get(self):
+        """Fetches all the orders."""
+        current_user = get_jwt_identity()
+        role_id = current_user["role_id"]
+        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
+        if role_id == client_role.id:
+            raise InvalidAPIUsage("Forbidden", 403)
+
+        try:
+            orders = list(map(lambda order: order.serialize(), Order.query.all()))
+            return orders, 200
+        except Exception as e:
+            return { "message": str(e) }, 500
+
     @jwt_required()
     @orders_namespace.doc(security="jsonWebToken")
     @orders_namespace.expect(new_order)
     def post(self):
         """Creates an order given some dishes and special instructions."""
         current_user = get_jwt_identity()
-        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
-        if current_user["role_id"] != client_role.id:
-            raise InvalidAPIUsage("Only client can create orders", 403)
-
-        client_id = current_user["id"]
-        client = User.query.get(client_id)
-        if client is None:
-            raise InvalidAPIUsage("User not found", 404)
-        
         payload = orders_namespace.payload
-        dishes = payload.get("dishes")
-        if dishes is None:
-            raise InvalidAPIUsage("Missing dishes", 422)
-
-        for dish in dishes:
-            dish_id = dish["id"]
-            existing_dish = Dish.query.get(dish_id)
-            if existing_dish is None:
-                raise InvalidAPIUsage(f"Dish {dish_id} does not exist", 404)
-            if dish["quantity"] > existing_dish.quantity:
-                raise InvalidAPIUsage(f"{existing_dish.quantity} {existing_dish.name}(s) left", 422)
+        validate_new_order(current_user, payload)
         
         # First, we create the order.
         special_instructions = payload.get("special_instructions")
         pending_status = OrderStatus.query.filter_by(name=OrderStatusName.PENDING.value).one_or_none()
+        dishes = payload["dishes"]
         grand_total = reduce(lambda s, dish: s + dish["unit_price"] * dish["quantity"], dishes, 0)
         order = Order(
-            client_id=client_id,
+            client_id=current_user["id"],
             status_id=pending_status.id,
             grand_total=grand_total,
             special_instructions=special_instructions
@@ -87,15 +112,15 @@ class CreateOrder(Resource):
         
         # Then, we proceed to link each dish with the created order.
         for dish in dishes:
-            existing_dish = Dish.query.get(dish["id"])
             db.session.add(
                 OrderDish(
                     order_id=order.id,
-                    dish_id=dish_id,
+                    dish_id=dish["id"],
                     unit_price=dish["unit_price"],
                     quantity=dish["quantity"]
                 )
             )
+            existing_dish = Dish.query.get(dish["id"])
             existing_dish.quantity -= dish["quantity"]
             db.session.commit()
 
@@ -114,31 +139,45 @@ class ValidateOrder(Resource):
     def post(self):
         """Validates order before checkout."""
         current_user = get_jwt_identity()
-        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
-        if current_user["role_id"] != client_role.id:
-            raise InvalidAPIUsage("Only client can create orders", 403)
-
-        client_id = current_user["id"]
-        client = User.query.get(client_id)
-        if client is None:
-            raise InvalidAPIUsage("User not found", 404)
-        
         payload = orders_namespace.payload
-        dishes = payload.get("dishes")
-        if dishes is None:
-            raise InvalidAPIUsage("Missing dishes", 422)
-
-        for dish in dishes:
-            dish_id = dish["id"]
-            existing_dish = Dish.query.get(dish_id)
-            if existing_dish is None:
-                raise InvalidAPIUsage(f"Dish {dish_id} does not exist", 404)
-            if dish["quantity"] > existing_dish.quantity:
-                raise InvalidAPIUsage(f"{existing_dish.quantity} {existing_dish.name}(s) left", 422)
-            if dish["unit_price"] < 0:
-                raise InvalidAPIUsage(f"Cost of {existing_dish.name} should be non-negative", 422)
-
+        validate_new_order(current_user, payload)
         return (""), 204
+
+@orders_namespace.response(200, "OK")
+@orders_namespace.response(403, "Forbidden")
+@orders_namespace.response(404, "Not found")
+@orders_namespace.response(500, "Internal server error")
+@orders_namespace.route("/<int:order_id>/update")
+class UpdateOrderStatus(Resource):
+    @jwt_required()
+    @orders_namespace.doc(security="jsonWebToken")
+    def put(self, order_id):
+        """Updates the status of the order to its following one."""
+        current_user = get_jwt_identity()
+        chef_role = Role.query.filter_by(name=RoleName.CHEF.value).one_or_none()
+        if current_user["role_id"] != chef_role.id:
+            raise InvalidAPIUsage("Only chefs can update orders", 403)
+        order = Order.query.get(order_id)
+        if order is None:
+            raise InvalidAPIUsage(f"Order {order_id} not found", 404)
+        
+        pending = OrderStatus.query.filter_by(name=OrderStatusName.PENDING.value).one_or_none()
+        in_progress = OrderStatus.query.filter_by(name=OrderStatusName.IN_PROGRESS.value).one_or_none()
+        completed = OrderStatus.query.filter_by(name=OrderStatusName.COMPLETED.value).one_or_none()
+        
+        if order.status_id == pending.id:
+            order.status_id = in_progress.id
+            order.chef_id = current_user["id"]
+        elif order.status_id == in_progress.id:
+            order.status_id = completed.id
+
+        try:
+            db.session.commit()
+        except Exception as e:
+            return { "message": str(e) }, 500
+        
+        return order.serialize(), 200
+        
 
 @orders_namespace.response(200, "OK")
 @orders_namespace.response(201, "Order created")

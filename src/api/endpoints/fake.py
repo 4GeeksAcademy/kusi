@@ -277,6 +277,10 @@ class Fake(Resource):
         mayonesa = Ingredient(name="Mayonesa")
         palta = Ingredient(name="Palta")
         perejil = Ingredient(name="Perejil")
+        cerdo = Ingredient(name="Cerdo")
+        pollo = Ingredient(name="Pollo")
+        aji_panca = Ingredient(name="Ají panca")
+        
 
         db.session.add(pescado)
         db.session.add(cebolla)
