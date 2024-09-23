@@ -2,6 +2,11 @@ import { useState, useContext, useEffect } from "react";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
+import "../../styles/orderDetails.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+
+
 
 export const ViewOrderDetails = () => {
 
@@ -67,8 +72,9 @@ export const ViewOrderDetails = () => {
                     ):(<p>No hay datos que mostrar</p>)}
                     <p className="text-end">S/.{orderDetails.grand_total}</p>
                     <hr></hr>
-                    <div>
+                    <div className="ticket-notes p-4 rounded">
                        <h5>Notas del pedido:</h5>
+                       <p><FontAwesomeIcon icon={faCaretRight} className="px-2"/>{orderDetails.special_instructions}</p>
                     </div>
                     <hr></hr>
                     <button type="button" class="btn btn-primary">Primary</button>
