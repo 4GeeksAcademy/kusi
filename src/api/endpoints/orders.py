@@ -103,29 +103,28 @@ class CreateAndFetchOrder(Resource):
                     )
                 )
                 def less_than_chef(a, b):
-                    if a.status_id == b.status_id:
-                        return a.updated_at > b.updated_at
+                    if a["status_id"] == b["status_id"]:
+                        return a["updated_at"] > b["updated_at"]
                     return (
-                        a.status_id == in_progress.id or
-                        a.status_id == pending.id and b.status_id == completed.id
+                        a["status_id"] == in_progress.id or
+                        a["status_id"] == pending.id and b["status_id"] == completed.id
                     )
                 orders.sort(key=cmp_to_key(less_than_chef))
             elif role_id == client_role.id:
                 orders = list(
                     map(
                         lambda order: order.serialize(),
-                        Order.query.filter(Order.client_id == user_id).all(),
+                        Order.query.filter_by(client_id=user_id).all(),
                     )
                 )
                 def less_than_client(a, b):
-                    if a.status_id == b.status_id:
-                        return a.updated_at > b.updated_at
+                    if a["status_id"] == b["status_id"]:
+                        return a["updated_at"] > b["updated_at"]
                     return (
-                        b.status_id == completed.id or
-                        a.status_id != completed.id and a.updated_at > b.updated_at
+                        b["status_id"] == completed.id or
+                        a["status_id"] != completed.id and a["updated_at"] > b["updated_at"]
                     )
                 orders.sort(key=cmp_to_key(less_than_client))
-
             return orders, 200
         except Exception as e:
             return { "message": str(e) }, 500
