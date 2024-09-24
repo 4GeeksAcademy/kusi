@@ -290,6 +290,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			updateOrderStatus: async (id, newStatus) => {
+				try{
+					const response = await fetch(`${process.env.BACKEND_URL}/orders/${id}/update`,{
+						method: "PUT",
+                        headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						},
+                        body: JSON.stringify({
+                            status_id: newStatus
+                        })
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error editando el id "+id)
+					}
+					const data = await response.json();
+                    console.log("Pedido actualizado con éxito", data);
+					setStore(prevStore => ({...prevStore, dataOrdersById: data}));
+
+				}catch (e){
+					console.error("Error al editar orden", e)
+				}
+			},
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},

@@ -1,22 +1,43 @@
 import { useState, useContext, useEffect } from "react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/orderDetails.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { Navbar } from "../component/Navbar.jsx";
+import { jwtDecode } from 'jwt-decode';
+import kusiLogo from '../../assets/images/kusi-logo.png';
 
 
 
 export const ViewOrderDetails = () => {
 
     const {store, actions} = useContext(Context);
-    const {id} = useParams()
-    const [orderDetails, setOrderDetails] = useState([])
-    const [dishes, setDishes] = useState([])
+    const {id} = useParams();
+    const navigate = useNavigate();
+    const [orderDetails, setOrderDetails] = useState([]);
+    const [dishes, setDishes] = useState([]);
+    const [roleId, setRoleId] = useState()
+    const [total, setTotal] = useState()
 
     console.log("este es el id que estoy llamando :)", id)
 
+    useEffect(() => {
+  
+        if (localStorage.getItem("token")) {
+            try {
+                const decodedToken = jwtDecode(localStorage.getItem("token"));
+                setRoleId(decodedToken.sub.role_id);
+            } catch (error) {
+                console.error("Error decoding token:", error);
+            }
+        } else {
+            setRoleId(0);
+        }
+    },[]);
+
+    console.log(roleId)
 
     useEffect(()=>{
         const fetch = async () => {
@@ -50,37 +71,121 @@ export const ViewOrderDetails = () => {
         [Status.COMPLETED]: "Completado",
         [Status.CANCELLED]: "Cancelado"
     };
+
+
+    const handleStatusChange = async () => {
+        const nextStatus = {
+            [Status.PENDING]: Status.IN_PROGRESS,
+            [Status.IN_PROGRESS]: Status.COMPLETED,
+            [Status.COMPLETED]: Status.COMPLETED,
+            [Status.CANCELLED]: Status.CANCELLED
+        };
+    
+        const newStatus = nextStatus[orderDetails.status_id]
+        await actions.updateOrderStatus(id, newStatus)
+        setOrderDetails(prevOrder => ({...prevOrder, status_id: newStatus}))
+
+        await actions.getOrdersById(id);
+        setOrderDetails(store.dataOrdersById);
+    };
+    
+
+    useEffect(() => {
+        const calculateTotalPrice = () => {
+            if (orderDetails?.dishes) {
+                
+                const totalPrice = orderDetails?.dishes?.reduce((acc, item) => {
+                    const byQuantities = item.price * item.quantity
+                    return acc + byQuantities
+                }, 0);
+                setTotal(totalPrice);
+            }
+        };
+        
+        calculateTotalPrice();
+        
+    }, [orderDetails]);
+    
+
+    console.log(total)
+
     return(
-        <div className="d-flex flex-column justify-content-center align-items-center p-3"> 
-            <div className="card text-start w-50 h-auto d-flex flex-column justify-content-center">
-                <h2 className="card-header text-center p-4">N° Orden #{orderDetails?.id || "No disponible"}</h2>
+        <div className="container d-flex justify-content-center align-items-center p-4">
+            <div className="card rounded-0" style={{ maxWidth: '400px', width: '100%', height:"auto" }}>
+                <div className="mb-3 d-flex justify-content-between align-items-center py-3 px-3">
+                    <img src={kusiLogo} style={{width:"70px"}}/>
+                    {roleId === 2 || roleId === 3 ? (
+                        <button type="button"
+                            className={`rounded-pill btn ${orderDetails?.status_id === Status.PENDING ? "btn-outline-primary" : orderDetails?.status_id === Status.IN_PROGRESS ? "btn-outline-warning" : orderDetails?.status_id === Status.COMPLETED ? "btn-outline-success" : "btn-outline-danger"}`}
+                            disabled={orderDetails.status_id === Status.COMPLETED || orderDetails.status_id === Status.CANCELLED}
+                            onClick={handleStatusChange}>
+                            {orderStatus[orderDetails?.status_id]}
+                        </button>
+                    ):(
+                        <p className={`rounded-pill px-3 py-2 ${orderDetails?.status_id === Status.PENDING ? "bg-primary text-white" : orderDetails?.status_id === Status.IN_PROGRESS ? "bg-warning text-dark" : orderDetails?.status_id === Status.COMPLETED ? "bg-success text-white" : "bg-danger text-white"}`}>
+                            {orderStatus[orderDetails?.status_id]}
+                        </p>
+                    )}
+                </div>
+                <div className="card-header text-start border-0">
+                    <h2 className="mb-0">Orden #{orderDetails?.id || "No disponible"}</h2>
+                </div>
                 <div className="card-body">
-                    <h5 className="card-title">Cliente: {orderDetails?.client?.name || "No disponible"}</h5>
-                    <h5 className="card-title">Email: {orderDetails?.client?.email || "No disponible"}</h5>
-                    <h5 className="card-title">Teléfono: {orderDetails?.client?.phone_number || "No disponible"}</h5>
-                    <hr></hr>
-                    <h5>Fecha: {new Date(orderDetails?.created_at).toLocaleDateString('es-ES')}</h5>
-                    <h5>Hora: {new Date(orderDetails?.created_at).toLocaleTimeString()}</h5>
-                    <hr></hr>
-                    <h5>Estado de la orden: {orderStatus[orderDetails?.status_id]}</h5>
-                    <hr></hr>
-                    <h5>Platos</h5>
-                    {orderDetails.dishes && orderDetails.dishes.length > 0 ? (
-                        orderDetails.dishes.map((dish, index) => (
-                            <p key={index}>{dish.name}</p>
-                        ))
-                    ):(<p>No hay datos que mostrar</p>)}
-                    <p className="text-end">S/.{orderDetails.grand_total}</p>
-                    <hr></hr>
-                    <div className="ticket-notes p-4 rounded">
-                       <h5>Notas del pedido:</h5>
-                       <p><FontAwesomeIcon icon={faCaretRight} className="px-2"/>{orderDetails.special_instructions}</p>
+                    <div>
+                        <div className="mb-3">
+                            {orderDetails.status_id === Status.IN_PROGRESS || orderDetails.status_id === Status.COMPLETED || orderDetails.status_id === Status.CANCELLED ? (
+                                <div className="">
+                                    <h5 className="fw-bold">Chef</h5>
+                                    <p>{orderDetails?.chef?.name}</p>
+                                </div>
+                            ):("")}
+                        </div>
+                        <div className="mb-3">
+                            <h5 className="card-title fw-bold">Cliente</h5>
+                            <p className="mb-1">{orderDetails?.client?.name || "No disponible"}</p>
+                            <p className="mb-1">{orderDetails?.client?.email || ""}</p>
+                            <p className="mb-1">{orderDetails?.client?.phone_number || ""}</p>
+                        </div>
+                        
                     </div>
-                    <hr></hr>
-                    <button type="button" class="btn btn-primary">Primary</button>
+                    
+                    <div className="mb-3">
+                        <h5 className="card-title fw-bold">Fecha y Hora</h5>
+                        <p className="mb-1">{new Date(orderDetails?.created_at).toLocaleDateString('es-ES')} {new Date(orderDetails?.created_at).toLocaleTimeString('es-ES')}</p>
+                    </div>
+                    
+                    <div className="mb-3">
+                        <h5 className="card-title fw-bold">Platos</h5>
+                        {orderDetails.dishes && orderDetails.dishes.length > 0 ? (
+                            orderDetails.dishes.map((dish, index) => (
+                                <div key={index} className="d-flex justify-content-between">
+                                    <p className="mb-0">{dish.quantity} x {dish.name}</p>
+                                    <p className="mb-0">S/.{dish.price * dish.quantity}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No hay datos que mostrar</p>
+                        )}
+                        <div className="d-flex justify-content-center align-items-end w-100">
+                            <hr style={{ marginLeft: 'auto', width:"10%" }} />
+                        </div>
+                                                
+                        <div className="d-flex justify-content-between">
+                            <p className="fw-bold">Total</p>
+                            <p className="fw-bold"> S/.{total}</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <div className="ticket-note p-3 rounded mb-3">
+                        <h5 className="card-title">Notas del Pedido</h5>
+                        <p className="mb-0"><FontAwesomeIcon icon={faCaretRight} className="me-2" />{orderDetails?.special_instructions || "Sin notas adicionales"}</p>
+                    </div>
                 </div>
             </div>
         </div>
+
+
         
     )
 }
