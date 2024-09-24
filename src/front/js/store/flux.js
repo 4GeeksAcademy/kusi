@@ -99,7 +99,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  "quantity": 20,
 				  "dish_ingredients": null
 				}
-			  ]
+			  ], 
+			  amount: 1,
+			  btnaditional: false
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -203,7 +205,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then((response)=>response.json())
 					.then((data)=>setStore({dishes: data.dishes}))
 					.catch((error)=>console.log(error))
-				}
+				},
+				incrementAmount: () => {
+					const store = getStore();
+					setStore({ amount: store.amount + 1 });
+				},
+				decrementAmount: () => {
+					const store = getStore();
+					if (store.amount > 1) {
+						setStore({ amount: store.amount - 1 });
+					}
+				},
+				setBtnAdicional: () => {
+					const store = getStore();
+					setStore({ btnaditional: !store.btnaditional });
+				},
 
 			}
 		}
