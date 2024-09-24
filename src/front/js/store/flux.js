@@ -9,17 +9,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				CHEF: 2,
 				ADMIN: 3
 			}),
-			list : [{
-                id:1,
-                quantity: 1,
-                unit_price: 51
-             },
-            {
-                id:6,
-                quantity: 2,
-                unit_price: 37
+			list : [
+			// 	{
+            //     id:1,
+            //     quantity: 1,
+            //     unit_price: 51
+            //  },
+            // {
+            //     id:6,
+            //     quantity: 2,
+            //     unit_price: 37
  
-            }],
+            // }
+			],
 			orderDish: [],
 			order:[],
 			dishes: [],
@@ -271,6 +273,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					let data = await resp.json()
 					console.log(data);					
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
+
+			sendChat: async (request) => {
+				try{
+					let resp = await fetch(process.env.BACKEND_URL + "/", {
+						method: 'POST',
+						body: JSON.stringify(request),
+					})
+					let data = await resp.json()
+					localStorage.setItem("responseBot",data)				
 				}catch(e){
 					console.error(e);
 					

@@ -83,6 +83,8 @@
 		"react-dom": "^16.8.4",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0",
+		"react-simple-chatbot": "^0.6.1",
+		"styled-components": "^6.1.13",
 		"sweetalert2": "^11.14.0"
 	}
 }

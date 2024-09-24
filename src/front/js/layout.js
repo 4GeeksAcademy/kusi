@@ -12,6 +12,7 @@ import { PaymentMade } from "./pages/paymentMade.jsx";
 import { PaymentNotMade } from "./pages/paymentNotMade.jsx";
 import { ResetPassword } from "./pages/resetPassword.jsx";
 import { EmailSent } from "./pages/emailSent.jsx";
+import { Chat } from "./component/chat.jsx";
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -31,6 +32,7 @@ const Layout = () => {
                     <Route element={<PaymentNotMade />} path="/payment-not-made" />
                     <Route element={<ResetPassword />} path="/reset-password" />
                     <Route element={<EmailSent />} path="/email-sent" />
+                    <Route element={<Chat />} path="/chat"/>
                     <Route element={<h1>Not found!</h1>} />
                 </Routes>
             </BrowserRouter>
