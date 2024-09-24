@@ -5,9 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class RoleName(str, Enum):
-    CLIENT = "client"
-    CHEF = "chef"
-    ADMIN = "admin"
+    CLIENT = "Client"
+    CHEF = "Chef"
+    ADMIN = "Admin"
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,10 +53,10 @@ class User(db.Model):
         }
 
 class OrderStatusName(str, Enum):
-    PENDING = "pending"
-    IN_PROGRESS = "in progress"
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
+    PENDING = "Pending"
+    IN_PROGRESS = "In progress"
+    COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
 
 class OrderStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,6 +76,7 @@ class OrderStatus(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    chef_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     status_id = db.Column(db.Integer, db.ForeignKey("order_status.id"), nullable=False)
     grand_total = db.Column(db.Float, nullable=False)
     special_instructions = db.Column(db.String(255))
@@ -89,11 +90,12 @@ class Order(db.Model):
         return {
             "id": self.id,
             "client_id": self.client_id,
+            "chef_id": self.chef_id,
             "status_id": self.status_id,
             "grand_total": self.grand_total,
             "special_instructions": self.special_instructions,
             "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at
+            "updated_at": self.updated_at.isoformat()
         }
 
 class OrderDish(db.Model):
