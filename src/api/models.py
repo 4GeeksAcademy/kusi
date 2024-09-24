@@ -146,6 +146,22 @@ class Dish(db.Model):
             "quantity": self.quantity
         }
  
+class ExtraDish(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dish_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    extra_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+    def __repr__(self):
+        return f"<ExtraDish {self.id}>"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "dish_id": self.dish_id,
+            "extra_id": self.ingredient_id
+        }
+
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
