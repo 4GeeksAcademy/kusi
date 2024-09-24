@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassStart, faFire, faBan, faUtensils, faPen,faPlus,faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "../component/Navbar.jsx";
 import { useNavigate } from "react-router-dom";
-import "../../styles/employees.css"
+import "../../styles/users.css"
 import { jwtDecode } from 'jwt-decode';
 import { UserModal } from "../component/UserModal.jsx";
+import Swal from 'sweetalert2'
 
 export const Users = () => {
     const { store, actions } = useContext(Context); 
@@ -38,7 +39,18 @@ export const Users = () => {
     const handleNewEmployee = () => SetIdUser(0);
     const handleDetailsUser = (id) => SetIdUser(id);
     const handleDeleteUser = async (id) => {
-        await actions.deleteUser(id);
+
+        Swal.fire({
+            title: "Estás seguro de eliminar este usuario?",
+            showCancelButton: true,
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                actions.deleteUser(id);
+            } 
+          });
+
     }
     const roles = Object.freeze({
         GUEST: 0,

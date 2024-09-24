@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassStart, faFire, faBan, faUtensils, faPen } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "./Navbar.jsx";
 import { useNavigate } from "react-router-dom";
-import "../../styles/employees.css"
+import "../../styles/users.css"
 import { jwtDecode } from 'jwt-decode';
 
 export const UserModal = ({id}) => {

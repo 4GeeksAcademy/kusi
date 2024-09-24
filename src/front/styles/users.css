@@ -29,3 +29,8 @@
 .spanEmployees{
     width: 100%;
 }
+
+.swal2-confirm{
+    background-color: #F44322;
+    border-color: #F44322;
+}
