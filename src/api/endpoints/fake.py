@@ -4,6 +4,7 @@ from api.models import (
     db,
     Dish,
     DishIngredient,
+    ExtraDish,
     Ingredient,
     Order,
     OrderDish,
@@ -23,11 +24,12 @@ bcrypt = Bcrypt()
 # 2. User
 # 3. OrderStatus
 # 4. Dish
-# 5. Ingredient
-# 6. DishIngredient
+# 5. ExtraDish
+# 6. Ingredient
+# 7. DishIngredient
 # TODO: Complete the following ones.
-# 7. Order
-# 8. OrderDish
+# 8. Order
+# 9. OrderDish
 @fake_namespace.route("/data")
 class Fake(Resource):
     @fake_namespace.doc("Populate DB")
@@ -137,6 +139,7 @@ class Fake(Resource):
         db.session.add(cancelled)
         db.session.commit()
 
+        # Dish
         ceviche = Dish(
             id=1,
             name="Ceviche",
@@ -234,6 +237,30 @@ class Fake(Resource):
             cooking_time=90,
             quantity=25
         )
+        cancha_serrana = Dish(
+            id=11,
+            name="Cancha serrana",
+            description="Maíz tostado en una sartén con un poco de aceite y sal hasta que adquiere un bonito color, casi siempre dorado.",
+            image_url="https://www.agraria.pe/imgs/a/lx/cancha-serrana-beneficios-de-incluirla-en-la-dieta-20475.jpg",
+            price=5,
+            quantity=100
+        )
+        inca_kola = Dish(
+            id=12,
+            name="Inca Kola",
+            description="Con su distintivo color amarillo dorado y su sabor dulce y exótico, Inca Kola ha logrado convertirse en un ícono nacional y un verdadero símbolo de identidad peruana.",
+            image_url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR4PciVYJze4JLS3P1ew7Slr93iZPHVKQEhw&s",
+            price=7,
+            quantity=200
+        )
+        crema_de_rocoto = Dish(
+            id=13,
+            name="Crema de rocoto",
+            description="Deliciosa receta peruana que consta de una salsa a base de rocoto, especias y hierbas aromáticas que le dan un sabor único.",
+            image_url="https://i.ytimg.com/vi/A8BLaAizD10/hqdefault.jpg",
+            price=5,
+            quantity=200
+        )
 
         db.session.add(ceviche)
         db.session.add(lomo_saltado)
@@ -245,7 +272,30 @@ class Fake(Resource):
         db.session.add(aguadito)
         db.session.add(tacu_tacu)
         db.session.add(pollo_a_la_brasa)
+        db.session.add(cancha_serrana)
+        db.session.add(inca_kola)
+        db.session.add(crema_de_rocoto)
         db.session.commit()
+
+        # ExtraDish
+        db.session.add(
+            ExtraDish(
+                dish_id=ceviche.id,
+                extra_id=cancha_serrana.id
+            )
+        )
+        db.session.add(
+            ExtraDish(
+                dish_id=ceviche.id,
+                extra_id=inca_kola.id
+            )
+        )
+        db.session.add(
+            ExtraDish(
+                dish_id=ceviche.id,
+                extra_id=crema_de_rocoto.id
+            )
+        )
 
         pescado = Ingredient(name="Pescado")
         cebolla = Ingredient(name="Cebolla")
@@ -280,7 +330,11 @@ class Fake(Resource):
         cerdo = Ingredient(name="Cerdo")
         pollo = Ingredient(name="Pollo")
         aji_panca = Ingredient(name="Ají panca")
-        
+        chincho = Ingredient(name="Chincho")
+        huacatay = Ingredient(name="Huacatay")
+        habas = Ingredient(name="Habas")
+        papa_huayro = Ingredient(name="Papa huayro")
+        yuca = Ingredient(name="Yuca")
 
         db.session.add(pescado)
         db.session.add(cebolla)
@@ -312,6 +366,14 @@ class Fake(Resource):
         db.session.add(mayonesa)
         db.session.add(palta)
         db.session.add(perejil)
+        db.session.add(cerdo)
+        db.session.add(pollo)
+        db.session.add(aji_panca)
+        db.session.add(chincho)
+        db.session.add(huacatay)
+        db.session.add(habas)
+        db.session.add(papa_huayro)
+        db.session.add(yuca)
         db.session.commit()
 
         # Ingredients of ceviche
@@ -645,6 +707,102 @@ class Fake(Resource):
             DishIngredient(
                 dish_id=pachamanca.id,
                 ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=cerdo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=pollo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=chincho.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=huacatay.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=habas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=camote.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=papa_huayro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=choclo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pachamanca.id,
+                ingredient_id=yuca.id
             )
         )
         db.session.commit()
