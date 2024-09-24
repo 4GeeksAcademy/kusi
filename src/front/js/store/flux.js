@@ -4,10 +4,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			roles: Object.freeze({ 
-				CLIENT :1,
-				CHEF :2,
-				ADMIN :3
-			  }),
+				CLIENT: 1,
+				CHEF: 2,
+				ADMIN: 3
+			}),
 			list : [],
 			orderDish: [],
 			order:[],
@@ -31,30 +31,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				console.log(store.list)
 			},
 			getDishes: async () => {
-				const store = getStore()
-				console.log(store.dishes)
-				if(store.dishes){
-					try {
-						let response = await fetch(`${process.env.BACKEND_URL}/dishes/`,{
-							headers:{
-								"Access-Control-Allow-Origin": "*",
-								"Authorization": `Bearer ${localStorage.getItem("token")}`,
-								"Content-Type": "application/json"
-							}
-						})
-	
-						let data = await response.json()
-
-						if(response.status == 201){
-							await setStore({dishes: data})
-							console.log(store.dishes)
-						} 
-	
-					}catch (e){
-						console.error("Error al traer usuarios",e)
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes/`, {
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ dishes: data })
 					}
-				} else {
-					console.log("Dishes complete")
+				} catch (err) {
+					console.error("Error:", err);
 				}
 			},
 

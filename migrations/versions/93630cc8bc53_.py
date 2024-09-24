@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 96a3a36452db
+Revision ID: 93630cc8bc53
 Revises: 
-Create Date: 2024-09-18 14:11:28.055534
+Create Date: 2024-09-23 15:49:47.545436
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '96a3a36452db'
+revision = '93630cc8bc53'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,10 +21,10 @@ def upgrade():
     op.create_table('dish',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('description', sa.String(length=255), nullable=False),
-    sa.Column('image_url', sa.String(length=255), nullable=True),
+    sa.Column('description', sa.String(length=511), nullable=False),
+    sa.Column('image_url', sa.String(length=1023), nullable=True),
     sa.Column('price', sa.Float(), nullable=False),
-    sa.Column('discount_percentage', sa.Integer(), nullable=False),
+    sa.Column('discount_percentage', sa.Integer(), nullable=True),
     sa.Column('cooking_time', sa.Integer(), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -73,8 +73,8 @@ def upgrade():
     sa.Column('name', sa.String(length=255), nullable=False),
     sa.Column('phone_number', sa.String(length=20), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('profile_picture_url', sa.String(length=255), nullable=True),
-    sa.Column('hashed_password', sa.String(length=255), nullable=False),
+    sa.Column('profile_picture_url', sa.String(length=1023), nullable=True),
+    sa.Column('hashed_salted_password', sa.String(length=255), nullable=False),
     sa.Column('salt', sa.String(length=255), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -85,11 +85,13 @@ def upgrade():
     op.create_table('order',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('chef_id', sa.Integer(), nullable=True),
     sa.Column('status_id', sa.Integer(), nullable=False),
     sa.Column('grand_total', sa.Float(), nullable=False),
     sa.Column('special_instructions', sa.String(length=255), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['chef_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['client_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['status_id'], ['order_status.id'], ),
     sa.PrimaryKeyConstraint('id')

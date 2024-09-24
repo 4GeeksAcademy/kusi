@@ -1,8 +1,12 @@
+from flask_cors import CORS
 from flask_restx import Api
-from api.namespace.hello import api as hello
-from api.namespace.users import api as users
-from api.namespace.hello_auth import api as hello_auth
-from api.namespace.auth import api as auth
+from api.endpoints import (
+    auth_namespace,
+    dishes_namespace,
+    fake_namespace,
+    orders_namespace,
+    users_namespace,
+)
 
 def setup_swagger(app):
     api = Api(app,
@@ -12,8 +16,9 @@ def setup_swagger(app):
         doc="/docs",
         validate=True
     )
-    
-    api.add_namespace(hello)
-    api.add_namespace(auth)
-    api.add_namespace(hello_auth)
-    api.add_namespace(users)
+    api.add_namespace(auth_namespace)
+    api.add_namespace(dishes_namespace)
+    api.add_namespace(fake_namespace)
+    api.add_namespace(orders_namespace)
+    api.add_namespace(users_namespace)
+    CORS(app)
