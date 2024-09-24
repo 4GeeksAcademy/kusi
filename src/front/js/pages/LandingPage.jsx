@@ -4,8 +4,26 @@ import plateAndKnife from '../../assets/images/plate-and-knife.png';
 import kusiLogo from '../../assets/images/kusi-logo.png';
 import '../../styles/landingPage.css';
 import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from 'react';
+import { Context } from "../store/appContext";
+
 
 export default function LandingPage() {
+
+    const {store, actions} = useContext(Context);
+    const [dishes, setDishes] = useState([])
+
+    useEffect(()=> {
+        const fetch = async () => {
+            await actions.getDishes()
+            setDishes(store.dishes)
+            console.log(store.dishes)
+        }
+        fetch()
+    },[])
+
+    console.log(dishes)
+
     return (
         <div className="landing-container container-fluid p-0">
             <div className="row g-0 vh-100">
