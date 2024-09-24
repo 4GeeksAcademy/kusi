@@ -3,6 +3,8 @@ from api.models import db, User, Role
 from api.namespaces import users_namespace
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required
+from api.utils import InvalidAPIUsage
+import secrets
 
 bcrypt = Bcrypt()
 
@@ -50,43 +52,75 @@ class UserAPI(Resource):
         '''Get all users'''
         try:
             all_users = User.query.all()
-            return all_users,201
+            return all_users,200
         except Exception as error:
             return str(error),500
     
     method_decorators = [jwt_required()]
     @users_namespace.doc(security="jsonWebToken")
     @users_namespace.expect(user_create_model)
-    @users_namespace.marshal_with(user_model)
     def post(self):
-        '''Create user'''
+        """Create a new user given her info."""
         try:
             payload = users_namespace.payload
-            email=payload["email"]
-            user = User.query.filter_by(email=email).first()
-            if user:
-                return "User already exists",404
-            role_name=payload["role"]
-            role = Role.query.filter_by(name=role_name).first(),
-            if not role:
-                return "Rol not found",404
-            name=payload["name"]
-            email=payload["email"]
-            phone_number=payload["phone_number"]
-            password=payload["password"]
-            passwordHashed = bcrypt.generate_password_hash(password).decode('utf-8')
-            user = User(
-                role_id=role.id,
-                email=email,
-                name=name,
-                phone_number=phone_number,
-                hashed_password=passwordHashed
+
+            role_id = payload.get("role_id")
+            if role_id is None:
+                raise InvalidAPIUsage("Missing role_id", status_code=400)
+
+            name = payload.get("name")
+            if name is None:
+                raise InvalidAPIUsage("Missing name", status_code=400)
+
+            password = payload.get("password")
+            if password is None:
+                raise InvalidAPIUsage("Missing password", status_code=400)
+            
+            email = payload.get("email")
+            if email is None:
+                raise InvalidAPIUsage("Missing email", status_code=400)
+
+            phone_number = payload.get("phone_number")
+            if phone_number is None:
+                phone_number = ""
+
+            is_active = payload.get("is_active")
+            if is_active is None:
+                is_active = True
+
+            existing_user = User.query.filter_by(email=email).one_or_none()
+            if existing_user is not None:
+                return { "message": "User already exists" }, 409
+                raise InvalidAPIUsage("User already exists", 409)
+
+            existing_role = Role.query.filter_by(id=role_id).first()
+            if existing_role is None:
+                return { "message": "Role not exists" }, 409
+                raise InvalidAPIUsage("Role not exists", 409)
+            
+            # See https://docs.python.org/3/library/secrets.html
+            salt = secrets.token_hex(16)
+            salted_password = f"{password}{salt}"
+            hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+
+            try:
+                new_user = User(
+                    role_id=role_id,
+                    email=email,
+                    name=name,
+                    phone_number=phone_number,
+                    is_active=is_active,
+                    hashed_salted_password=hashed_salted_password,
+                    # profile_picture_url="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+                    salt=salt
                 )
-            db.session.add(user)
-            db.session.commit()
-            return user,201
-        except Exception as error:
-            return str(error),500
+                db.session.add(new_user)
+                db.session.commit()
+                return new_user.serialize(), 201
+            except Exception as e:
+                return { "message": str(e) }, 500
+        except Exception as e:
+            return { "message": str(e) }, 500
 
 @users_namespace.route('/<id>')
 @users_namespace.param('id', 'User identifier')
@@ -103,38 +137,50 @@ class UserAPI(Resource):
             user = User.query.filter_by(id=id).first()
             if not user:
                 return "User not found",404
-            return user
+            return user,200
         except Exception as error:
             return str(error),500
     
     method_decorators = [jwt_required()]
     @users_namespace.doc(security="jsonWebToken")
     @users_namespace.expect(user_update_model)
-    @users_namespace.marshal_with(user_model)
     def put(self,id):
-        '''Update user'''
+        """Update a user given her info."""
         try:
-            user = User.query.filter_by(id=id).first()
-            if not user:
-                users_namespace.abort(404)
+            
             payload = users_namespace.payload
-            if "email" in payload:
-                user.email = payload["email"]
+            user = User.query.filter_by(id=id).first()
             if "name" in payload:
                 user.name = payload["name"]
+            if "email" in payload:
+                email = payload.get("email")
+                existing_email = User.query.filter(email==email,id!=id).one_or_none()
+                if existing_email is not None:
+                    return { "message": "Email already exists" }, 409
+                    raise InvalidAPIUsage("User already exists", 409)
+                user.email = payload["email"]
             if "phone_number" in payload:
                 user.phone_number = payload["phone_number"]
-            if "is_active" in payload:
-                user.is_active = payload["is_active"]
             if "profile_picture_url" in payload:
                 user.profile_picture_url = payload["profile_picture_url"]
+            if "is_active" in payload:
+                user.is_active = payload["is_active"]
+            if "role_id" in payload:
+                existing_role = Role.query.filter_by(id=payload["role_id"]).first()
+                if existing_role is None:
+                    return { "message": "Role not exists" }, 409
+                    raise InvalidAPIUsage("Role not exists", 409)
+                user.role_id = payload["role_id"]
             if "password" in payload:
-                user.password = payload["password"]
-                user.hashed_password = bcrypt.generate_password_hash(payload["password"]).decode('utf-8')
+                password = payload["password"]
+                salt = secrets.token_hex(16)
+                salted_password = f"{password}{salt}"
+                hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+                user.hashed_salted_password = hashed_salted_password
             db.session.commit()
-            return user,201
-        except Exception as error:
-            return str(error),500
+            return user.serialize(), 200
+        except Exception as e:
+            return { "message": str(e) }, 500
 
     method_decorators = [jwt_required()]
     @users_namespace.doc(security="jsonWebToken")
@@ -147,6 +193,6 @@ class UserAPI(Resource):
             db.session.delete(user)
             db.session.commit()
             message="User deleted"
-            return message,201
+            return message,200
         except Exception as error:
             return str(error),500
