@@ -249,14 +249,16 @@ class FetchOrderById(Resource):
         try:
             response = order.serialize()
             response["client"] = User.query.get(order.client_id).serialize()
-            if order.chef_id is not None:
-                response["chef"] = User.query.get(order.chef_id).serialize()
-            response["dishes"] = list(
-                map(
-                    lambda dish: dish.serialize(),
-                    db.session.query(Dish).join(OrderDish).filter(OrderDish.order_id == order_id).all()
-                )
-            )
+            response["chef"] = User.query.get(order.chef_id).serialize() if order.chef_id is not None else None
+            dish_with_order_details = db.session.query(Dish, OrderDish).join(OrderDish).filter(OrderDish.order_id == order_id).all()
+            response["dishes"] = [
+                {
+                    **dish.serialize(),
+                    "price": order_dish.unit_price,
+                    "quantity": order_dish.quantity
+                }
+                for dish, order_dish in dish_with_order_details
+            ]
             return response, 200
         except Exception as e:
             return { "message": str(e) }, 500
