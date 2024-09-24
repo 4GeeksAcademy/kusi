@@ -244,7 +244,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			orders: async () => {
-				const store = getStore();
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/orders`,{
 						headers:{
@@ -269,7 +268,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			getOrdersById: async (id) => {
-				const store = getStore()
 
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/orders/${id}`,{

@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/orderDetails.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "../component/Navbar.jsx";
 import { jwtDecode } from 'jwt-decode';
 import kusiLogo from '../../assets/images/kusi-logo.png';
+import arrowImg from '../../assets/images/arrow.png';
 
 
 
@@ -110,13 +111,18 @@ export const ViewOrderDetails = () => {
     console.log(total)
 
     return(
-        <div className="container d-flex justify-content-center align-items-center p-4">
-            <div className="card rounded-0" style={{ maxWidth: '400px', width: '100%', height:"auto" }}>
+        <div className="container d-flex  flex-column justify-content-center align-items-center">
+            <div className="d-flex justify-content-start align-items-start pb-5 pb-md-0 pe-3 pe-md-0 w-100" style={{width:"10%", height:"35px"}}>
+                <Link to="/orders">
+                    <img className="arrow-img" src={arrowImg}/>
+                </Link>
+            </div>
+            <div className="card rounded-0" style={{ maxWidth: '500px', width: '100%', height:"auto" }}>
                 <div className="mb-3 d-flex justify-content-between align-items-center py-3 px-3">
                     <img src={kusiLogo} style={{width:"70px"}}/>
-                    {roleId === 2 || roleId === 3 ? (
+                    {roleId === 2 ? (
                         <button type="button"
-                            className={`rounded-pill btn ${orderDetails?.status_id === Status.PENDING ? "btn-outline-primary" : orderDetails?.status_id === Status.IN_PROGRESS ? "btn-outline-warning" : orderDetails?.status_id === Status.COMPLETED ? "btn-outline-success" : "btn-outline-danger"}`}
+                            className={`rounded-pill btn ${orderDetails?.status_id === Status.PENDING ? "btn-outline-dark btn-primary text-white border-white" : orderDetails?.status_id === Status.IN_PROGRESS ? "btn-outline-dark btn-warning text-white border-white" : orderDetails?.status_id === Status.COMPLETED ? "btn-success" : "btn-danger"}`}
                             disabled={orderDetails.status_id === Status.COMPLETED || orderDetails.status_id === Status.CANCELLED}
                             onClick={handleStatusChange}>
                             {orderStatus[orderDetails?.status_id]}

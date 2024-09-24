@@ -11,7 +11,6 @@ export const Orders = () => {
     const { store, actions } = useContext(Context);
     const [ordersData, setOrdersData] = useState([]);
     const [ordersDataById, setOrdersDataById] = useState([]);
-    const [clientsData, setClientsData] = useState([]);
     const [roleId, setRoleId] = useState();
     const navigate = useNavigate();
     const [userId, setUserId] = useState();
@@ -24,34 +23,41 @@ export const Orders = () => {
     });
 
     useEffect(() => {
-        if (localStorage.getItem("token")) {
-            try {
-                const decodedToken = jwtDecode(localStorage.getItem("token"));
-                setRoleId(decodedToken.sub.role_id);
-                setUserId(decodedToken.sub.id);
-            } catch (error) {
-                console.error("Error decoding token:", error);
+        const decodeToken = () => {
+            if (localStorage.getItem("token")) {
+                try {
+                    const decodedToken = jwtDecode(localStorage.getItem("token"));
+                    setRoleId(decodedToken.sub.role_id);
+                    setUserId(decodedToken.sub.id);
+                } catch (error) {
+                    console.error(error);
+                    setRoleId(0);
+                }
+            } else {
+                setRoleId(0);
             }
-        } else {
-            setRoleId(0);
-        }
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            await actions.orders(); 
-            setOrdersData(store.dataOrders);
-            
-            if (roleId === Roles.CLIENT) {
-                const clientOrders = store.dataOrders.filter(order => order.client_id === userId);
-                setOrdersDataById(clientOrders);
-            }
-    
-            await actions.getUsers();
-            setClientsData(store.dataUsers);
         };
-        fetchData();
-    }, [roleId]);
+    
+        decodeToken();
+    }, []);
+    
+    useEffect(() => {
+        const fetchOrders= async () => {
+            if (roleId !== undefined) {
+                await actions.orders();
+                setOrdersData(store.dataOrders);
+    
+                if (roleId === Roles.CLIENT) {
+                    const clientOrders = store.dataOrders.filter(order => order.client_id === userId);
+                    setOrdersDataById(clientOrders);
+                }
+            }
+        };
+    
+        fetchOrders();
+        
+    }, [roleId, userId]);
+    
 
     const orderStatus = {
         1: "Pendiente",
@@ -67,7 +73,7 @@ export const Orders = () => {
     return (
         <div>
             <Navbar />
-            <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="container d-flex justify-content-center align-items-center mt-4">
                 {(ordersData.length > 0 || ordersDataById.length > 0) ? (
                     (roleId === Roles.CHEF || roleId === Roles.ADMIN) ? (
                         <table className="table table-hover text-center">
@@ -76,7 +82,6 @@ export const Orders = () => {
                                     <th></th>
                                     <th>N° ORDEN</th>
                                     <th>FECHA</th>
-                                    <th>CLIENTE</th> 
                                     <th>TOTAL</th>
                                     <th>ESTADO</th>
                                     <th></th>
@@ -85,21 +90,20 @@ export const Orders = () => {
                             <tbody>
                                 {ordersData.map((item) => (
                                     <tr key={item.id}>
-                                        <td>
+                                        <td className="align-middle">
                                             <button className="btn btn-dark" onClick={() => handleDetails(item.id)}>
                                                 <FontAwesomeIcon icon={faPlus} />
                                             </button>
                                         </td>
-                                        <td>#{item.id}</td>
-                                        <td>{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
-                                        <td>{clientsData.find(client => client.id === item.client_id)?.name}</td>
-                                        <td>S/.{item.grand_total.toFixed(2)}</td>
-                                        <td>
-                                            <p className={`py-1 ${item.status_id === 1 ? "text-primary" : item.status_id === 2 ? "text-warning" : item.status_id === 3 ? "text-success" : "text-danger"}`} style={{ width: "100%", textAlign: "center", borderRadius: "50px" }}>
+                                        <td className="align-middle">#{item.id}</td>
+                                        <td className="align-middle">{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
+                                        <td className="align-middle">S/.{item.grand_total.toFixed(2)}</td>
+                                        <td className="align-middle">
+                                            <p className={`pt-3 ${item.status_id === 1 ? "text-primary" : item.status_id === 2 ? "text-warning" : item.status_id === 3 ? "text-success" : "text-danger"}`} style={{}}>
                                                 {orderStatus[item.status_id] || "Desconocido"}
                                             </p>
                                         </td>
-                                        <td>
+                                        <td className="align-middle">
                                             <button
                                                 className={item.status_id === 1 ? "btn btn-primary" : item.status_id === 2 ? "btn btn-warning" : item.status_id === 3 ? "btn btn-success" : "btn btn-danger"}
                                                 disabled={item.status_id === 3 || item.status_id === 4}
@@ -125,16 +129,16 @@ export const Orders = () => {
                             <tbody>
                                 {ordersDataById.map((item) => (
                                     <tr key={item.id}>
-                                        <td>
+                                        <td className="align-middle">
                                             <button className="btn btn-dark" onClick={() => handleDetails(item.id)}>
                                                 <FontAwesomeIcon icon={faPlus} />
                                             </button>
                                         </td>
-                                        <td>#{item.id}</td>
-                                        <td>{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
-                                        <td>S/.{item.grand_total.toFixed(2)}</td>
-                                        <td>
-                                            <p className={`py-1 ${item.status_id === 1 ? "text-primary" : item.status_id === 2 ? "text-warning" : item.status_id === 3 ? "text-success" : "text-danger"}`} style={{ width: "100%", textAlign: "center", borderRadius: "50px" }}>
+                                        <td className="align-middle">#{item.id}</td>
+                                        <td className="align-middle">{new Date(item.created_at).toLocaleDateString('es-ES')}</td>
+                                        <td className="align-middle">S/.{item.grand_total.toFixed(2)}</td>
+                                        <td className="align-middle">
+                                            <p className={`pt-3 ${item.status_id === 1 ? "text-primary" : item.status_id === 2 ? "text-warning" : item.status_id === 3 ? "text-success" : "text-danger"}`}>
                                                 {orderStatus[item.status_id]}
                                             </p>
                                         </td>
