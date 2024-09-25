@@ -291,7 +291,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 					});
 					const data = await resp.json();
-					localStorage.setItem("responseBot", data);
+					localStorage.setItem("responseBot", data.content);
 					return data
 				} catch(e) {
 					console.error(e);

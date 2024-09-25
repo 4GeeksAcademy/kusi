@@ -29,7 +29,7 @@ export const Chat =() =>  {
 
     useEffect(() => {
       localStorage.setItem("requestBot","");
-      localStorage.setItem("responseBot"," ");
+      // localStorage.setItem("responseBot"," ");
     }, []);
 
     function isClient() {
@@ -38,6 +38,19 @@ export const Chat =() =>  {
       const decodedToken = jwtDecode(token);
       const role_id = decodedToken.sub.role_id;
       return role_id === 1;
+    }
+
+    const Prueba = () =>{
+      const [resp, setResp] = useState(""); 
+      useEffect(() => {
+        const interval = setTimeout(() => {
+          console.log(JSON.parse(localStorage.getItem("chat")));
+          
+          setResp(localStorage.getItem("responseBot"))
+      }, 5000);
+      return () => clearTimeout(interval); 
+      }, []);
+      return(<div>{resp}</div>)
     }
     
   
@@ -50,7 +63,6 @@ export const Chat =() =>  {
       {
         id: '1',
         user: true,
-        trigger: '2',
         validator: value => {
           localStorage.setItem('requestBot', value);
           const chat = JSON.parse(localStorage.getItem("chat") || "[]");
@@ -58,13 +70,16 @@ export const Chat =() =>  {
           actions.sendChat(chat).then(response => {
             chat.push(response);
             localStorage.setItem("chat", JSON.stringify(chat));
+            
           });
-        }
+          return true;
+        },
+        trigger: '2',
       },
       {
         id: '2',
-        message: localStorage.getItem("responseBot"),
-        waitAction: true,
+        component: <Prueba />,
+        asMessage: true,
         trigger: '1'
       }
     ];
