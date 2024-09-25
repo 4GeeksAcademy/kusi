@@ -14,9 +14,8 @@ import anticuchos from "../../assets/images/anticuchos.jpg"
 import ajiDeGallina from "../../assets/images/Aji-de-Gallina.jpeg"
 import {Wave, WaveFlipped} from "../component/Wave.jsx"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAward } from '@fortawesome/free-solid-svg-icons';
-import { faUtensils } from '@fortawesome/free-solid-svg-icons';
-import { faLeaf } from '@fortawesome/free-solid-svg-icons';
+import { faAward, faUtensils, faLeaf,  } from '@fortawesome/free-solid-svg-icons';
+import { Footer } from '../component/Footer.jsx';
 
 
 
@@ -183,7 +182,9 @@ export default function LandingPage() {
                 Regístrate / Inicia Sesión
             </button>
         </div>
-
+        
+        <WaveFlipped/>
+        <Footer/>
     </div>
     );
 }
