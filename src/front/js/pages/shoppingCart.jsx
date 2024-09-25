@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef  } from 'react';
+import React, { useState, useContext ,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/shoppingCart.css';
 import emptycart from '../../assets/images/emptycart.png';
@@ -6,15 +6,22 @@ import bin from '../../assets/images/bin.png';
 import minus from '../../assets/images/minus.png';
 import plus from '../../assets/images/plus.png';
 import kusilogo from '../../assets/images/kusi-logo.png'
+import { Navbar } from "../component/Navbar.jsx";
 
 
 import { Context } from "../store/appContext";
+
 
 export const ShoppingCart = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [notes,setNotes] = useState("")
     
+
+    useEffect(()=>{
+        actions.getDishes()
+    },[]);
+
 	const handleChange = (e)=> {
 		let txt = e.target.value
 		setNotes(txt)
@@ -26,24 +33,11 @@ export const ShoppingCart = () => {
             setNotes("")   
 		
 	}
-     
 
-    if(Object.keys(store.list).length === 0)
-        { return(
-            <div className="container text-center justify-content-center align-items-center container-cart">
-                <h1>Tu carrito está vacío! </h1>
-                <div className="container">
-                    <img 
-                        src={emptycart} alt="" id="emptycart" />
-                </div>
-                <div className="text-center justify-content-center align-items-center mb-3"><button className="btn btn-danger" onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
-            </div>
-            
-        )
-        }
-
-    else{
-        return(
+  return(
+    <>
+    {store.list.length>0?(<>
+          <Navbar></Navbar>
             <div className='container-cart'>
                 <div className="container">
                 </div>
@@ -58,7 +52,7 @@ export const ShoppingCart = () => {
                       <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
 
                           <div className="col-3 col-sm-3 col-md-3 d-flex justify-content-center">
-                            <img src={item.image} alt={item.id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
+                            <img src={item.image_url} alt={item.id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
                           </div>
                             <div className="row col-9 col-sm-9 col-md-9">
                    
@@ -67,7 +61,7 @@ export const ShoppingCart = () => {
                               </div>
                           
                               <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
-                                S/.{item.unit_price.toFixed(2)*item.quantity}
+                                S/.{item.price.toFixed(2)*item.quantity}
                               </div>
                             
                               <div className="col-8 col-lg-3 col-md-3 align-self-center text-start icon-left">
@@ -99,8 +93,23 @@ export const ShoppingCart = () => {
                     </div>
                    </div>
                 
-            </div>         
-        )
-    }
+            </div>    
+            </>     ):(
+                  <>
+                  <Navbar></Navbar>
+                    <div className="container text-center justify-content-center align-items-center container-cart">
+                        <h1>Tu carrito está vacío! </h1>
+                        <div className="container">
+                            <img 
+                                src={emptycart} alt="" id="emptycart" />
+                        </div>
+                        <div className="text-center justify-content-center align-items-center mb-3"><button onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
+                    </div>
+                    </>
+                )}
+    </>
+  );
+
+
 
 }

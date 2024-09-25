@@ -10,14 +10,14 @@ import { Chat } from "../component/chat.jsx";
 export const Menu = () => {
     const { actions } = useContext(Context);
 
-	useEffect(() => {
+	useEffect( ()  => {
 		actions.getDishes();
 	}, []);
 
 	return (
 		<>
 			<Navbar />
-			<div className="container d-flex justify-content-center align-items-center w-auto mt-3">
+			<div className="container-menu container d-flex justify-content-center align-items-center w-auto mt-3">
 				<DishCardsTable />
 			</div>
 			<Chat/>
