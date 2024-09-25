@@ -1,3 +1,4 @@
+import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -206,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			incrementDish : (id) => {
 				const store = getStore();
 				const transitory = store.list.find(product =>
-					product.dish_id === id)
+					product.id === id)
 					  if(transitory){ 
 						getActions().changePrice(id,transitory.quantity+1,transitory.unit_price)
 					  }
@@ -214,7 +215,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			decrementDish : (id) => {
 				const store = getStore();
 				const transitory = store.list.find(product =>
-					product.dish_id === id && product.quantity>1)
+					product.id === id && product.quantity>1)
 						if(transitory){ 
 							getActions().changePrice(id,transitory.quantity-1,transitory.unit_price)
 				 	 }
@@ -222,7 +223,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			changePrice : (id,quantity) => {
 				const store = getStore();
 				const transitorylist = store.list.map((product) =>
-					product.dish_id === id
+					product.id === id
 					  ? { ...product, quantity: quantity } 
 					  : product
 				  )
@@ -238,7 +239,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			deleteDish : (id) => {
 				const store = getStore();
 				const newtransitory = store.list.filter((product) =>
-					product.dish_id !== id
+					product.id !== id
 				  )
 				setStore({list: newtransitory})
 				
@@ -247,29 +248,101 @@ const getState = ({ getStore, getActions, setStore }) => {
 				
 					const store = getStore();
 					let token = localStorage.getItem("token");
+				try{
+					if (!token) {
+						
+						Swal.fire({
+							title:"Hey!", 
+							text: "Primero debes iniciar sesión",
+							icon: "warning",
+							confirmButtonColor: "#F44322",
+							cancelButtonColor: "#F44322"});
+						window.location.href = "/login";
+						return
+					}
+
 					const addNote = ({
-						client_id: "10", //cambiar id del store
 						dishes: store.list, 
 						special_instructions: instructionsnote, 
-						grand_total: getActions().totalPrice()   
 					  });
 
-
-					if (!token) {
-						Swal.fire("Hey!", "Primero debes iniciar sesión", "warning");
-						return
-					 }
 					
-					try{
-						let resp = await fetch(process.env.BACKEND_URL + "/orders", {
+					const resp = await fetch(`${process.env.BACKEND_URL}/orders/validate`, {
 							method: 'POST',
 							body: JSON.stringify(addNote),
 							headers: {
-								Authorization:`Bearer ${token}`
+								"Authorization":`Bearer ${token}`,
+								"Content-Type": "application/json",
+								"Access-Control-Allow-Origin": "*",
 							  },	
 						})
-						let data = await resp.json()
-						setStore({...getStore(), order: addNote })
+
+						if (resp.ok) { 
+							if (resp.status === 204) {
+							  setStore({ ...getStore(), order: addNote });
+							  localStorage.setItem("amount", getActions().totalPrice());
+							  localStorage.setItem("order", JSON.stringify(addNote));
+							  console.log(store.order);
+							  window.location.href = "/paypal";
+							} else {
+							  let data = await resp.json();
+							  console.log(data);
+							}
+
+						}else if (resp.status === 422){
+							let data = await resp.json();
+							await Swal.fire({
+								title: "Oh no!", 
+								text: data.message, 
+								icon: "warning",
+							  	confirmButtonColor: "#F44322",
+							  	cancelButtonColor: "#F44322"});
+							localStorage.removeItem("amount");
+							window.location.href = "/shopping-cart";
+							return
+						}
+
+						else if (resp.status===401){
+							localStorage.clear()
+							window.location.href = "/login";
+							return
+							
+						}
+
+						else{
+							Swal.fire({
+								title: "Oh no!", 
+								text: data.message, 
+								icon: "warning",
+							  	confirmButtonColor: "#F44322",
+							  	cancelButtonColor: "#F44322"});
+						}
+						
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
+
+			createOrder: async () => {
+				const store = getStore();
+				let order = localStorage.getItem("order");
+				localStorage.removeItem("amount");
+				let token = localStorage.getItem("token");
+				try{
+					let resp = await fetch(`${process.env.BACKEND_URL}/orders/`, {
+						method: 'POST',
+						body: order,
+						headers: {
+							"Authorization":`Bearer ${token}`,
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+						},	
+					})
+					let data = await resp.json()
+					console.log(data);
+					localStorage.removeItem("order");
+					
 					
 				}catch(e){
 					console.error(e);
@@ -277,6 +350,40 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+
+			recoverPassword: async (email) => {
+				try{
+					let resp = await fetch(process.env.BACKEND_URL + "/", {
+						method: 'POST',
+						body: JSON.stringify(email),
+					})
+					let data = await resp.json()
+					console.log(data);					
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
+
+			sendChat: async (chat) => {
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/ai", {
+						method: 'POST',
+						body: JSON.stringify({ messages: chat }),
+						headers: {
+							"Authorization":`Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+						},
+					});
+					const data = await resp.json();
+					localStorage.setItem("responseBot", data.content);
+					return data
+				} catch(e) {
+					console.error(e);
+				}
+			},
+			
 			orders: async () => {
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/orders`,{
@@ -351,6 +458,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+
 			login: async (user,showModal=true) => {
 				try{
 					

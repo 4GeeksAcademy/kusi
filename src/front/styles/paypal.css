@@ -1,0 +1,16 @@
+.paypal div{
+    width: 400px;
+}
+
+@media (max-width:570px) {
+    .arrow-img{
+        width: 20px;
+        height: auto;
+    }
+
+    .paypal div{
+        width: 200px;
+        flex: content;
+    }
+    
+}

@@ -1,3 +1,4 @@
+from api.endpoints.ai import ai_namespace
 from api.endpoints.auth import auth_namespace
 from api.endpoints.dishes import dishes_namespace
 from api.endpoints.fake import fake_namespace

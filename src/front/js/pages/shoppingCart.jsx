@@ -27,15 +27,11 @@ export const ShoppingCart = () => {
 		setNotes(txt)
 	}
 
-    const goToPay = () => {
-
-		try{
-            actions.btnContinuar(notes);
-            navigate("/menu")
+    const goToPay = async () => {
+            await actions.btnContinuar(notes);
+            // navigate("/paypal")
             setNotes("")   
-		}catch(e){
-			console.error(e);
-		}
+		
 	}
 
   return(
@@ -52,7 +48,7 @@ export const ShoppingCart = () => {
                         <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1></div>
                   </div> 
                   <ul className="p-0">{store.list.map(item => (
-                      <li className="list-group-item d-flex align-items-center justify-content-center">
+                      <li key={item.id} className="list-group-item d-flex align-items-center justify-content-center">
                       <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
 
                           <div className="col-3 col-sm-3 col-md-3 d-flex justify-content-center">
@@ -61,7 +57,7 @@ export const ShoppingCart = () => {
                             <div className="row col-9 col-sm-9 col-md-9">
                    
                               <div className="col-8 col-lg-6 col-md-6 text-start icon-left">
-                                {item.name}
+                                {/* {item.name} */}
                               </div>
                           
                               <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
@@ -93,7 +89,7 @@ export const ShoppingCart = () => {
                       <h5 className="text-start">Notas del pedido (opcional)</h5>
                       <textarea className="form-control" name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
                       <p className="text-end mb-1 text-secondary">{notes.length}/255</p>
-                      <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button onClick={()=>goToPay()}>Continuar</button></div>
+                      <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button className="btn btn-danger" onClick={()=>goToPay()}>Continuar</button></div>
                     </div>
                    </div>
                 
