@@ -73,10 +73,9 @@ class CreateAndFetchUsers(Resource):
         """Creates a new user given her info."""
         payload = users_namespace.payload
         current_user = get_jwt_identity()
-
-        role_id = current_user["role_id"]
-        if role_id is None:
-            raise InvalidAPIUsage("Missing role ID", status_code=400)
+        admin_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
+        if current_user["role_id"] != admin_role.id:
+            raise InvalidAPIUsage("Only admins can create employees", 403)
 
         name = payload.get("name")
         if name is None:
@@ -92,6 +91,9 @@ class CreateAndFetchUsers(Resource):
         if existing_user is not None:
             raise InvalidAPIUsage("User already exists", 409)
 
+        role_id = payload.get("role_id")
+        if role_id is None:
+            raise InvalidAPIUsage("Missing role ID", status_code=400)
         existing_role = Role.query.get(role_id)
         if existing_role is None:
             raise InvalidAPIUsage("Role does", 404)
