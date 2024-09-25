@@ -1,7 +1,7 @@
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Resource, fields
-from api.models import db, Dish, DishIngredient, Ingredient, Role, RoleName
+from api.models import db, Dish, ExtraDish, DishIngredient, Ingredient, Role, RoleName
 from api.namespaces import dishes_namespace
 from api.utils import InvalidAPIUsage
 
@@ -143,3 +143,32 @@ class FetchAndUpdateDishById(Resource):
             return { "message": str(e) }, 500
         
         return dish.serialize(), 200
+
+@dishes_namespace.response(200, "OK")
+@dishes_namespace.response(403, "Forbidden")
+@dishes_namespace.response(404, "Dish not found")
+@dishes_namespace.response(500, "Internal server error")
+@dishes_namespace.route("/<int:dish_id>/extras")
+class FetchExtraDishes(Resource):
+    @jwt_required()
+    @dishes_namespace.doc(security="jsonWebToken")
+    def get(self, dish_id):
+        """Fetches the extra dishes of the dish with specified ID."""
+        dish = Dish.query.filter_by(id=dish_id).one_or_none()
+        if dish is None:
+            raise InvalidAPIUsage(f"Dish {dish_id} not found.", 404)
+
+        try:
+            extra_dishes = list(
+                map(
+                    lambda extra: extra.serialize(),
+                    db.session.query(Dish).join(
+                        ExtraDish, ExtraDish.extra_id == Dish.id
+                    ).filter(
+                        ExtraDish.dish_id == dish_id
+                    ).all()
+                )
+            )
+            return extra_dishes, 200
+        except Exception as e:
+            return { "message": str(e) }, 500
