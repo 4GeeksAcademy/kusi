@@ -3,11 +3,7 @@ import { Adicional } from "../component/adicional.jsx";
 import { Context } from "../store/appContext";
 
 export const ContainerAdicionales = ({id}) => {
-    const { store,actions } = useContext(Context);
-
-    useEffect(async ()=>{
-        //await actions.getExtrasByDishId(id)
-    },[]);
+    const { store } = useContext(Context);
 
     return (
         <div className="container-adicionales mt-3 mx-auto">
