@@ -4,14 +4,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			roles: Object.freeze({ 
-				CLIENT: 1,
-				CHEF: 2,
-				ADMIN: 3
+				CLIENT :1,
+				CHEF :2,
+				ADMIN :3
 			}),
+			dataAditionalById: [],
 			list : [],
+			listCart : [],
 			orderDish: [],
 			order:[],
 			dishes: [],
+			dishSelected: {},
 			dataDishesById: [],
 			dataUsers: [],
 			dataUsersById: [],
@@ -21,6 +24,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			employees: [],
 			clients: [],
 			userData: [],
+			btnaditional:false,
+			extras:[],
+			modalExtras:0,
+			ingredients:""
 		},
 		actions: {
 			
@@ -28,13 +35,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token");
 				setStore({dataUsersById: []})
 			},
-			updateListCart: async(dishes) =>{
-				const store = getStore()
-				await setStore({list: dishes})
+			showExtrasDetail: async(id) =>{
+				if(id>0){
+					await getActions().getAditionalsById(id);
+				}
 			},
 			getDishes: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/dishes/`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes`, {
 						headers:{
 							"Access-Control-Allow-Origin": "*",
 							"Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -49,7 +57,45 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error:", err);
 				}
 			},
+			getDishById: async (id) => {
+				try {
+					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
 
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ dishSelected: data })
+					}
+				} catch (e){
+					console.error("Error:", e);
+				}
+			},
+			updateListCart: (newList) => {
+				setStore({ list: newList });
+			},
+			getExtrasByDishId: async (id) => {
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}/extras`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ extras: data })
+					}
+				}catch (e){
+					console.error("Error al traer el usuario", e)
+				}
+			},
 			getDishesById: async (id) => {
 				const store = getStore()
 				if(store.dishes){
@@ -153,7 +199,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al actualizar el usuario:", e);
                 }
 			},
-			// Use getActions to call a function within a fuction
+			
 			logoRefresh: () => {
 				window.location.reload();
 			},
@@ -395,6 +441,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 								//reset the global store
 				setStore({ demo: demo });
 			},
+				incrementAdicional: () => {
+					const store = getStore();
+					setStore({ cantadicional: store.cantadicional + 1 });
+				},
+				decrementAdicional: () => {
+					const store = getStore();
+					if (store.cantadicional > 1) {
+						setStore({ cantadicional: store.cantadicional - 1 });
+					}
+				},
+				setBtnAdicional: async () => {
+					const store = getStore();
+					setStore({ btnaditional: !store.btnaditional });
+				},
+				getAditionalsById: async (id) => {
+					try{
+						let response = await fetch(`${process.env.BACKEND_URL}/diches/${id}/extras`,{
+							headers:{
+								"Access-Control-Allow-Origin": "*",
+								"Authorization": `Bearer ${localStorage.getItem("token")}`,
+								"Content-Type": "application/json"
+							}
+						})
+	
+						if(!response.ok){
+							console.log("Hubo un error trayendo el id "+id)
+						}
+						let data = await response.json()
+						setStore({ dataAditionalById: data })
+					}catch (e){
+						console.error("Error al traer el usuario", e)
+					}
+				},
 			getUsers: async () => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/users/`, {
