@@ -45,7 +45,7 @@ export const ModalDetalle = ({ id, imgSrc, title, description }) => {
                                 <ContainerAdicionales/>
                                 <div className="d-flex">
                                     <div className="col-6 d-flex justify-content-start">
-                                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Seguir comprando</button>
+                                        <button type="button" className="btn rounded-pill px-4"  data-bs-dismiss="modal" aria-label="Close" style={{ color: 'white', background: '#F44322' }}>Seguir comprando</button>
                                     </div>                                   
                                     <div className="col-6 d-flex justify-content-end">                                   
                                         <Link to="/shopping-cart" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Realizar orden</Link>

@@ -134,7 +134,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						"cooking_time": null,
 						"quantity": 200
 					  }
-				]
+				],
+				dataAditionalById: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -263,6 +264,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const store = getStore();
 					setStore({ btnaditional: !store.btnaditional });
 				},
+				getAditionalsById: async (id) => {
+					const store = getStore()
+	
+					try{
+						let response = await fetch(`${process.env.BACKEND_URL}/diches/${id}/extras`,{
+							headers:{
+								"Access-Control-Allow-Origin": "*",
+								"Authorization": `Bearer ${localStorage.getItem("token")}`,
+								"Content-Type": "application/json"
+							}
+						})
+	
+						if(!response.ok){
+							console.log("Hubo un error trayendo el id "+id)
+						}
+						let data = await response.json()
+						setStore({dataAditionalById: data})
+					}catch (e){
+						console.error("Error al traer el usuario", e)
+					}
+				}
 
 			}
 		}
