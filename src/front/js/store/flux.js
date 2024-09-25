@@ -100,7 +100,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getUsersById: async (id) => {
-				const store = getStore()
 
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/users/${id}`,{
