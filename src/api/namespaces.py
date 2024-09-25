@@ -8,6 +8,12 @@ authorizations = {
     }
 }
 
+ai_namespace = Namespace(
+    "ai",
+    description="Kusi AI.",
+    authorizations=authorizations
+)
+
 auth_namespace = Namespace(
     "auth",
     description="Login, signup, JWT.",
