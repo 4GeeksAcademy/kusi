@@ -4,6 +4,11 @@ import { Context } from "../store/appContext.js";
 
 export const DishCardsTable = () => {
     const { store } = useContext(Context);
+
+    if (store.dishes === undefined) {
+        return <></>;
+    }
+
     return (
         <div className="container-dishes mt-5 mx-auto">
             <div className="row">

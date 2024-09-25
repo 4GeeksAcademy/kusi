@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef  } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/shoppingCart.css';
 import emptycart from '../../assets/images/emptycart.png';
