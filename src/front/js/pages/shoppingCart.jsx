@@ -32,7 +32,7 @@ export const ShoppingCart = () => {
 	}
      
 
-    if(Object.keys(store.list).length === 0)
+    if(Object.keys(store.listCart).length === 0)
         { return(
             <div className="container text-center justify-content-center align-items-center container-cart">
                 <h1>Tu carrito está vacío! </h1>
@@ -57,12 +57,12 @@ export const ShoppingCart = () => {
                       <div className="d-flex justify-content-center">
                         <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1></div>
                   </div> 
-                  <ul className="p-0">{store.list.map(item => (
+                  <ul className="p-0">{store.listCart.map(item => (
                       <li className="list-group-item d-flex align-items-center justify-content-center">
                       <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
 
                           <div className="col-3 col-sm-3 col-md-3 d-flex justify-content-center">
-                            <img src={item.image} alt={item.dish_id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
+                            <img src={item.image_url} alt={item.id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
                           </div>
                             <div className="row col-9 col-sm-9 col-md-9">
                    
@@ -71,21 +71,21 @@ export const ShoppingCart = () => {
                               </div>
                           
                               <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
-                                S/.{item.unit_price.toFixed(2)*item.quantity}
+                                S/.{item.price.toFixed(2)*item.quantity}
                               </div>
                             
                               <div className="col-8 col-lg-3 col-md-3 align-self-center text-start icon-left">
                                 <div className="text-start icon-left p-0 m-0">
-                                  <span onClick={() => actions.decrementDish(item.dish_id)} className="span-icon"><img 
+                                  <span onClick={() => actions.decrementDish(item.id)} className="span-icon"><img 
                                     src={minus} alt=""  /></span>
                                   <span className="px-1">{item.quantity}</span>
-                                  <span onClick={() => actions.incrementDish(item.dish_id,item.quantity)} className="span-icon"><img 
+                                  <span onClick={() => actions.incrementDish(item.id,item.quantity)} className="span-icon"><img 
                                     src={plus} alt=""  /></span>
                                 </div>
                               </div>
                           
                               <div className="col-4 col-lg-1 col-md-1 align-self-center text-end icon-right">
-                                <span onClick={() => actions.deleteDish(item.dish_id)} className="span-icon">
+                                <span onClick={() => actions.deleteDish(item.id)} className="span-icon">
                                 <img 
                                   src={bin} alt="" id="bin" />
                                 </span>

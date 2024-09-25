@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { DishDetail } from "./DishDetail.jsx";
+import { Context } from "../store/appContext.js";
 
-export const DishCard = ({ id, imageUrl, name, cookingTime, price, discountPercentage }) => {
+export const DishCard = ({ id, name,description, imageUrl, price, discountPercentage, cookingTime,quantity }) => {
+
+    const { store,actions } = useContext(Context);
+    
     let discountedPrice = price;
     if (discountPercentage !== null) {
         discountedPrice = price * (100 - discountPercentage) / 100;
@@ -11,7 +15,8 @@ export const DishCard = ({ id, imageUrl, name, cookingTime, price, discountPerce
             <div
                 className="card w-100"
                 data-bs-toggle="modal"
-                data-bs-target={`#modal-${id}`}
+                data-bs-target={`#modal-detail-dish`}
+                onClick={()=>{actions.showDishDetail(id)}}
             >
                 <img
                     src={imageUrl}
@@ -40,7 +45,7 @@ export const DishCard = ({ id, imageUrl, name, cookingTime, price, discountPerce
                     </p>
                 </div>
             </div>
-            <DishDetail id={`modal-${id}`} />
+            
         </>
     );
 };

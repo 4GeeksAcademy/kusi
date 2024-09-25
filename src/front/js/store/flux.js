@@ -8,29 +8,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				CHEF :2,
 				ADMIN :3
 			  }),
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			],
 			dataAditionalById: [],
 			list : [],
+			listCart : [],
 			orderDish: [],
 			order:[],
 			dishes: [],
+			dishSelected: {},
 			dataUsersById: [],
 			users: [],
 			employees: [],
 			clients: [],
 			userData: [],
+			btnaditional:false,
+			extras:[],
+			modalExtras:0,
+			ingredients:""
 		},
 		actions: {
 			
@@ -38,13 +31,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token");
 				setStore({dataUsersById: []})
 			},
-			updateListCart: async(dishes) =>{
+			updateListCart: async(dishes,dishesCart) =>{
 				const store = getStore()
 				await setStore({list: dishes})
+				await setStore({listCart: dishesCart})
+			},
+			showDishDetail: async(id) =>{
+				const store = getStore()
+				if(id>0){
+					await getActions().getDishById(id);
+					if(store.dishSelected.ingredients.length>0){
+						await setStore({ingredients: store.dishSelected.ingredients.map(x => x.name).join(', ')})
+					} else {
+						await setStore({ingredients: "Sin ingredientes"})
+					}
+				}
+			},
+			showExtrasDetail: async(id) =>{
+				if(id>0){
+					await getActions().getAditionalsById(id);
+				}
 			},
 			getDishes: async () => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/dishes/`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes`, {
 						headers:{
 							"Access-Control-Allow-Origin": "*",
 							"Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -57,6 +67,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch (err) {
 					console.error("Error:", err);
+				}
+			},
+			getDishById: async (id) => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ dishSelected: data })
+					}
+				}catch (e){
+					console.error("Error al traer el usuario", e)
+				}
+			},
+			getExtrasByDishId: async (id) => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}/extras`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ extras: data })
+					}
+				}catch (e){
+					console.error("Error al traer el usuario", e)
 				}
 			},
 			getUsersById: async (id) => {
@@ -284,29 +334,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 								//reset the global store
 				setStore({ demo: demo });
 			},
-			getDishes: async() =>{
-				fetch(`${process.env.BACKEND_URL}/dishes/`, {
-					method: "GET",
-					headers:{
-						"Access-Control-Allow-Origin": "*",
-						"Authorization": `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "application/json"
-					}
-				})
-				.then((response)=>response.json())
-				.then((data)=>setStore({dishes: data.dishes}))
-				.catch((error)=>console.log(error))
-			},
-				incrementAmount: () => {
-					const store = getStore();
-					setStore({ amount: store.amount + 1 });
-				},
-				decrementAmount: () => {
-					const store = getStore();
-					if (store.amount > 1) {
-						setStore({ amount: store.amount - 1 });
-					}
-				},
 				incrementAdicional: () => {
 					const store = getStore();
 					setStore({ cantadicional: store.cantadicional + 1 });
@@ -317,7 +344,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ cantadicional: store.cantadicional - 1 });
 					}
 				},
-				setBtnAdicional: () => {
+				setBtnAdicional: async () => {
 					const store = getStore();
 					setStore({ btnaditional: !store.btnaditional });
 				},

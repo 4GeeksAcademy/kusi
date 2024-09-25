@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { DishCard } from "./DishCard.jsx";
+import {DishDetail } from "./DishDetail.jsx";
 import { Context } from "../store/appContext.js";
 
 export const DishCardsTable = () => {
@@ -19,14 +20,26 @@ export const DishCardsTable = () => {
                     >
                         <DishCard
                             id={dish.id}
-                            imageUrl={dish.image_url}
                             name={dish.name}
-                            cookingTime={dish.cooking_time}
+                            description={dish.description}
+                            imageUrl={dish.image_url}
                             price={dish.price}
                             discountPercentage={dish.discount_percentage}
+                            cookingTime={dish.cooking_time}
+                            quantity={dish.quantity}
                         />
                     </div>
                 ))}
+                
+                <div className="modal fade" id={`modal-detail-dish`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                    <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '600px', borderRadius: '20px' }}>
+                        <div className="modal-content p-0" style={{ borderRadius: '20px' }}>
+                            <div className="modal-body d-flex flex-column align-items-center p-0 mb-3">
+                            <DishDetail />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

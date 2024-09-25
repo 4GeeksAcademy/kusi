@@ -8,7 +8,7 @@ import { Context } from "../store/appContext.js";
 export const Menu = () => {
     const { actions } = useContext(Context);
 
-	useEffect(() => {
+	useEffect( ()  => {
 		actions.getDishes();
 	}, []);
 
