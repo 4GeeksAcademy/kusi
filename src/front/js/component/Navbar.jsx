@@ -54,19 +54,6 @@ export const Navbar = () => {
         navigate("/login");
     };
 
-    // useEffect(() => {
-    //     if(userId){
-    //         const fetchData = async () => {
-    //             try {
-    //                 await actions.getUsersById(userId)
-    //             } catch (e) {
-    //                 console.error("Error al obtener los datos del usuario", e);
-    //             }
-    //         };
-    //         fetchData();
-    //     }
-    // }, [userId]);
-
 
     const menuItemsByRole = {
         [Roles.GUEST]: [
@@ -82,7 +69,7 @@ export const Navbar = () => {
         [Roles.ADMIN]: [
             { title: "Menú", link: "/menu" },
             { title: "Pedidos", link: "/orders" },
-            { title: "Personal", link: "/users" },
+            { title: "Usuarios", link: "/users" },
             { title: "Reportes", link: "/reports" }
         ]
     };

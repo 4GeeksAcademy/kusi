@@ -33,7 +33,7 @@ export const Paypal = () => {
                                     return actions.order.create({
                                         purchase_units:[{
                                             amount:{
-                                                value:  store.order.grand_total
+                                                value:  localStorage.getItem("amount")
                                             }
                                         }]
                                     })
@@ -48,6 +48,10 @@ export const Paypal = () => {
                                         actions.createOrder();
                                     })
                                     
+                                }}
+
+                                onError= {(err) => {
+                                    navigate("/payment-not-made");
                                 }}
                                
                             />

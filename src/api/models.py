@@ -5,9 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class RoleName(str, Enum):
-    CLIENT = "client"
-    CHEF = "chef"
-    ADMIN = "admin"
+    CLIENT = "Client"
+    CHEF = "Chef"
+    ADMIN = "Admin"
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,8 +31,8 @@ class User(db.Model):
     name = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20))
     is_active = db.Column(db.Boolean, nullable=False, default=True)
-    profile_picture_url = db.Column(db.String(255))
-    hashed_password = db.Column(db.String(255), nullable=False)
+    profile_picture_url = db.Column(db.String(1023))
+    hashed_salted_password = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
@@ -49,20 +49,20 @@ class User(db.Model):
             "phone_number": self.phone_number,
             "is_active": self.is_active,
             "profile_picture_url": self.profile_picture_url,
-            "created_at": self.created_at
+            "created_at": self.created_at.isoformat()
         }
 
 class OrderStatusName(str, Enum):
-    PENDING = "pending"
-    IN_PROGRESS = "in progress"
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
+    PENDING = "Pending"
+    IN_PROGRESS = "In progress"
+    COMPLETED = "Completed"
+    CANCELLED = "Cancelled"
 
 class OrderStatus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Enum(OrderStatusName), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)    
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now) 
 
     def __repr__(self):
         return f"<OrderStatus {self.name.value}>"
@@ -76,6 +76,7 @@ class OrderStatus(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    chef_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     status_id = db.Column(db.Integer, db.ForeignKey("order_status.id"), nullable=False)
     grand_total = db.Column(db.Float, nullable=False)
     special_instructions = db.Column(db.String(255))
@@ -89,11 +90,12 @@ class Order(db.Model):
         return {
             "id": self.id,
             "client_id": self.client_id,
+            "chef_id": self.chef_id,
             "status_id": self.status_id,
             "grand_total": self.grand_total,
             "special_instructions": self.special_instructions,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
         }
 
 class OrderDish(db.Model):
@@ -120,10 +122,10 @@ class OrderDish(db.Model):
 class Dish(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.String(255), nullable=False)
-    image_url = db.Column(db.String(255))
+    description = db.Column(db.String(511), nullable=False)
+    image_url = db.Column(db.String(1023))
     price = db.Column(db.Float, nullable=False)
-    discount_percentage = db.Column(db.Integer, nullable=False)
+    discount_percentage = db.Column(db.Integer)
     cooking_time = db.Column(db.Integer)
     quantity = db.Column(db.Integer, nullable=False, default=0)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -144,6 +146,22 @@ class Dish(db.Model):
             "quantity": self.quantity
         }
  
+class ExtraDish(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dish_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    extra_id = db.Column(db.Integer, db.ForeignKey("dish.id"), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+    def __repr__(self):
+        return f"<ExtraDish {self.id}>"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "dish_id": self.dish_id,
+            "extra_id": self.ingredient_id
+        }
+
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, nullable=False)
@@ -165,7 +183,7 @@ class DishIngredient(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey("ingredient.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-
+    
     def __repr__(self):
         return f"<DishIngredient {self.id}>"
     
