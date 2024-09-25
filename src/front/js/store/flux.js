@@ -7,7 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				CLIENT :1,
 				CHEF :2,
 				ADMIN :3
-			  }),
+			}),
 			dataAditionalById: [],
 			list : [],
 			listCart : [],
@@ -30,22 +30,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logout: async() =>{
 				localStorage.removeItem("token");
 				setStore({dataUsersById: []})
-			},
-			updateListCart: async(dishes,dishesCart) =>{
-				const store = getStore()
-				await setStore({list: dishes})
-				await setStore({listCart: dishesCart})
-			},
-			showDishDetail: async(id) =>{
-				const store = getStore()
-				if(id>0){
-					await getActions().getDishById(id);
-					if(store.dishSelected.ingredients.length>0){
-						await setStore({ingredients: store.dishSelected.ingredients.map(x => x.name).join(', ')})
-					} else {
-						await setStore({ingredients: "Sin ingredientes"})
-					}
-				}
 			},
 			showExtrasDetail: async(id) =>{
 				if(id>0){
@@ -70,9 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			getDishById: async (id) => {
-				const store = getStore()
-
-				try{
+				try {
 					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}`,{
 						headers:{
 							"Access-Control-Allow-Origin": "*",
@@ -85,13 +67,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (response.status === 200){
 						await setStore({ dishSelected: data })
 					}
-				}catch (e){
-					console.error("Error al traer el usuario", e)
+				} catch (e){
+					console.error("Error:", e);
 				}
 			},
+			updateListCart: (newList) => {
+				setStore({ list: newList });
+			},
 			getExtrasByDishId: async (id) => {
-				const store = getStore()
-
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}/extras`,{
 						headers:{
@@ -164,7 +147,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error al actualizar el usuario:", e);
                 }
 			},
-			// Use getActions to call a function within a fuction
+			
 			logoRefresh: () => {
 				window.location.reload();
 			},
