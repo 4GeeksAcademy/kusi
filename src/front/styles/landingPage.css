@@ -26,9 +26,31 @@
 }
   
 .image-card:hover {
-    transform: rotate(1deg) scale(1.1); /* Gira y aumenta el tamaño al pasar el ratón */
+    transform: rotate(1deg) scale(1.1);
 }
-  
+
+.react-multi-carousel-dot-list {
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.react-multi-carousel-dot button {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 0 5px;
+    border: none;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.react-multi-carousel-dot--active button {
+    background-color: #ffb703;
+    opacity: 1;
+}
 
 
 @media (max-width: 1700px) {
@@ -113,6 +135,9 @@
     .image-card {
         width: 80%;
     }
+    .image-card:hover {
+        transform: rotate(1deg) scale(1);
+    }
 }
 
 @media (max-width:400px) {
@@ -124,5 +149,8 @@
 
     .image-card {
         width: 100%;
+    }
+    .image-card:hover {
+        transform: rotate(1deg) scale(1);
     }
 }

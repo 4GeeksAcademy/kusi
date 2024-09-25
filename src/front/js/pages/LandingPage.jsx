@@ -100,43 +100,41 @@ export default function LandingPage() {
 
         <Wave/>
 
-        <div className="bg-black d-flex justify-content-center align-items-center py-5" style={{ minHeight: "80vh", zIndex:"1050"}}>
-                <div className='w-75'>
-                    {dishes.length > 0 ? (
-                        <Carousel
-                            responsive={responsive}
-                            autoPlay={true}
-                            autoPlaySpeed={3000}
-                            infinite={true}
-                            showDots={true}
-                            arrows={false}
+        <div className="bg-black d-flex justify-content-center align-items-center py-5 py-md-0" style={{ maxHeight:"650px", zIndex: "1050" }}>
+            <div className='w-75'>
+                <Carousel
+                    responsive={responsive}
+                    autoPlay={true}
+                    autoPlaySpeed={3000}
+                    infinite={true}
+                    showDots={true}
+                    arrows={false}
+                    pauseOnHover={false}
+                >
+                    {dishes.map((dish, index) => (
+                        <div 
+                            key={index} 
+                            className='container-card d-flex flex-column gap-4 justify-content-center align-items-center text-center p-3 p-md-4' 
+                            style={{ maxWidth: "1200px", height: "auto", margin: "0 auto" }}
                         >
-                            {dishes.map((dish, index) => (
-                                <div 
-                                    key={index} 
-                                    className='container-card d-flex flex-column gap-4 justify-content-center align-items-center p-3 p-md-4' 
-                                    style={{maxWidth:"1200px", height:"auto" }}
-                                >
-                                    <div className='container-card-image d-flex justify-content-center align-items-center'>
-                                        <img 
-                                            className='image-card rounded-circle hover-scale' 
-                                            style={{ width: "300px", height: "300px", objectFit: "cover" }} 
-                                            src={dish.image} 
-                                            alt={dish.name} 
-                                        />
-                                    </div>
-                                    <div className='container-card-description text-center'>
-                                        <h2 className='text-white mb-3'>{dish.name}</h2>
-                                        <p className='text-white fs-5'>{dish.slogan}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </Carousel>
-                    ) : (
-                        <div className="text-center text-white">Cargando platos...</div>
-                    )}
-                </div>
+                            <div className='container-card-image d-flex justify-content-center align-items-center'>
+                                <img 
+                                    className='image-card rounded-circle hover-scale' 
+                                    style={{ width: "300px", height: "300px", objectFit: "cover" }} 
+                                    src={dish.image} 
+                                    alt={dish.name} 
+                                />
+                            </div>
+                            <div className='container-card-description'>
+                                <h2 className='text-white mb-3'>{dish.name}</h2>
+                                <p className='text-white fs-5'>{dish.slogan}</p>
+                            </div>
+                        </div>
+                    ))}
+                </Carousel>
             </div>
+        </div>
+
 
 
         <WaveFlipped/>
@@ -175,7 +173,7 @@ export default function LandingPage() {
 
         <Wave/>
 
-        <div className="container-fluid bg-black text-white py-5 text-center" style={{minHeight:"50vh"}}>
+        <div className="container-fluid bg-black text-white py-5 text-center" style={{maxHeight:"750px"}}>
             <h2 className="mb-4" style={{ color: "#F44322", fontSize: "2.5rem" }}>¡Haz tu compra ahora!</h2>
             <p className="lead mb-5">Regístrate o inicia sesión para descubrir nuestras ofertas exclusivas y disfrutar de una experiencia culinaria inigualable.</p>
             <button 
