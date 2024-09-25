@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 398040cd4a5a
+Revision ID: f1180af8cc4e
 Revises: 
-Create Date: 2024-09-20 15:06:48.722212
+Create Date: 2024-09-24 19:32:17.554157
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '398040cd4a5a'
+revision = 'f1180af8cc4e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -66,6 +66,16 @@ def upgrade():
     sa.ForeignKeyConstraint(['ingredient_id'], ['ingredient.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('extra_dish',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('dish_id', sa.Integer(), nullable=False),
+    sa.Column('extra_id', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['dish_id'], ['dish.id'], ),
+    sa.ForeignKeyConstraint(['extra_id'], ['dish.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('role_id', sa.Integer(), nullable=False),
@@ -85,11 +95,13 @@ def upgrade():
     op.create_table('order',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('client_id', sa.Integer(), nullable=False),
+    sa.Column('chef_id', sa.Integer(), nullable=True),
     sa.Column('status_id', sa.Integer(), nullable=False),
     sa.Column('grand_total', sa.Float(), nullable=False),
     sa.Column('special_instructions', sa.String(length=255), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['chef_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['client_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['status_id'], ['order_status.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -114,6 +126,7 @@ def downgrade():
     op.drop_table('order_dish')
     op.drop_table('order')
     op.drop_table('user')
+    op.drop_table('extra_dish')
     op.drop_table('dish_ingredient')
     op.drop_table('role')
     op.drop_table('order_status')
