@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext ,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/shoppingCart.css';
 import emptycart from '../../assets/images/emptycart.png';
@@ -6,15 +6,22 @@ import bin from '../../assets/images/bin.png';
 import minus from '../../assets/images/minus.png';
 import plus from '../../assets/images/plus.png';
 import kusilogo from '../../assets/images/kusi-logo.png'
+import { Navbar } from "../component/Navbar.jsx";
 
 
 import { Context } from "../store/appContext";
+
 
 export const ShoppingCart = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [notes,setNotes] = useState("")
     
+
+    useEffect(()=>{
+        actions.getDishes()
+    },[]);
+
 	const handleChange = (e)=> {
 		let txt = e.target.value
 		setNotes(txt)
@@ -30,24 +37,11 @@ export const ShoppingCart = () => {
 			console.error(e);
 		}
 	}
-     
 
-    if(Object.keys(store.listCart).length === 0)
-        { return(
-            <div className="container text-center justify-content-center align-items-center container-cart">
-                <h1>Tu carrito está vacío! </h1>
-                <div className="container">
-                    <img 
-                        src={emptycart} alt="" id="emptycart" />
-                </div>
-                <div className="text-center justify-content-center align-items-center mb-3"><button onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
-            </div>
-            
-        )
-        }
-
-    else{
-        return(
+  return(
+    <>
+    {store.list.length>0?(<>
+          <Navbar></Navbar>
             <div className='container-cart'>
                 <div className="container">
                 </div>
@@ -57,7 +51,7 @@ export const ShoppingCart = () => {
                       <div className="d-flex justify-content-center">
                         <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1></div>
                   </div> 
-                  <ul className="p-0">{store.listCart.map(item => (
+                  <ul className="p-0">{store.list.map(item => (
                       <li className="list-group-item d-flex align-items-center justify-content-center">
                       <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
 
@@ -103,8 +97,23 @@ export const ShoppingCart = () => {
                     </div>
                    </div>
                 
-            </div>         
-        )
-    }
+            </div>    
+            </>     ):(
+                  <>
+                  <Navbar></Navbar>
+                    <div className="container text-center justify-content-center align-items-center container-cart">
+                        <h1>Tu carrito está vacío! </h1>
+                        <div className="container">
+                            <img 
+                                src={emptycart} alt="" id="emptycart" />
+                        </div>
+                        <div className="text-center justify-content-center align-items-center mb-3"><button onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
+                    </div>
+                    </>
+                )}
+    </>
+  );
+
+
 
 }
