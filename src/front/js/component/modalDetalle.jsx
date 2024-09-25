@@ -1,13 +1,15 @@
 import React, { useContext} from 'react';
 import { Context } from "../store/appContext";
+import { ContainerAdicionales } from "../component/containerAdicionales.jsx"
+import { Link } from 'react-router-dom';
 
 
-export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) => {
+export const ModalDetalle = ({ id, imgSrc, title, description }) => {
 
     const { store, actions } = useContext(Context);
 
     return (
-        <div className="modal fade" id={id} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id={id} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '600px', borderRadius: '20px' }}>
                 <div className="modal-content p-0" style={{ borderRadius: '20px' }}>
                     <div className="modal-body d-flex flex-column align-items-center p-0 mb-3">
@@ -23,7 +25,7 @@ export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) =>
                                 <div className="col">
                                     <h4>{title}</h4>
                                     <p>{description}</p>
-                                    <p>Ingredientes: Lorem ipsum dolor sit amet consectetur adipisicing elit. At illum fuga quibusdam laborum. Mollitia quo recusandae{ingredients}</p>
+                                    <p>Ingredientes: Lorem ipsum dolor sit amet consectetur adipisicing elit. At illum fuga quibusdam laborum. Mollitia quo recusandae</p>
                                 </div>
                             </div>
                             <div className="col-4 d-flex justify-content-center align-items-center mb-2">
@@ -39,14 +41,14 @@ export const ModalDetalle = ({ id, imgSrc, title, description, ingredients }) =>
                             </>
                         ) : (
                             <div className="container-fluid mt-3 mx-3">
-                                <h4>Adicionar</h4>
-                                
-                                <div className="row">
-                                    <div className="col">
-                                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Carrito</button>
-                                    </div> 
-                                    <div className="col">                                   
-                                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Ver platos</button>
+                                <h4 className='text-center'>Complementa tu comida</h4>
+                                <ContainerAdicionales/>
+                                <div className="d-flex">
+                                    <div className="col-6 d-flex justify-content-start">
+                                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Seguir comprando</button>
+                                    </div>                                   
+                                    <div className="col-6 d-flex justify-content-end">                                   
+                                        <Link to="/shopping-cart" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}>Realizar orden</Link>
                                     </div>
                                 </div>                            
                             </div>

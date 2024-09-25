@@ -101,7 +101,40 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			  ], 
 			  amount: 1,
-			  btnaditional: false
+			  btnaditional: false,
+			  cantadicional: 1,
+			  adicionales: [
+					{
+						"id": 11,
+						"name": "Cancha serrana",
+						"description": "Maíz tostado en una sartén con un poco de aceite y sal hasta que adquiere un bonito color, casi siempre dorado.",
+						"image_url": "https://www.agraria.pe/imgs/a/lx/cancha-serrana-beneficios-de-incluirla-en-la-dieta-20475.jpg",
+						"price": 5,
+						"discount_percentage": null,
+						"cooking_time": null,
+						"quantity": 100
+					  },
+					  {
+						"id": 12,
+						"name": "Inca Kola",
+						"description": "Con su distintivo color amarillo dorado y su sabor dulce y exótico, Inca Kola ha logrado convertirse en un ícono nacional y un verdadero símbolo de identidad peruana.",
+						"image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR4PciVYJze4JLS3P1ew7Slr93iZPHVKQEhw&s",
+						"price": 7,
+						"discount_percentage": null,
+						"cooking_time": null,
+						"quantity": 200
+					  },
+					  {
+						"id": 13,
+						"name": "Crema de rocoto",
+						"description": "Deliciosa receta peruana que consta de una salsa a base de rocoto, especias y hierbas aromáticas que le dan un sabor único.",
+						"image_url": "https://i.ytimg.com/vi/A8BLaAizD10/hqdefault.jpg",
+						"price": 5,
+						"discount_percentage": null,
+						"cooking_time": null,
+						"quantity": 200
+					  }
+				]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -214,6 +247,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const store = getStore();
 					if (store.amount > 1) {
 						setStore({ amount: store.amount - 1 });
+					}
+				},
+				incrementAdicional: () => {
+					const store = getStore();
+					setStore({ cantadicional: store.cantadicional + 1 });
+				},
+				decrementAdicional: () => {
+					const store = getStore();
+					if (store.cantadicional > 1) {
+						setStore({ cantadicional: store.cantadicional - 1 });
 					}
 				},
 				setBtnAdicional: () => {

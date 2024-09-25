@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
 import { ModalDetalle } from "../component/modalDetalle.jsx";
 
-export const Card = ({ id, imgSrc, title, time, price, description, ingredients, discount }) => {
+export const Card = ({ id, imgSrc, title, time, price, description, discount }) => {
     const { store, actions } = useContext(Context);
 
     const priceDiscount = price - (price * discount / 100);
@@ -18,11 +17,11 @@ export const Card = ({ id, imgSrc, title, time, price, description, ingredients,
                         <p className="card-text text-secondary">
                             <div className="row">
                                 <div className="col-7">
-                                    <span>S/.{priceDiscount.toFixed(2)}</span>
-                                    <span className="px-2" style={{ color: '#BFBFBF', textDecoration: 'line-through' }}>S/.{price.toFixed(2)}</span>
+                                    <span>S/{priceDiscount.toFixed(2)}</span>
+                                    <span className="px-2" style={{ color: '#BFBFBF', textDecoration: 'line-through' }}>S/{price.toFixed(2)}</span>
                                 </div>
                                 <div className="col-5 text-end">
-                                    <i className="fa-regular fa-clock px-1"></i>{time} min
+                                    <i className="fa-regular fa-clock px-1"></i>{time}min
                                 </div>
                             </div>
                         </p>
@@ -35,7 +34,6 @@ export const Card = ({ id, imgSrc, title, time, price, description, ingredients,
                 imgSrc={imgSrc}
                 title={title}
                 description={description}
-                ingredients={ingredients}
             />
         </>
     );
