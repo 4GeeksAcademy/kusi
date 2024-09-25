@@ -2,7 +2,7 @@ from datetime import timedelta
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 from flask_restx import fields, Resource
-from api.models import db, User
+from api.models import db, User, Role, RoleName
 from api.namespaces import auth_namespace
 from api.utils import InvalidAPIUsage
 import secrets
@@ -85,10 +85,6 @@ class SignUp(Resource):
         """Registers a new user given her info."""
         payload = auth_namespace.payload
 
-        role_id = payload.get("role")
-        if role_id is None:
-            raise InvalidAPIUsage("Missing role", status_code=400)
-
         name = payload.get("name")
         if name is None:
             raise InvalidAPIUsage("Missing name", status_code=400)
@@ -111,10 +107,12 @@ class SignUp(Resource):
         salt = secrets.token_hex(16)
         salted_password = f"{password}{salt}"
         hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+        
+        client_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
 
         try:
             new_user = User(
-                role_id=role_id,
+                role_id=client_role.id,
                 email=email,
                 name=name,
                 phone_number=phone_number,
