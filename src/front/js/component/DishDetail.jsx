@@ -11,7 +11,7 @@ export const DishDetail = () => {
 
     const addToCart = (id) => {
         const updatedList = store.list;
-        const currentDish = store.dishSelected;
+        let currentDish = store.dishSelected;
 
         let found = false;
         for (let i  = 0; i < updatedList.length; i++) {
@@ -23,6 +23,7 @@ export const DishDetail = () => {
         }
 
         if (!found) {
+            currentDish.quantity = amount;
             updatedList.push(currentDish);
         }
 

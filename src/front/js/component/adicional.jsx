@@ -21,7 +21,7 @@ export const Adicional = ({ imgSrc, name, price, description }) => {
                         <button className="btn" style={{ color: '#F44322', fontSize: '20px' }} onClick={actions.decrementAdicional}>
                             <i className="fa-solid fa-circle-minus"></i>
                         </button>
-                        <span className="mx-0" style={{ fontSize: '15px' }}>{0}</span>
+                        <span className="mx-0" style={{ fontSize: '15px' }}>{1}</span>
                         <button className="btn" style={{ color: '#F44322', fontSize: '20px' }} onClick={actions.incrementAdicional}>
                             <i className="fa-solid fa-circle-plus"></i>
                         </button>

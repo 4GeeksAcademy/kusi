@@ -231,7 +231,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			  },
 			totalPrice: () => {
 				const store = getStore();
-				const total = store.list.reduce((total,product)=>total + product.unit_price * product.quantity,0)
+				const total = store.list.reduce((total,product)=>total + product.price * product.quantity,0)
 				return total.toFixed(2);
 				
 			},
