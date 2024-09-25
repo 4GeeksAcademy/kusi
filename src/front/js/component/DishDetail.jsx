@@ -1,12 +1,21 @@
-import React, { useContext} from 'react';
-import { Context } from "../store/appContext";
-import { ContainerAdicionales } from "../component/containerAdicionales.jsx"
+import React, { useContext,useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ContainerAdicionales } from "../component/containerAdicionales.jsx"
+import { Context } from "../store/appContext";
 
-
-export const ModalDetalle = ({ id, imgSrc, title, description }) => {
-
+export const DishDetail = ({ id }) => {
+    const [amount, setAmount] = useState(1);
     const { store, actions } = useContext(Context);
+
+    const addToCart = (id) => {
+        const dishes = store.list;
+        for (let i  = 0; i < dishes.length; i++) {
+            if (dishes[i].id == id) {
+                dishes[i].quantity = amount;
+            }
+        }
+        actions.updateListCart(dishes);
+    };
 
     return (
         <div className="modal fade" id={id} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
@@ -53,10 +62,11 @@ export const ModalDetalle = ({ id, imgSrc, title, description }) => {
                                 </div>                            
                             </div>
                         )}
+                        </div>
+                        <button type="button" className="btn rounded-pill px-4" style={{ color: 'white', background: '#F44322' }}  onClick={()=>{addToCart(id,imgSrc,title,priceDiscount)}}>Agregar</button>
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 

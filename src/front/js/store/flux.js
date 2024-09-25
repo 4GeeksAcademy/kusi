@@ -21,126 +21,178 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			dishes: [
-				{
-				  "id": 1,
-				  "name": "Ceviche",
-				  "description": "Plato tipico de peru con pescado y limon",
-				  "image_url": "https://trexperienceperu.com/sites/default/files/2024-05/ceviche.jpg",
-				  "price": 30,
-				  "discount_percentage": 10,
-				  "cooking_time": 15,
-				  "quantity": 50,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 2,
-				  "name": "Pollo a la brasa",
-				  "description": "Plato tipico de peru con pollo al carbon",
-				  "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjezA9-4z0byMCywNsi3n3nBDUzsXJW2YaaA&s",
-				  "price": 60,
-				  "discount_percentage": 5,
-				  "cooking_time": 5,
-				  "quantity": 20,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 3,
-				  "name": "Aji de gallina",
-				  "description": "Plato tipico de peru con gallina y aji",
-				  "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSWTUO8hei_5TWAQ4lE92JDQwXCCCRbVcxrw&s",
-				  "price": 20,
-				  "discount_percentage": 15,
-				  "cooking_time": 15,
-				  "quantity": 80,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 4,
-				  "name": "Estafado de carne",
-				  "description": "Plato tipico de peru con carne",
-				  "image_url": "https://www.recetasnestle.com.pe/sites/default/files/srh_recipes/02d772e59776b9b3566382bbf306f795.jpg",
-				  "price": 20,
-				  "discount_percentage": 10,
-				  "cooking_time": 15,
-				  "quantity": 200,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 5,
-				  "name": "Arroz con pollo",
-				  "description": "Plato tipico de peru con arroz y pollo",
-				  "image_url": "https://i.ytimg.com/vi/H6lgxgEWIs8/maxresdefault.jpg",
-				  "price": 15,
-				  "discount_percentage": 5,
-				  "cooking_time": 15,
-				  "quantity": 50,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 6,
-				  "name": "Causa rellena",
-				  "description": "Plato tipico de peru papa y aji amarillo",
-				  "image_url": "https://cdn0.recetasgratis.net/es/posts/8/6/2/causa_limena_31268_orig.jpg",
-				  "price": 20,
-				  "discount_percentage": 10,
-				  "cooking_time": 10,
-				  "quantity": 120,
-				  "dish_ingredients": null
-				},
-				{
-				  "id": 7,
-				  "name": "Pollo al horno",
-				  "description": "Plato tipico de peru con pollo y salsa",
-				  "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT5VXgFC1udztiDcPU8A7LAPe4Pt8ZMUUitQ&s",
-				  "price": 30,
-				  "discount_percentage": 25,
-				  "cooking_time": 25,
-				  "quantity": 20,
-				  "dish_ingredients": null
-				}
-			  ], 
-			  amount: 1,
-			  btnaditional: false,
-			  cantadicional: 1,
-			  adicionales: [
-					{
-						"id": 11,
-						"name": "Cancha serrana",
-						"description": "Maíz tostado en una sartén con un poco de aceite y sal hasta que adquiere un bonito color, casi siempre dorado.",
-						"image_url": "https://www.agraria.pe/imgs/a/lx/cancha-serrana-beneficios-de-incluirla-en-la-dieta-20475.jpg",
-						"price": 5,
-						"discount_percentage": null,
-						"cooking_time": null,
-						"quantity": 100
-					  },
-					  {
-						"id": 12,
-						"name": "Inca Kola",
-						"description": "Con su distintivo color amarillo dorado y su sabor dulce y exótico, Inca Kola ha logrado convertirse en un ícono nacional y un verdadero símbolo de identidad peruana.",
-						"image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR4PciVYJze4JLS3P1ew7Slr93iZPHVKQEhw&s",
-						"price": 7,
-						"discount_percentage": null,
-						"cooking_time": null,
-						"quantity": 200
-					  },
-					  {
-						"id": 13,
-						"name": "Crema de rocoto",
-						"description": "Deliciosa receta peruana que consta de una salsa a base de rocoto, especias y hierbas aromáticas que le dan un sabor único.",
-						"image_url": "https://i.ytimg.com/vi/A8BLaAizD10/hqdefault.jpg",
-						"price": 5,
-						"discount_percentage": null,
-						"cooking_time": null,
-						"quantity": 200
-					  }
-				],
-				dataAditionalById: []
+			dataAditionalById: [],
+			list : [],
+			orderDish: [],
+			order:[],
+			dishes: [],
+			dataUsersById: [],
+			users: [],
+			employees: [],
+			clients: [],
+			userData: [],
 		},
 		actions: {
+			
+			logout: async() =>{
+				localStorage.removeItem("token");
+				setStore({dataUsersById: []})
+			},
+			updateListCart: async(dishes) =>{
+				const store = getStore()
+				await setStore({list: dishes})
+			},
+			getDishes: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes/`, {
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ dishes: data })
+					}
+				} catch (err) {
+					console.error("Error:", err);
+				}
+			},
+			getUsersById: async (id) => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/users/${id}`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error trayendo el id "+id)
+					}
+					let data = await response.json()
+					setStore({dataUsersById: data})
+				}catch (e){
+					console.error("Error al traer el usuario", e)
+				}
+			},
+			updateUser: async (userId, newUpdateUser) => {
+				const store = getStore();
+				try{
+					const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`,{
+						method: "PUT",
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							"email": newUpdateUser.email,
+							"name": newUpdateUser.name,
+							"phone_number": newUpdateUser.phone_number,
+							"is_active": newUpdateUser.is_active,
+							"profile_picture_url": newUpdateUser.profile_picture_url,
+							"password": newUpdateUser.password
+						})
+					})
+
+					if(!response.ok){
+						console.log(`El id ${userId} que intentas editar no existe`)
+					}
+
+					const data = await response.json();
+                    console.log(data);
+					setStore({ dataUsersById: data });
+
+					return data;
+
+				}catch (e) {
+                    console.error("Error al actualizar el usuario:", e);
+                }
+			},
 			// Use getActions to call a function within a fuction
 			logoRefresh: () => {
 				window.location.reload();
+			},
+			incrementDish : (id) => {
+				const store = getStore();
+				const transitory = store.list.find(product =>
+					product.dish_id === id)
+					  if(transitory){ 
+						getActions().changePrice(id,transitory.quantity+1,transitory.unit_price)
+					  }
+			},
+			decrementDish : (id) => {
+				const store = getStore();
+				const transitory = store.list.find(product =>
+					product.dish_id === id && product.quantity>1)
+						if(transitory){ 
+							getActions().changePrice(id,transitory.quantity-1,transitory.unit_price)
+				 	 }
+			  },
+			changePrice : (id,quantity) => {
+				const store = getStore();
+				const transitorylist = store.list.map((product) =>
+					product.dish_id === id
+					  ? { ...product, quantity: quantity } 
+					  : product
+				  )
+				setStore({list: transitorylist})
+				
+			  },
+			totalPrice: () => {
+				const store = getStore();
+				const total = store.list.reduce((total,product)=>total + product.unit_price * product.quantity,0)
+				return total.toFixed(2);
+				
+			},
+			deleteDish : (id) => {
+				const store = getStore();
+				const newtransitory = store.list.filter((product) =>
+					product.dish_id !== id
+				  )
+				setStore({list: newtransitory})
+				
+			},
+			btnContinuar : async (instructionsnote) => {
+				
+					const store = getStore();
+					let token = localStorage.getItem("token");
+					const addNote = ({
+						client_id: "10", //cambiar id del store
+						dishes: store.list, 
+						special_instructions: instructionsnote, 
+						grand_total: getActions().totalPrice()   
+					  });
+
+
+					if (!token) {
+						Swal.fire("Hey!", "Primero debes iniciar sesión", "warning");
+						return
+					 }
+					
+					try{
+						let resp = await fetch(process.env.BACKEND_URL + "/orders", {
+							method: 'POST',
+							body: JSON.stringify(addNote),
+							headers: {
+								Authorization:`Bearer ${token}`
+							  },	
+						})
+						let data = await resp.json()
+						setStore({...getStore(), order: addNote })
+					
+				}catch(e){
+					console.error(e);
+					
+				}
+			},
+			exampleFunction: () => {
+				getActions().changeColor(0, "green");
 			},
 			login: async (user,showModal=true) => {
 				try{
@@ -233,13 +285,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 			getDishes: async() =>{
-				fetch("https://crispy-guacamole-q77gjxqpwwgwf9v59-3001.app.github.dev/dishes/",{
-					method: "GET"
+				fetch(`${process.env.BACKEND_URL}/dishes/`, {
+					method: "GET",
+					headers:{
+						"Access-Control-Allow-Origin": "*",
+						"Authorization": `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json"
+					}
 				})
-					.then((response)=>response.json())
-					.then((data)=>setStore({dishes: data.dishes}))
-					.catch((error)=>console.log(error))
-				},
+				.then((response)=>response.json())
+				.then((data)=>setStore({dishes: data.dishes}))
+				.catch((error)=>console.log(error))
+			},
 				incrementAmount: () => {
 					const store = getStore();
 					setStore({ amount: store.amount + 1 });
@@ -265,8 +322,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({ btnaditional: !store.btnaditional });
 				},
 				getAditionalsById: async (id) => {
-					const store = getStore()
-	
 					try{
 						let response = await fetch(`${process.env.BACKEND_URL}/diches/${id}/extras`,{
 							headers:{
@@ -280,14 +335,186 @@ const getState = ({ getStore, getActions, setStore }) => {
 							console.log("Hubo un error trayendo el id "+id)
 						}
 						let data = await response.json()
-						setStore({dataAditionalById: data})
+						setStore({ dataAditionalById: data })
 					}catch (e){
 						console.error("Error al traer el usuario", e)
 					}
-				}
+				},
+			getUsers: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/users/`, {
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+					const data = await response.json();
+					if (response.status === 200){
 
-			}
-		}
-	};
+						await setStore({ users: data })
+						const employees = data.filter(user => user.role_id ==2 || user.role_id ==3)
+						const clients = data.filter(user => user.role_id ==1)
+						await setStore({ employees: employees })
+						await setStore({ clients: clients })
+					}
+				} catch (err) {
+					console.error("Error:", err);
+				}
+			},
+			getUserById: async (id) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ userData: data })
+					}
+				} catch (err) {
+					console.error("Error:", err);
+				}
+			},
+			createEmployee: async (employee) => {
+				try {
+					employee.role_id = parseInt(employee.role_id)
+					employee.is_active = (employee.is_active === 'true');
+					const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+						method: 'POST',
+						body: JSON.stringify(employee),
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+
+					const data = await response.json();
+
+					if (response.status === 201){
+						const store = getStore()
+						let listEmployees = [];
+						listEmployees = store.employees;
+						listEmployees.push(data)
+						await setStore({ employees: listEmployees })
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Empleado creado!",
+						});
+						return true
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
+						return false
+					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
+			editUser: async (user) => {
+				try {
+					user.role_id = parseInt(user.role_id)
+					user.is_active = (user.is_active === 'true');
+					user.profile_picture_url = (user.profile_picture_url || "");
+					const response = await fetch(`${process.env.BACKEND_URL}/users/${user.id}`, {
+						method: 'PUT',
+						body: JSON.stringify(user),
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+
+					const data = await response.json();
+
+					if (response.status === 200){
+						const store = getStore()
+						let listUsers = [];
+						listUsers = store.users;
+						const objIndex = listUsers.findIndex(obj => obj.id == data.id);
+						listUsers[objIndex] = data
+						await setStore({ users: listUsers })
+						const employees = listUsers.filter(user => user.role_id ==2 || user.role_id ==3)
+						const clients = listUsers.filter(user => user.role_id ==1)
+						await setStore({ employees: employees })
+						await setStore({ clients: clients })
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Usuario editado!",
+						});
+						return true
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
+						return false
+					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
+			deleteUser: async (id) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
+						method: 'DELETE',
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+
+					if (response.status === 200){
+						const store = getStore()
+						let listUsers = [];
+						listUsers = store.users;
+						const objIndex = listUsers.findIndex(obj => obj.id == id);
+						if (objIndex > -1) { // only splice array when item is found
+							listUsers.splice(objIndex, 1); // 2nd parameter means remove one item only
+						}
+						await setStore({ users: listUsers })
+						const employees = listUsers.filter(user => user.role_id ==2 || user.role_id ==3)
+						const clients = listUsers.filter(user => user.role_id ==1)
+						await setStore({ employees: employees })
+						await setStore({ clients: clients })
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Usuario eliminado!",
+						});
+						return true
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
+						return false
+					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
+		},
+	}
+};
 
 export default getState;

@@ -2,9 +2,12 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import injectContext from './store/appContext';
 import LandingPage from './pages/LandingPage.jsx';
-import { Menu } from "./pages/menu.jsx"
+import { Profile } from './pages/profile.jsx';
+import { Menu } from "./pages/Menu.jsx";
 import { Login } from "./pages/login.jsx";
 import { SignUp } from "./pages/signup.jsx";
+import { ShoppingCart } from "./pages/shoppingCart.jsx";
+import { Users } from "./pages/users.jsx";
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -12,13 +15,16 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-                    <Routes>
-                        <Route element={<LandingPage />} path="/" />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<SignUp />} path="/signup" />
-                        <Route element={<Menu />} path="/menu" />
-                        <Route element={<h1>Not found!</h1>} />
-                    </Routes>
+                <Routes>
+                    <Route element={<LandingPage />} path="/" />
+                    <Route element={<Profile />} path="/profile" />
+                    <Route element={<Login />} path="/login" />
+                    <Route element={<SignUp />} path="/signup" />
+                    <Route element={<Menu />} path="/menu" />
+                    <Route element={<ShoppingCart />} path="/shopping-cart" />
+                    <Route element={<Users />} path="/users" />
+                    <Route element={<h1>Not found!</h1>} path="*"/>
+                </Routes>
             </BrowserRouter>
         </div>
     );

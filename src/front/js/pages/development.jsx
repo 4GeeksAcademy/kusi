@@ -5,7 +5,7 @@ import kusiLogo from '../../assets/images/kusi-logo.png';
 import '../../styles/landingPage.css';
 import { Link, useNavigate } from "react-router-dom";
 
-export default function LandingPage() {
+export default function Development() {
     return (
         <div className="landing-container container-fluid p-0">
             <div className="row g-0 vh-100">
@@ -30,30 +30,10 @@ export default function LandingPage() {
                             className="px-4 px-md-1"
                             style={{ fontSize: "5vw" }}
                         >
-                            Descubre los auténticos sabores del Perú en cada bocado
+                            En desarrollo
                         </h1> 
                     </div>
-                    {false?<></>:
-                    // {localStorage.getItem("token")?<></>:
-                    <div className="d-flex flex-column flex-lg-row gap-3 mt-4 mt-md-5">
-                        <Link to="/login" className="div-link">
-                            <button
-                                type="button"
-                                className="btn btn-danger py-2 px-4 px-md-5 fs-4 rounded-pill"
-                            >
-                                Iniciar sesión
-                            </button>
-                        </Link>
-                        
-                        <Link to="/signup" className="div-link">
-                            <button
-                                type="button"
-                                className="btn btn-outline-dark py-2 px-4 px-md-5 fs-4 hover-white rounded-pill"
-                            >
-                                Registrarse
-                            </button>
-                        </Link>
-                    </div> }
+                    
                 </div>
                 <div className="landing-img-2 col-md-2 col-lg-1 d-none d-md-flex flex-column justify-content-start">
                     <img
