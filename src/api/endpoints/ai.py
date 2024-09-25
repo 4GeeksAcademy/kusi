@@ -44,7 +44,7 @@ class AI(Resource):
         client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
         if current_user["role_id"] != client_role.id:
             raise InvalidAPIUsage("Only clients can use Kusi AI", 403)
-        dish_names = list(map(lambda dish: dish.serialize()["name"], Dish.query.all()))
+        dishes = list(map(lambda dish: dish.serialize(), Dish.query.all()))
         # TODO: Add order of current user
         payload = ai_namespace.payload
         prompt = f"""
@@ -64,12 +64,13 @@ class AI(Resource):
             Clients can only ask about the following: app features, order details or gastronomy information. Otherwise, do not answer politely.
         </filter>
         <data>
-            - Dishes: {', '.join(dish_names)}.
+            - Dishes: {dishes}.
         </data>
         <request>
             {payload["messages"][-1]["content"]}
         </request>
         """
+        payload["messages"][-1]["content"] = prompt
         response = openai_client.chat.completions.create(
             model=os.environ.get("OPENAI_MODEL"),
             messages=payload["messages"]
