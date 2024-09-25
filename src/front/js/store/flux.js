@@ -251,7 +251,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Authorization":`Bearer ${token}`,
 							"Content-Type": "application/json",
 							"Access-Control-Allow-Origin": "*",
-						  },	
+						},	
 					})
 					let data = await resp.json()
 					console.log(data);
@@ -279,17 +279,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			sendChat: async (request) => {
-				try{
-					let resp = await fetch(process.env.BACKEND_URL + "/", {
+			sendChat: async (chat) => {
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/ai", {
 						method: 'POST',
-						body: JSON.stringify(request),
-					})
-					let data = await resp.json()
-					localStorage.setItem("responseBot",data)				
-				}catch(e){
+						body: JSON.stringify({ messages: chat }),
+						headers: {
+							"Authorization":`Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+						},
+					});
+					const data = await resp.json();
+					localStorage.setItem("responseBot", data);
+					return data
+				} catch(e) {
 					console.error(e);
-					
 				}
 			},
 			

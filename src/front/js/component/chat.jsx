@@ -1,11 +1,11 @@
-import React, { Component,useContext,useEffect,useState } from 'react'
+import React, { useContext,useEffect,useState } from 'react'
 import ChatBot from 'react-simple-chatbot'
 import { ThemeProvider } from 'styled-components'
 import { Context } from "../store/appContext";
 import chatbot from '../../assets/images/chatbot.png';
 import botavatar from '../../assets/images/botavatar.png';
 import botoff from '../../assets/images/botoff.png';
-
+import { jwtDecode } from 'jwt-decode';
 
 export const Chat =() =>  {
     const { store, actions } = useContext(Context);
@@ -28,70 +28,70 @@ export const Chat =() =>  {
 
 
     useEffect(() => {
-      // Recuperar el valor del localStorage al cargar el componente
       localStorage.setItem("requestBot","");
       localStorage.setItem("responseBot"," ");
     }, []);
+
+    function isClient() {
+      const token = localStorage.getItem("token")
+      if (token === null) return false;
+      const decodedToken = jwtDecode(token);
+      const role_id = decodedToken.sub.role_id;
+      return role_id === 1;
+    }
+    
   
     const steps = [
       {
         id: 'welcome',
-        message: 'Bienvenido a Kusi AI🤖 ',
+        message: 'Bienvenido a Kusi AI 🤖 Puedes realizarme cualquier consulta relacionada a la app.',
         trigger: '1',
       },
       {
         id: '1',
-        message: '¿Cuál es tu consulta?',
-        trigger: '2',
-      },
-      {
-        id: '2',
         user: true,
-        trigger: '3',
-        validator: (value) =>{
+        trigger: '2',
+        validator: value => {
           localStorage.setItem('requestBot', value);
-          return true
-          
+          const chat = JSON.parse(localStorage.getItem("chat") || "[]");
+          chat.push({ role: "user", content: value });
+          actions.sendChat(chat).then(response => {
+            chat.push(response);
+            localStorage.setItem("chat", JSON.stringify(chat));
+          });
         }
       },
       {
-        id: '3',
-        message: (localStorage.getItem("responseBot")),
-        trigger: '2',
-      },
-      // {
-      //   id: '4',
-      //   message: '¿Quieres hacer otra consulta?',
-      //   trigger: '5',
-      // },
-      // {
-      //   id: '5',
-      //   options: [
-      //     {value: "y", label: "Si", trigger: "1" },
-      //     {value: "n", label: "No", trigger: "6" },
-      //   ]
-      // },
-      // {
-      //   id: '6',
-      //   message: 'Gracias por tu consulta! , Aqui estaré por si me necesitas.',
-      //   end: true,
-      // },
+        id: '2',
+        message: localStorage.getItem("responseBot"),
+        waitAction: true,
+        trigger: '1'
+      }
     ];
 
         return (
-
-            <div className="container d-flex text-end justify-content-end" style={{ position: 'fixed', bottom: '70px', right: '20px', zIndex: 1000 }}>
-                <button onClick={toggleChat} className="btn btn-danger" style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-                        {isOpen ? <img  src={botoff} alt="" /> : <img  src={chatbot} alt="" />}
-                    </button>
+          <div
+              className={`container d-flex text-end justify-content-end ${ isClient() ? '' : 'd-none' }`}
+              style={{ position: 'fixed', bottom: '70px', right: '20px', zIndex: 1000 }}>
+              <button
+                onClick={toggleChat}
+                className="btn btn-danger"
+                style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+              >
+                {isOpen ? <img  src={botoff} alt="" /> : <img  src={chatbot} alt="" />}
+              </button>
             <ThemeProvider theme={theme}>
-            {isOpen &&
-                <ChatBot headerTitle= "Kusi AI" placeholder="Escribe aquí" recognitionEnable={{enable:true, lang: 'es'}} botAvatar={botavatar}
-                 steps={steps}
+              {isOpen &&
+                <ChatBot
+                  headerTitle="Kusi AI"
+                  placeholder="Escribe aquí"
+                  recognitionEnable={{enable:true, lang: 'es'}}
+                  botAvatar={botavatar}
+                  steps={steps}
                 />
-            }    
+              }    
             </ThemeProvider>
-            </div>
-        )
+          </div>
+        );
     
 }
