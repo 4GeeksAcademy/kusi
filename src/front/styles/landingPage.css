@@ -26,11 +26,9 @@
 }
   
 .image-card:hover {
-    transform: rotate(180deg) scale(1.1); /* Gira y aumenta el tamaño al pasar el ratón */
+    transform: rotate(1deg) scale(1.1); /* Gira y aumenta el tamaño al pasar el ratón */
 }
   
-
-      
 
 
 @media (max-width: 1700px) {
@@ -121,6 +119,7 @@
 
     .container-card-image {
         width: 100%;
+        height: 270px;
     }
 
     .image-card {
