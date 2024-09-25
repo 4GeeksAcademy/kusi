@@ -110,7 +110,6 @@ export default function LandingPage() {
                             infinite={true}
                             showDots={true}
                             arrows={false}
-                            className="dish-carousel"
                         >
                             {dishes.map((dish, index) => (
                                 <div 
