@@ -15,7 +15,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			order:[],
 			dishes: [],
 			dishSelected: {},
+			dataDishesById: [],
+			dataUsers: [],
 			dataUsersById: [],
+			dataOrders: [],
+			dataOrdersById: [],
 			users: [],
 			employees: [],
 			clients: [],
@@ -92,8 +96,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error al traer el usuario", e)
 				}
 			},
-			getUsersById: async (id) => {
+			getDishesById: async (id) => {
 				const store = getStore()
+				if(store.dishes){
+					try {
+						let response = await fetch(`${process.env.BACKEND_URL}/dishes/${id}`,{
+							headers:{
+								"Access-Control-Allow-Origin": "*",
+								"Authorization": `Bearer ${localStorage.getItem("token")}`,
+								"Content-Type": "application/json"
+							}
+						})
+	
+						let data = await response.json()
+
+						if(response.status == 201){
+							await setStore({dataDishesById: data})
+							console.log(store.dataDishesById)
+						} 
+	
+					}catch (e){
+						console.error("Error al traer los Dishes", e)
+					}
+				} else {
+					console.log("Dishes complete")
+				}
+			},
+
+			getUsers: async () => {
+				const store = getStore()
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/users`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error trayendo los usuarios")
+					}
+					let data = await response.json()
+					setStore({dataUsers: data})
+				}catch (e){
+					console.error("Error al traer usuarios", e)
+				}
+			},
+
+			getUsersById: async (id) => {
 
 				try{
 					let response = await fetch(`${process.env.BACKEND_URL}/users/${id}`,{
@@ -224,6 +276,78 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}
 			},
+
+			orders: async () => {
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/orders`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Ocurrio un error al traer la data orders")
+					}
+
+					let data = await response.json()
+					setStore({dataOrders: data})
+					console.log(data)
+
+				}catch (e){
+					console.error(e)
+				}
+			},
+
+
+			getOrdersById: async (id) => {
+
+				try{
+					let response = await fetch(`${process.env.BACKEND_URL}/orders/${id}`,{
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						}
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error trayendo el id "+id)
+					}
+					let data = await response.json()
+					setStore({dataOrdersById: data})
+				}catch (e){
+					console.error("Error al traer la orden del usuario", e)
+				}
+			},
+
+			updateOrderStatus: async (id, newStatus) => {
+				try{
+					const response = await fetch(`${process.env.BACKEND_URL}/orders/${id}/update`,{
+						method: "PUT",
+                        headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+        					"Content-Type": "application/json"
+						},
+                        body: JSON.stringify({
+                            status_id: newStatus
+                        })
+					})
+
+					if(!response.ok){
+						console.log("Hubo un error editando el id "+id)
+					}
+					const data = await response.json();
+                    console.log("Pedido actualizado con éxito", data);
+					setStore(prevStore => ({...prevStore, dataOrdersById: data}));
+
+				}catch (e){
+					console.error("Error al editar orden", e)
+				}
+			},
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},

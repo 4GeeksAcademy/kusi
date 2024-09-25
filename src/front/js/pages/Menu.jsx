@@ -15,7 +15,7 @@ export const Menu = () => {
 	return (
 		<>
 			<Navbar />
-			<div className="container d-flex justify-content-center align-items-center w-auto mt-3">
+			<div className="container-menu container d-flex justify-content-center align-items-center w-auto mt-3">
 				<DishCardsTable />
 			</div>
 		</>
