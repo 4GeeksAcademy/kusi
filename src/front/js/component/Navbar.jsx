@@ -54,19 +54,6 @@ export const Navbar = () => {
         navigate("/login");
     };
 
-    // useEffect(() => {
-    //     if(userId){
-    //         const fetchData = async () => {
-    //             try {
-    //                 await actions.getUsersById(userId)
-    //             } catch (e) {
-    //                 console.error("Error al obtener los datos del usuario", e);
-    //             }
-    //         };
-    //         fetchData();
-    //     }
-    // }, [userId]);
-
 
     const menuItemsByRole = {
         [Roles.GUEST]: [
