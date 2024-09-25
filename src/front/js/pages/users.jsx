@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 
 export const Users = () => {
     const { store, actions } = useContext(Context); 
-    const [idUser, SetIdUser] = useState(0);
+    const [idUser, setIdUser] = useState(0);
 
     useEffect(() => {
 
@@ -36,8 +36,8 @@ export const Users = () => {
     }, []);
 
 
-    const handleNewEmployee = () => SetIdUser(0);
-    const handleDetailsUser = (id) => SetIdUser(id);
+    const handleNewEmployee = () => setIdUser(0);
+    const handleDetailsUser = (id) => setIdUser(id);
     const handleDeleteUser = async (id) => {
 
         Swal.fire({
