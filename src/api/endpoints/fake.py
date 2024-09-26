@@ -40,6 +40,7 @@ class Fake(Resource):
         Order.query.delete()
         DishIngredient.query.delete()
         Ingredient.query.delete()
+        ExtraDish.query.delete()        
         Dish.query.delete()        
         OrderStatus.query.delete()
         User.query.delete()

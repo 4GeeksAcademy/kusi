@@ -21,6 +21,7 @@ typing-extensions = "*"
 flask-restx = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+openai="*"
 
 [requires]
 python_version = "3.10"
