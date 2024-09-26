@@ -262,7 +262,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const addNote = ({
-						dishes: store.list, 
+						dishes: store.list.map(x => { return { ...x, unit_price: x.price } }),
 						special_instructions: instructionsnote, 
 					  });
 
