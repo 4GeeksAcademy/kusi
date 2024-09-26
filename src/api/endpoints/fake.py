@@ -390,6 +390,141 @@ class Fake(Resource):
             cooking_time=25,
             quantity=40
         )
+        sopa_minuta = Dish(
+            id=28,
+            name="Sopa a la Minuta",
+            description="Sopa espesa con trozos de carne, verduras y fideos, ideal para un día frío.",
+            image_url="https://recetascocinaperuana.com/wp-content/uploads/2020/08/sopa-a-la-minuta.jpg",
+            price=18,
+            cooking_time=60,
+            quantity=50
+        )
+        pan = Dish(
+            id=29,
+            name="Pan",
+            description="Pan fresco, perfecto para acompañar sopas y guisos.",
+            image_url="https://poramoralhorno.com/wp-content/uploads/2020/11/20200727_134403-768x373.jpg",
+            price=4,
+            cooking_time=10,
+            quantity=100
+        )
+        arroz_con_mariscos = Dish(
+            id=30,
+            name="Arroz con Mariscos",
+            description="Arroz cocido con una variedad de mariscos y especias, servido con salsa de ají.",
+            image_url="https://lechedetigre.net/wp-content/uploads/2022/12/Arroz-con-Mariscos-Receta-Peruana.jpg",
+            price=35,
+            cooking_time=50,
+            quantity=50
+        )
+        papa_rellena = Dish(
+            id=31,
+            name="Papa Rellena",
+            description="Papa hervida y rellena con carne molida, cebolla, ají, huevo duro, y aceitunas. Luego se fríe.",
+            image_url="https://blog.redbus.pe/wp-content/uploads/2020/04/noticia-1575907744-papa-rellena-e1587762159322-696x372.png",
+            price=25,
+            cooking_time=40,
+            quantity=30
+        )
+        ensalada_rusa = Dish(
+            id=32,
+            name="Ensalada Rusa",
+            description="Mezcla de papas, zanahorias, arvejas y mayonesa.",
+            image_url="https://mccormick.widen.net/content/yseerqyqia/jpeg/Ensalada_Rusa_2000x1125.jpg?crop=true&anchor=438,0&q=80&color=ffffffff&u=u0bb0o&w=1125&h=1125",
+            price=10,
+            cooking_time=15,
+            quantity=50
+        )
+        arroz_tapado = Dish(
+            id=33,
+            name="Arroz Tapado",
+            description="Arroz blanco con una capa de carne molida, aceitunas, pasas, huevo duro y plátano frito.",
+            image_url="https://www.deliciosi.com/images/1700/1748/arroz-tapado-665.webp",
+            price=20,
+            cooking_time=30,
+            quantity=25
+        )
+        mondonguito_italiana = Dish(
+            id=35,
+            name="Mondonguito a la Italiana",
+            description="Mondongo cocido con papas, zanahorias y arvejas, en un aderezo con salsa de tomate y vino.",
+            image_url="https://recetinas.com/wp-content/uploads/2018/05/mondongo-a-la-italiana-720x480.jpg",
+            price=22,
+            cooking_time=50,
+            quantity=20
+        )
+        puca_picante = Dish(
+            id=36,
+            name="Puca Picante",
+            description="Tradicional plato ayacuchano a base de papas, maní, beterraga, ají panca y carne de cerdo.",
+            image_url="https://origin.cronosmedia.glr.pe/large/2023/02/27/lg_63fcc33d9c7ca8355623c0a3.jpg",
+            price=18,
+            cooking_time=40,
+            quantity=30
+        )
+        chanfainita = Dish(
+            id=37,
+            name="Chanfainita",
+            description="Plato tradicional peruano a base de bofe de res cocido con papas y aderezado con ají panca.",
+            image_url="https://www.recetasnestle.com.pe/sites/default/files/styles/recipe_detail_mobile/public/srh_recipes/c6fc11f68ec8776ef5ca1868e9c11b25.webp?itok=0rSiVyWf",
+            price=18,
+            cooking_time=60,
+            quantity=20
+        )
+        pure_de_papa = Dish(
+            id=38,
+            name="Puré de Papa",
+            description="Papas cocidas y machacadas, mezcladas con mantequilla y leche.",
+            image_url="https://i.ytimg.com/vi/YBsJZ7umVno/maxresdefault.jpg",
+            price=10,
+            cooking_time=25,
+            quantity=40
+        )
+        quinua = Dish(
+            id=39,
+            name="Quinua",
+            description="Superalimento andino, cocido y acompañado con vegetales y especias.",
+            image_url="https://comidasperuanas.net/wp-content/uploads/2020/12/Quinua-con-pollo.webp",
+            price=15,
+            cooking_time=30,
+            quantity=25
+        )
+        ocopa = Dish(
+            id=40,
+            name="Ocopa",
+            description="Papa sancochada bañada en salsa de ocopa hecha con huacatay, maní, y ají amarillo.",
+            image_url="https://i.ytimg.com/vi/IIfkUnKHmBk/maxresdefault.jpg",
+            price=22,
+            cooking_time=40,
+            quantity=30
+        )
+        patita_con_mani = Dish(
+            id=41,
+            name="Patita con Maní",
+            description="Guiso hecho a base de patitas de cerdo y una salsa de maní, acompañada de yuca.",
+            image_url="https://jameaperu.com/wp-content/uploads/2020/03/patita-con-mani_700x465.jpg",
+            price=20,
+            cooking_time=90,
+            quantity=15
+        )
+        leche_de_tigre = Dish(
+            id=42,
+            name="Leche de Tigre",
+            description="Jugo resultante del ceviche, cargado de sabores de limón, ají y pescado.",
+            image_url="https://1.bp.blogspot.com/-2c2xzlQULMs/YKwopsAYGiI/AAAAAAAAN8Y/zJSrBXR5nTgsuK1u00Ls_K2hOi2Vu6GcACLcBGAsYHQ/s706/Leche-de-tigre.jpg",
+            price=12,
+            cooking_time=15,
+            quantity=50
+        )
+        jalea_mixta = Dish(
+            id=43,
+            name="Jalea Mixta",
+            description="Plato marino compuesto por trozos de pescado frito, acompañado de mariscos como calamar, camarón y conchas.",
+            image_url="https://quechuaschicken.com/wp-content/uploads/2023/02/41F90A77-1B45-43FB-9973-820F0FB3275F-scaled.jpeg",
+            price=35,
+            cooking_time=50,
+            quantity=20
+        )
 
 
         db.session.add(ceviche)
@@ -418,6 +553,21 @@ class Fake(Resource):
         db.session.add(rocoto_relleno)
         db.session.add(arroz_chaufa)
         db.session.add(tequeños)
+        db.session.add(sopa_minuta)
+        db.session.add(pan)
+        db.session.add(arroz_con_mariscos)
+        db.session.add(papa_rellena)
+        db.session.add(ensalada_rusa)
+        db.session.add(arroz_tapado)
+        db.session.add(mondonguito_italiana)
+        db.session.add(puca_picante)
+        db.session.add(chanfainita)
+        db.session.add(pure_de_papa)
+        db.session.add(quinua)
+        db.session.add(ocopa)
+        db.session.add(patita_con_mani)
+        db.session.add(leche_de_tigre)
+        db.session.add(jalea_mixta)
 
         db.session.commit()
 
@@ -515,9 +665,164 @@ class Fake(Resource):
             )
         )
 
+        db.session.add(ExtraDish(
+            dish_id=sopa_minuta.id,
+            extra_id=pan.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_con_mariscos.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=papa_rellena.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=papa_rellena.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_tapado.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_tapado.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=ensalada_rusa.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=mondonguito_italiana.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=mondonguito_italiana.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=puca_picante.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=puca_picante.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=chanfainita.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=chanfainita.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=chanfainita.id,
+            extra_id=papa_a_la_huancaina.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=pure_de_papa.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=pure_de_papa.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=quinua.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=quinua.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=ocopa.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=ocopa.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=patita_con_mani.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=patita_con_mani.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=leche_de_tigre.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=jalea_mixta.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=jalea_mixta.id,
+            extra_id=inca_kola.id
+            )
+        )
 
 
-
+        mariscos = Ingredient(name="Mariscos")
         pescado = Ingredient(name="Pescado")
         cebolla = Ingredient(name="Cebolla")
         aji_limo = Ingredient(name="Ají limo")
@@ -587,6 +892,18 @@ class Fake(Resource):
         cebolla_china = Ingredient(name="Cebolla china")
         kion = Ingredient(name="Kion")
         masa_wantan = Ingredient(name="Masa Wantan")
+        zanahoria = Ingredient(name="Zanahoria")
+        apio = Ingredient(name="Apio")
+        carne_res = Ingredient(name="Carne de res")
+        arvejas = Ingredient(name="Arvejas")
+        beterraga = Ingredient(name="Beterraga")
+        plátano_frito = Ingredient(name="Plátano Frito")
+        bofe_res = Ingredient(name="Bofe de Res")
+        mantequilla = Ingredient(name="Mantequilla")
+        calamar = Ingredient(name="Calamar")
+        camarones = Ingredient(name="Camarones")
+        conchas = Ingredient(name="Conchas")
+        patita_cerdo = Ingredient(name="Patita de Cerdo")
 
         db.session.add(pescado)
         db.session.add(cebolla)
@@ -656,6 +973,20 @@ class Fake(Resource):
         db.session.add(pasas)
         db.session.add(cebolla_china)
         db.session.add(kion)
+        db.session.add(zanahoria)
+        db.session.add(apio)
+        db.session.add(carne_res)
+        db.session.add(mariscos)
+        db.session.add(arvejas)
+        db.session.add(beterraga)
+        db.session.add(plátano_frito)
+        db.session.add(bofe_res)
+        db.session.add(mantequilla)
+        db.session.add(calamar)
+        db.session.add(camarones)
+        db.session.add(conchas)
+        db.session.add(patita_cerdo)
+
         db.session.commit()
         
 
@@ -1590,6 +1921,464 @@ class Fake(Resource):
                 ingredient_id=masa_wantan.id
             )
         )
+
+        #SOPA A LA MINUTA
+
+        db.session.add(
+            DishIngredient(
+                dish_id=sopa_minuta.id,
+                ingredient_id=carne_res.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sopa_minuta.id,
+                ingredient_id=fideos.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sopa_minuta.id,
+                ingredient_id=zanahoria.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sopa_minuta.id,
+                ingredient_id=apio.id
+            )
+        )
+
+
+        #ARROZ CON MARISCOS
+
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_mariscos.id,
+                ingredient_id=arroz.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_mariscos.id,
+                ingredient_id=mariscos.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_mariscos.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+
+        # Papa Rellena
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=carne_molida.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=huevo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=aceitunas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=papa_rellena.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Arroz Tapado
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=arroz.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=carne_molida.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=aceitunas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=huevo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=plátano_frito.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_tapado.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Mondonguito a la Italiana
+        db.session.add(
+            DishIngredient(
+                dish_id=mondonguito_italiana.id,
+                ingredient_id=mondongo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=mondonguito_italiana.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=mondonguito_italiana.id,
+                ingredient_id=zanahoria.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=mondonguito_italiana.id,
+                ingredient_id=arvejas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=mondonguito_italiana.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Puca Picante
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=cerdo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=mani.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=beterraga.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=puca_picante.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Ensalada Rusa
+        db.session.add(
+            DishIngredient(
+                dish_id=ensalada_rusa.id,
+                ingredient_id=arvejas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ensalada_rusa.id,
+                ingredient_id=beterraga.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ensalada_rusa.id,
+                ingredient_id=zanahoria.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ensalada_rusa.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Chanfainita
+        db.session.add(
+            DishIngredient(
+                dish_id=chanfainita.id,
+                ingredient_id=bofe_res.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=chanfainita.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=chanfainita.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=chanfainita.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=chanfainita.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Puré de Papa
+        db.session.add(
+            DishIngredient(
+                dish_id=pure_de_papa.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pure_de_papa.id,
+                ingredient_id=mantequilla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pure_de_papa.id,
+                ingredient_id=leche.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pure_de_papa.id,
+                ingredient_id=pollo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=pure_de_papa.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Quinua
+        db.session.add(
+            DishIngredient(
+                dish_id=quinua.id,
+                ingredient_id=quinua.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=quinua.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=quinua.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=quinua.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Ocopa
+        db.session.add(
+            DishIngredient(
+                dish_id=ocopa.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ocopa.id,
+                ingredient_id=huacatay.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ocopa.id,
+                ingredient_id=mani.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ocopa.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=ocopa.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Patita con Maní
+        db.session.add(
+            DishIngredient(
+                dish_id=patita_con_mani.id,
+                ingredient_id=patita_cerdo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=patita_con_mani.id,
+                ingredient_id=mani.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=patita_con_mani.id,
+                ingredient_id=yuca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=patita_con_mani.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Leche de Tigre
+        db.session.add(
+            DishIngredient(
+                dish_id=leche_de_tigre.id,
+                ingredient_id=pescado.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=leche_de_tigre.id,
+                ingredient_id=limon.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=leche_de_tigre.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=leche_de_tigre.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=leche_de_tigre.id,
+                ingredient_id=sal.id
+            )
+        )
+
+        # Jalea Mixta
+        db.session.add(
+            DishIngredient(
+                dish_id=jalea_mixta.id,
+                ingredient_id=pescado.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=jalea_mixta.id,
+                ingredient_id=calamar.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=jalea_mixta.id,
+                ingredient_id=camarones.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=jalea_mixta.id,
+                ingredient_id=conchas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=jalea_mixta.id,
+                ingredient_id=sal.id
+            )
+        )
+
 
 
         db.session.commit()
