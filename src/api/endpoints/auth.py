@@ -1,13 +1,18 @@
+import os
+import secrets
+
 from datetime import timedelta
+
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
+from flask_mail import Message, Mail
 from flask_restx import fields, Resource
 from api.models import db, User, Role, RoleName
 from api.namespaces import auth_namespace
 from api.utils import InvalidAPIUsage
-import secrets
 
 bcrypt = Bcrypt()
+mail = Mail()
 
 credentials = auth_namespace.model(
     "Credentials",
@@ -20,13 +25,14 @@ credentials = auth_namespace.model(
 sign_up_form = auth_namespace.model(
     "SignUpForm",
     {
-        "role": fields.Integer,
         "email": fields.String,
         "name": fields.String,
         "phone_number": fields.String,
         "password": fields.String
     }
 )
+
+reset_form = auth_namespace.model("ResetForm", { "email": fields.String })
 
 @auth_namespace.response(200, "OK")
 @auth_namespace.response(401, "Unauthorized")
@@ -123,5 +129,39 @@ class SignUp(Resource):
             db.session.add(new_user)
             db.session.commit()
             return new_user.serialize(), 201
+        except Exception as e:
+            return { "message": str(e) }, 500
+
+@auth_namespace.response(204, "No content")
+@auth_namespace.response(400, "Bad request")
+@auth_namespace.response(404, "User not found")
+@auth_namespace.response(500, "Internal server error")
+@auth_namespace.route("/reset")
+class Reset(Resource):
+    @auth_namespace.expect(reset_form)
+    def put(self):
+        """Resets the password of the user."""
+        payload = auth_namespace.payload
+        email = payload.get("email")
+        if email is None:
+            raise InvalidAPIUsage("Missing email", 400)
+        user = User.query.filter_by(email=email).one_or_none()
+        if user is None:
+            raise InvalidAPIUsage("User not found", 404)
+        try:
+            password = secrets.token_hex(16)
+            salted_password = f"{password}{user.salt}"
+            hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+            user.hashed_salted_password = hashed_salted_password
+            db.session.commit()
+            body = f"Estimado/a {user.name},\n\nHemos recibido una solicitud para restablecer la contraseña de su cuenta. A continuación, le proporcionamos una nueva contraseña temporal:\n\n{password}\n\nLe recomendamos encarecidamente que, por su seguridad, cambie esta contraseña temporal inmediatamente después de iniciar sesión. Puede hacerlo accediendo a la configuración de su cuenta.\n\nSi usted no realizó esta solicitud, por favor contáctenos de inmediato para proteger su cuenta.\n\nAtentamente,\n\nKusi"
+            msg = Message(
+                subject="Kusi | Recuperación de contraseña",
+                sender=os.environ.get("MAIL_USERNAME"),
+                body=body,
+                recipients=[user.email]
+            )
+            mail.send(msg)
+            return (""), 204
         except Exception as e:
             return { "message": str(e) }, 500
