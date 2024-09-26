@@ -110,11 +110,21 @@ class Fake(Resource):
             hashed_salted_password=bcrypt.generate_password_hash("jhoel-passwordjhoel-salt").decode("utf-8"),
             salt="jhoel-salt"
         )
+        camila = User(
+            role_id=client_role.id,
+            email="camila@gmail.com",
+            name="Camila",
+            phone_number="+51 923452876",
+            profile_picture_url="https://www.vhv.rs/dpng/d/550-5509255_brawl-stars-wiki-brawl-stars-brawler-brock-hd.png",
+            hashed_salted_password=bcrypt.generate_password_hash("camila-passwordcamila-salt").decode("utf-8"),
+            salt="jhoel-salt"
+        )
         db.session.add(angel)
         db.session.add(manuel)
         db.session.add(rossy)
         db.session.add(ruben)
         db.session.add(jhoel)
+        db.session.add(camila)
         db.session.commit()
         
         # OrderStatus
@@ -281,6 +291,105 @@ class Fake(Resource):
             cooking_time=30,
             discount_percentage=10
         )
+        seco_de_cabrito = Dish(
+            id=16,
+            name="Seco de Cabrito",
+            description="Un plato típico del norte de Perú que consiste en carne de cabrito guisada con culantro y cerveza, acompañado de yuca y frijoles.",
+            image_url="https://ojo.pe/resizer/EpxYmy1s3pTq692uFWpn0yGp2ng=/580x330/smart/filters:format(jpeg):quality(75)/arc-anglerfish-arc2-prod-elcomercio.s3.amazonaws.com/public/QX4YGUICI5AHZI44HAKLU73EX4.jpg",
+            price=45,
+            cooking_time=90,
+            quantity=20
+        )
+        sarsa_criolla = Dish(
+            id=17,
+            name="Sarsa Criolla",
+            description="Es el acompañante clásico de muchos platos de la gastronomía peruana.",
+            image_url="https://jameaperu.com/wp-content/uploads/2018/07/sarsa-criolla_700x465.jpg",
+            price=5,
+            cooking_time=10,
+            quantity=100
+        )
+        cau_cau = Dish(
+            id=19,
+            name="Cau Cau",
+            description="Un guiso de mondongo con papas y hierbas aromáticas, servido con arroz.",
+            image_url="https://peru.info/archivos/publicacion/96-imagen-15972012020.jpg",
+            price=27,
+            cooking_time=60,
+            quantity=20
+        )
+        arroz_blanco = Dish(
+            id=20,
+            name="Arroz Blanco",
+            description="El acompañamiento ideal para cualquier plato principal.",
+            image_url="https://www.recetasnestle.com.do/sites/default/files/styles/recipe_detail_mobile/public/srh_recipes/6a98b4c32d678925047bf495f5731d23.webp?itok=UbiVk74q",
+            price=4,
+            cooking_time=20,
+            quantity=50
+        )
+        carapulcra = Dish(
+            id=21,
+            name="Carapulcra",
+            description="Estofado tradicional peruano a base de papas secas y carne, cocido con maní y ajíes.",
+            image_url="https://imgmedia.wapa.pe/650x368/wapa/migration/imagen/2019/07/04/noticia-1562251851-portada-carapulcra-con-sopa-seca.png",
+            price=30,
+            cooking_time=90,
+            quantity=18
+        )
+        yuca_frita = Dish(
+            id=22,
+            name="Yuca Frita",
+            description="Yuca frita crujiente, perfecta para acompañar platos tradicionales.",
+            image_url="https://www.comidastipicasperuanas.com/wp-content/uploads/2022/05/Receta-de-yuca-frita.jpg",
+            price=7,
+            cooking_time=15,
+            quantity=40
+        )
+        olluquito_charqui = Dish(
+            id=23,
+            name="Olluquito con Charqui",
+            description="Un plato tradicional a base de olluco, un tubérculo andino, y charqui (carne seca de llama o res).",
+            image_url="https://recetaculinaria.com/wp-content/uploads/olluquito-con-charqui-768x432.jpg",
+            price=26,
+            cooking_time=50,
+            quantity=30
+        )
+        arroz_con_pato = Dish(
+            id=24,
+            name="Arroz con Pato",
+            description="Arroz cocido con cilantro, cerveza negra y un delicioso pato tierno.",
+            image_url="https://comidaperuana.online/wp-content/uploads/2022/07/arroz-con-pato-1-768x513.webp",
+            price=40,
+            cooking_time=120,
+            quantity=25
+        )
+        rocoto_relleno = Dish(
+            id=25,
+            name="Rocoto Relleno",
+            description="Delicioso rocoto arequipeño relleno de carne molida, pasas y queso, horneado a la perfección.",
+            image_url="https://patasca.net/wp-content/uploads/2021/10/rocoto-relleno.jpg",
+            price=28,
+            cooking_time=60,
+            quantity=40
+        )
+        arroz_chaufa = Dish(
+            id=26,
+            name="Arroz Chaufa",
+            description="Arroz frito al estilo chino-peruano, preparado con pollo, huevo y cebolla china.",
+            image_url="https://micomidaperuana.com/ezoimgfmt/i0.wp.com/micomidaperuana.com/wp-content/uploads/2019/05/Arroz-chaufa.jpg?resize=768%2C512&ssl=1&ezimgfmt=ngcb1/notWebP",
+            price=20,
+            cooking_time=30,
+            quantity=50
+        )
+        tequeños = Dish(
+            id=27,
+            name="Tequeños",
+            description="Deliciosos bocados de masa rellenos de queso, perfectos para compartir.",
+            image_url="https://1.bp.blogspot.com/-a431x4feOBw/V_LQfuV9DFI/AAAAAAAABKs/-1xfDbLHuhckYPvg9ozFv0qejud5gcHCACLcB/s640/tequenos.jpg",
+            price=15,
+            cooking_time=25,
+            quantity=40
+        )
 
 
         db.session.add(ceviche)
@@ -298,6 +407,18 @@ class Fake(Resource):
         db.session.add(crema_de_rocoto)
         db.session.add(tallarines_verdes)
         db.session.add(papa_a_la_huancaina)
+        db.session.add(seco_de_cabrito)
+        db.session.add(sarsa_criolla)
+        db.session.add(cau_cau)
+        db.session.add(arroz_blanco)
+        db.session.add(carapulcra)
+        db.session.add(yuca_frita)
+        db.session.add(olluquito_charqui)
+        db.session.add(arroz_con_pato)
+        db.session.add(rocoto_relleno)
+        db.session.add(arroz_chaufa)
+        db.session.add(tequeños)
+
         db.session.commit()
 
         # ExtraDish
@@ -326,6 +447,76 @@ class Fake(Resource):
                 extra_id=papa_a_la_huancaina.id
             )
         )
+
+        db.session.add(
+            ExtraDish(
+                dish_id=seco_de_cabrito.id,
+                extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=cau_cau.id,
+            extra_id=arroz_blanco.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=cau_cau.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=carapulcra.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=carapulcra.id,
+            extra_id=yuca_frita.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=olluquito_charqui.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_con_pato.id,
+            extra_id=sarsa_criolla.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=rocoto_relleno.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=rocoto_relleno.id,
+            extra_id=yuca_frita.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_chaufa.id,
+            extra_id=tequeños.id
+            )
+        )
+
+        db.session.add(ExtraDish(
+            dish_id=arroz_chaufa.id,
+            extra_id=inca_kola.id
+            )
+        )
+
+
+
 
         pescado = Ingredient(name="Pescado")
         cebolla = Ingredient(name="Cebolla")
@@ -372,6 +563,30 @@ class Fake(Resource):
         queso = Ingredient(name="Queso")
         nueces = Ingredient(name="Nueces")
         bistec = Ingredient(name="Bistec")
+        cabrito = Ingredient(name="Cabrito")
+        chicha_de_jora = Ingredient(name="Chicha de jora")
+        zapallo_loche = Ingredient(name="Zapallo loche")
+        oregano = Ingredient(name="Orégano")
+        frejol = Ingredient(name="Frejol")
+        tocino = Ingredient(name="Tocino")
+        arroz = Ingredient(name="Arroz")
+        mondongo = Ingredient(name="Mondongo")
+        hierbabuena = Ingredient(name="Hierbabuena")
+        papa_blanca = Ingredient(name="Papa blanca")
+        palillo = Ingredient(name="Palillo")
+        papas_secas = Ingredient(name="Papas secas")
+        mani = Ingredient(name="Maní")
+        canela = Ingredient(name="Canela")
+        olluco = Ingredient(name="Olluco")
+        charqui = Ingredient(name="Charqui")
+        pato = Ingredient(name="Pato")
+        cerveza_negra = Ingredient(name="Cerveza negra")
+        rocoto = Ingredient(name="Rocoto")
+        carne_molida = Ingredient(name="Carne molida")
+        pasas = Ingredient(name="Pasas")
+        cebolla_china = Ingredient(name="Cebolla china")
+        kion = Ingredient(name="Kion")
+        masa_wantan = Ingredient(name="Masa Wantan")
 
         db.session.add(pescado)
         db.session.add(cebolla)
@@ -418,7 +633,32 @@ class Fake(Resource):
         db.session.add(queso)
         db.session.add(nueces)
         db.session.add(bistec)
+        db.session.add(cabrito)
+        db.session.add(chicha_de_jora)
+        db.session.add(zapallo_loche)
+        db.session.add(oregano)
+        db.session.add(tocino)
+        db.session.add(oregano)
+        db.session.add(arroz)
+        db.session.add(mondongo)
+        db.session.add(papa_blanca)
+        db.session.add(hierbabuena)
+        db.session.add(palillo)
+        db.session.add(papas_secas)
+        db.session.add(mani)
+        db.session.add(canela)
+        db.session.add(olluco)
+        db.session.add(charqui)
+        db.session.add(pato)
+        db.session.add(cerveza_negra)
+        db.session.add(rocoto)
+        db.session.add(carne_molida)
+        db.session.add(pasas)
+        db.session.add(cebolla_china)
+        db.session.add(kion)
         db.session.commit()
+        
+
 
         # Ingredients of ceviche
         db.session.add(
@@ -953,6 +1193,405 @@ class Fake(Resource):
                 ingredient_id=aceite_vegetal.id
             )
         )
+
+        # seco_de_cabrito
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=culantro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=aji_amarillo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=chicha_de_jora.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=zapallo_loche.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=oregano.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=frejol.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=seco_de_cabrito.id,
+                ingredient_id=tocino.id
+            )
+        )
+
+        # sarsa_criolla
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=aji_limo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=limon.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=culantro.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=sarsa_criolla.id,
+                ingredient_id=pimienta.id
+            )
+        )
+
+        # Caucau
+        db.session.add(
+            DishIngredient(
+                dish_id=cau_cau.id,
+                ingredient_id=mondongo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=cau_cau.id,
+                ingredient_id=papas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=cau_cau.id,
+                ingredient_id=hierbabuena.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=cau_cau.id,
+                ingredient_id=turmeric.id
+            )
+        )
+
+        # arroz
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_blanco.id,
+                ingredient_id=arroz.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_blanco.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_blanco.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        
+
+        # carapulcra
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=papas_secas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=mani.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=cerdo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=canela.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=carapulcra.id,
+                ingredient_id=pimienta.id
+            )
+        )
+
+        #Yuca_Frita
+        db.session.add(
+            DishIngredient(
+                dish_id=yuca_frita.id,
+                ingredient_id=yuca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=yuca_frita.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=yuca_frita.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+
+        #Olluquito con charqui
+        db.session.add(
+            DishIngredient(
+                dish_id=olluquito_charqui.id,
+                ingredient_id=olluco.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=olluquito_charqui.id,
+                ingredient_id=charqui.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=olluquito_charqui.id,
+                ingredient_id=aji_panca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=olluquito_charqui.id,
+                ingredient_id=papa_blanca.id
+            )
+        )
+
+
+        #Arroz Con Pato
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_pato.id,
+                ingredient_id=pato.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_pato.id,
+                ingredient_id=arroz.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_pato.id,
+                ingredient_id=cerveza_negra.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_con_pato.id,
+                ingredient_id=culantro.id
+            )
+        )
+
+        #Rocoto Relleno
+        db.session.add(
+            DishIngredient(
+                dish_id=rocoto_relleno.id,
+                ingredient_id=rocoto.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=rocoto_relleno.id,
+                ingredient_id=carne_molida.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=rocoto_relleno.id,
+                ingredient_id=queso.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=rocoto_relleno.id,
+                ingredient_id=pasas.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=rocoto_relleno.id,
+                ingredient_id=huevo.id
+            )
+        )
+
+        #Chaufa
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_chaufa.id,
+                ingredient_id=huevo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_chaufa.id,
+                ingredient_id=cebolla_china.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_chaufa.id,
+                ingredient_id=pollo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_chaufa.id,
+                ingredient_id=sillao.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=arroz_chaufa.id,
+                ingredient_id=kion.id
+            )
+        )
+
+
+        #Tequeños
+        db.session.add(
+            DishIngredient(
+                dish_id=tequeños.id,
+                ingredient_id=palta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tequeños.id,
+                ingredient_id=tomate.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tequeños.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tequeños.id,
+                ingredient_id=limon.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tequeños.id,
+                ingredient_id=masa_wantan.id
+            )
+        )
+
+
         db.session.commit()
         
         return (""), 204
