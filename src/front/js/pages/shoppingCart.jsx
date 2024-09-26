@@ -29,7 +29,7 @@ export const ShoppingCart = () => {
 
     const goToPay = async () => {
             await actions.btnContinuar(notes);
-            // navigate("/paypal")
+            navigate("/paypal")
             setNotes("")   
 		
 	}

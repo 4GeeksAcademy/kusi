@@ -262,7 +262,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const addNote = ({
-						dishes: store.list, 
+						dishes: store.list.map(x => { return { ...x, unit_price: x.price } }),
 						special_instructions: instructionsnote, 
 					  });
 
@@ -459,57 +459,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
-			login: async (user,showModal=true) => {
-				try{
-					
-					let resp = await fetch(process.env.BACKEND_URL + "/auth/login", {
+			login: async (credentials, showModal=true) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/auth/login`, {
 						method: 'POST',
-						body: JSON.stringify(user),
+						body: JSON.stringify(credentials),
 						headers: {
 							'Content-Type': 'application/json',
-						  },	
+							'Access-Control-Allow-Origin': '*'
+						},	
 					})
 
-					let data = await resp.json()
-					
-					if(!showModal){
+					const data = await response.json()
 
-						if (data.access_token) {
-							localStorage.setItem("token" , data.access_token)
-						}
-
-					} else {
-
-						if(resp.status == 404 || resp.status == 401){
-							console.log(data.message)
-							Swal.fire({
-								icon: "error",
-								title: "Error",
-								text: "Credenciales invalidas",
-							});
-						} else if(resp.status == 200){
-	
-							if (data.access_token) {
-								localStorage.setItem("token" , data.access_token)
-							}
-	
+					if (response.status === 200) {
+						localStorage.setItem("token", data.access_token);
+						if (showModal) {
 							Swal.fire({
 								icon: "success",
-								title: "Bienvenido",
-								text: "Credenciales validas",
-							});
-						} else {
-							Swal.fire({
-								icon: "error",
-								title: "Error",
-								text: "Error desconocido",
+								title: "Bienvenido"
 							});
 						}
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
 					}
-
-					
-				}catch(error){
-					console.log("Error: ", error)
+				} catch (e) {
+					console.error("Error:", e);
 				}
 			},
 			signup: async (user) => {
