@@ -143,17 +143,11 @@ class UserAPI(Resource):
     def put(self,id):
         """Update a user given her info."""
         try:
-            
             payload = users_namespace.payload
             user = User.query.filter_by(id=id).first()
             if "name" in payload:
                 user.name = payload["name"]
             if "email" in payload:
-                email = payload.get("email")
-                existing_email = User.query.filter(email==email,id!=id).one_or_none()
-                if existing_email is not None:
-                    return { "message": "Email already exists" }, 409
-                    raise InvalidAPIUsage("User already exists", 409)
                 user.email = payload["email"]
             if "phone_number" in payload:
                 user.phone_number = payload["phone_number"]

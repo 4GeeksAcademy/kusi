@@ -11,14 +11,26 @@ from api.commands import setup_commands
 from api.swagger import setup_swagger
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+app.config.update(
+    dict(
+        MAIL_SERVER=os.environ.get("MAIL_SERVER"),
+        MAIL_USERNAME=os.environ.get("MAIL_USERNAME"),
+        MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD"),
+        MAIL_USE_SSL=False,
+        MAIL_USE_TLS=True,
+        MAIL_PORT=587
+    )
+)
 
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+mail = Mail(app)
 
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
