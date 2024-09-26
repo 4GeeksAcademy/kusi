@@ -1,12 +1,25 @@
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restx import Resource, fields
-from api.models import db, Dish, ExtraDish, DishIngredient, Ingredient, Role, RoleName
+from api.models import db, Dish, ExtraDish, DishIngredient, Ingredient, Role, RoleName,User
 from api.namespaces import dishes_namespace
 from api.utils import InvalidAPIUsage
 
 bcrypt = Bcrypt()
 
+new_dish = dishes_namespace.model(
+    "Dish",
+    {
+        "name": fields.String,
+        "description": fields.String,
+        "price": fields.Float,
+        "discount_percentage": fields.Integer,
+        "cooking_time": fields.Integer,
+        "quantity": fields.Integer 
+    }
+)
+
+        
 @dishes_namespace.response(200, "OK")
 @dishes_namespace.response(500, "Internal server error")
 @dishes_namespace.route("/")
@@ -21,17 +34,64 @@ class FetchDishes(Resource):
         except Exception as e:
             return { "message": str(e) }, 500
 
-new_dish = dishes_namespace.model(
-    "Dish",
-    {
-        "name": fields.String,
-        "description": fields.String,
-        "price": fields.Float,
-        "discount_percentage": fields.Integer,
-        "cooking_time": fields.Integer,
-        "quantity": fields.Integer 
-    }
-)
+    
+
+    @jwt_required()
+    @dishes_namespace.doc(security="jsonWebToken")
+    @dishes_namespace.expect(new_dish)
+    def post(self):
+        """Create a dish."""
+        current_user = get_jwt_identity()
+        payload = dishes_namespace.payload
+
+        admin_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
+        if current_user["role_id"] != admin_role.id:
+            raise InvalidAPIUsage("Only admin can create orders", 403)
+
+        admin_id = current_user["id"]
+        admin = User.query.get(admin_id)
+        if admin is None:
+            raise InvalidAPIUsage("Admin not found", 404)
+        
+        name = payload.get("name")
+        if name is None:
+            raise InvalidAPIUsage("Missing name", 422)
+        dishExist = Dish.query.filter_by(name=name).one_or_none()
+        if dishExist:
+            raise InvalidAPIUsage("Dish already exists.", 422)
+        description = payload.get("description")
+        if description is None:
+            raise InvalidAPIUsage("Missing description", 422)
+        image_url = payload.get("image_url")
+        if image_url is None:
+            raise InvalidAPIUsage("Missing image_url", 422)
+        price = payload.get("price")
+        if price is None:
+            raise InvalidAPIUsage("Missing price", 422)
+        discount_percentage = payload.get("discount_percentage")
+        if discount_percentage is None:
+            raise InvalidAPIUsage("Missing discount_percentage", 422)
+        cooking_time = payload.get("cooking_time")
+        if cooking_time is None:
+            raise InvalidAPIUsage("Missing cooking_time", 422)
+        quantity = payload.get("quantity")
+        if quantity is None:
+            raise InvalidAPIUsage("Missing quantity", 422)
+    
+        # First, we create the dish.
+        dish = Dish(
+            name=name,
+            description=description,
+            image_url=image_url,
+            price=price,
+            discount_percentage=discount_percentage,
+            cooking_time=cooking_time,
+            quantity=quantity
+        )
+        db.session.add(dish)
+        db.session.commit()
+        
+        return dish.serialize(), 201
 
 @dishes_namespace.response(200, "OK")
 @dishes_namespace.response(403, "Forbidden")

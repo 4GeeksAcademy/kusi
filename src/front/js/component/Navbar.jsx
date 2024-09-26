@@ -67,7 +67,7 @@ export const Navbar = () => {
             { title: "Pedidos", link: "/orders" }
         ],
         [Roles.ADMIN]: [
-            { title: "Menú", link: "/menu" },
+            { title: "Menús", link: "/dishes" },
             { title: "Pedidos", link: "/orders" },
             { title: "Usuarios", link: "/users" },
             { title: "Reportes", link: "/reports" }

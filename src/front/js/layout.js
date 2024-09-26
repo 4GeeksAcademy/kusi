@@ -16,6 +16,8 @@ import { Chat } from "./component/chat.jsx";
 import { Orders } from './pages/Orders.jsx';
 import { ViewOrderDetails } from './pages/ViewOrderDetails.jsx';
 import { Users } from "./pages/users.jsx";
+import { Dishes } from './pages/dishes.jsx';
+import Development from './pages/development.jsx';
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -36,10 +38,11 @@ const Layout = () => {
                     <Route element={<ResetPassword />} path="/reset-password" />
                     <Route element={<EmailSent />} path="/email-sent" />
                     <Route element={<Chat />} path="/chat"/>
+                    <Route element={<Dishes />} path="/dishes" />
                     <Route element={<Orders />} path="/orders" />
                     <Route element={<ViewOrderDetails/>} path="/orders/:id" />
                     <Route element={<Users />} path="/users" />
-                    <Route element={<h1>Not found!</h1>} path="*"/>
+                    <Route element={<Development/>} path="*"/>
                 </Routes>
             </BrowserRouter>
         </div>

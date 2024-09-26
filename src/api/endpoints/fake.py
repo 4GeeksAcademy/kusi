@@ -40,6 +40,7 @@ class Fake(Resource):
         Order.query.delete()
         DishIngredient.query.delete()
         Ingredient.query.delete()
+        ExtraDish.query.delete()        
         Dish.query.delete()        
         OrderStatus.query.delete()
         User.query.delete()
@@ -261,6 +262,26 @@ class Fake(Resource):
             price=5,
             quantity=200
         )
+        tallarines_verdes = Dish(
+            id=14,
+            name="Tallarines verdes",
+            description="La salsa verde es nuestro pesto peruano, adaptado a ingredientes que se usaban y usan comunmente en Perú.",
+            image_url="https://assets.tastemadecdn.net/images/225ba1/43b36a4db5a71cba84bb/ba6d44.jpg",
+            price=45,
+            quantity=50,
+            cooking_time=45
+        )
+        papa_a_la_huancaina = Dish(
+            id=15,
+            name="Papa a la huancaina",
+            description="",
+            image_url="https://tofuu.getjusto.com/orioneat-local/resized2/3HrMzCyKfs5FQ99mf-1400-x.webp",
+            price=29,
+            quantity=100,
+            cooking_time=30,
+            discount_percentage=10
+        )
+
 
         db.session.add(ceviche)
         db.session.add(lomo_saltado)
@@ -275,6 +296,8 @@ class Fake(Resource):
         db.session.add(cancha_serrana)
         db.session.add(inca_kola)
         db.session.add(crema_de_rocoto)
+        db.session.add(tallarines_verdes)
+        db.session.add(papa_a_la_huancaina)
         db.session.commit()
 
         # ExtraDish
@@ -294,6 +317,13 @@ class Fake(Resource):
             ExtraDish(
                 dish_id=ceviche.id,
                 extra_id=crema_de_rocoto.id
+            )
+        )
+
+        db.session.add(
+            ExtraDish(
+                dish_id=tallarines_verdes.id,
+                extra_id=papa_a_la_huancaina.id
             )
         )
 
@@ -335,6 +365,13 @@ class Fake(Resource):
         habas = Ingredient(name="Habas")
         papa_huayro = Ingredient(name="Papa huayro")
         yuca = Ingredient(name="Yuca")
+        fideos = Ingredient(name="Fideos")
+        espinaca = Ingredient(name="Espinaca")
+        albahaca = Ingredient(name="Albahaca")
+        aceite_de_oliva = Ingredient(name="Aceite de oliva")
+        queso = Ingredient(name="Queso")
+        nueces = Ingredient(name="Nueces")
+        bistec = Ingredient(name="Bistec")
 
         db.session.add(pescado)
         db.session.add(cebolla)
@@ -374,6 +411,13 @@ class Fake(Resource):
         db.session.add(habas)
         db.session.add(papa_huayro)
         db.session.add(yuca)
+        db.session.add(fideos)
+        db.session.add(espinaca)
+        db.session.add(albahaca)
+        db.session.add(aceite_de_oliva)
+        db.session.add(queso)
+        db.session.add(nueces)
+        db.session.add(bistec)
         db.session.commit()
 
         # Ingredients of ceviche
@@ -805,88 +849,110 @@ class Fake(Resource):
                 ingredient_id=yuca.id
             )
         )
-        db.session.commit()
-        # #Order
-        # order_ruben_1 = Order(
-        #     client_id = ruben.id,
-        #     status_id = order_status_pending.id,
-        #     grand_total=150.90,
-        #     special_instructions="Sin aji"
-        #     )
-        # order_ruben_2 = Order(
-        #     client_id = ruben.id,
-        #     status_id = order_status_completed.id,
-        #     grand_total=94.50,
-        #     special_instructions=""
-        #     )
-        # order_jhoel_1 = Order(
-        #     client_id = jhoel.id,
-        #     status_id = order_status_pending.id,
-        #     grand_total=240.20,
-        #     special_instructions="Sin papa"
-        #     )
-        # order_jhoel_2 = Order(
-        #     client_id = jhoel.id,
-        #     status_id = order_status_in_progress.id,
-        #     grand_total=30,
-        #     special_instructions="Sin cebolla y sin aji"
-        #     )
-        # db.session.add(order_ruben_1)
-        # db.session.add(order_ruben_2)
-        # db.session.add(order_jhoel_1)
-        # db.session.add(order_jhoel_2)
-        # db.session.commit()
 
-        # #OrderDish
-        # order_ruben_1_dish_1 = OrderDish(
-        #     order_id = order_ruben_1.id,
-        #     dish_id = dish_ceviche.id,
-        #     unit_price=20.50,
-        #     quantity=4
-        #     )
-        # order_ruben_1_dish_2 = OrderDish(
-        #     order_id = order_ruben_1.id,
-        #     dish_id = dish_pollo_al_horno.id,
-        #     unit_price=30,
-        #     quantity=1
-        #     )
-        # order_ruben_2_dish_1 = OrderDish(
-        #     order_id = order_ruben_2.id,
-        #     dish_id = dish_pollo_a_la_brasa.id,
-        #     unit_price=150,
-        #     quantity=2
-        #     )
-        # order_jhoel_1_dish_1 = OrderDish(
-        #     order_id = order_jhoel_1.id,
-        #     dish_id = dish_pollo_al_horno.id,
-        #     unit_price=15,
-        #     quantity=2
-        #     )
-        # order_jhoel_1_dish_2 = OrderDish(
-        #     order_id = order_jhoel_1.id,
-        #     dish_id = dish_causa_rellena.id,
-        #     unit_price=30,
-        #     quantity=4
-        #     )
-        # order_jhoel_1_dish_3 = OrderDish(
-        #     order_id = order_jhoel_1.id,
-        #     dish_id = dish_aji_de_gallina.id,
-        #     unit_price=15,
-        #     quantity=2
-        #     )
-        # order_jhoel_2_dish_1 = OrderDish(
-        #     order_id = order_jhoel_2.id,
-        #     dish_id = dish_ceviche.id,
-        #     unit_price=40,
-        #     quantity=1
-        #     )
-        # db.session.add(order_ruben_1_dish_1)
-        # db.session.add(order_ruben_1_dish_2)
-        # db.session.add(order_ruben_2_dish_1)
-        # db.session.add(order_jhoel_1_dish_1)
-        # db.session.add(order_jhoel_1_dish_2)
-        # db.session.add(order_jhoel_1_dish_3)
-        # db.session.add(order_jhoel_2_dish_1)
-        # db.session.commit()
+        # Ingredients of tallarines verdes
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=fideos.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=espinaca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=albahaca.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=aceite_de_oliva.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=leche.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=queso.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=cebolla.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=nueces.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=bistec.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=laurel.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=ajo.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=comino.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=pimienta.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=sal.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=pan.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=sillao.id
+            )
+        )
+        db.session.add(
+            DishIngredient(
+                dish_id=tallarines_verdes.id,
+                ingredient_id=aceite_vegetal.id
+            )
+        )
+        db.session.commit()
         
         return (""), 204

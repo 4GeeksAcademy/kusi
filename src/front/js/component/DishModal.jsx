@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/users.css"
 import { jwtDecode } from 'jwt-decode';
 
-export const UserModal = ({id}) => {
+export const DishModal = ({id}) => {
     const { store, actions } = useContext(Context);
-    const [userData,setUserData] = useState({})
+    const [dishData,setDishData] = useState({})
     const modalRef = useRef()
 
     useEffect(() => {
@@ -23,8 +23,8 @@ export const UserModal = ({id}) => {
                         const decodedToken = jwtDecode(localStorage.getItem("token"));
                         //console.log(decodedToken.sub)
         
-                        await actions.getUserById(id);
-                        setUserData(store.userData)
+                        await actions.getDishById(id);
+                        setDishData(store.dishSelected)
                         
                     } catch (error) {
                         console.error("Error decoding token:", error);
@@ -39,20 +39,25 @@ export const UserModal = ({id}) => {
     }, [id]);
 
     const handleChangeData = (e) => {
-        setUserData({ ...userData, [e.target.name]: e.target.value });
+        setDishData({ ...dishData, [e.target.name]: e.target.value });
     }
 
-    const saveEmployee = async (e) => {		
+    const uploadImage = async (e) => {
+        await actions.uploadImage(e)
+        setDishData({ ...dishData, ["image_url"]: store.imageUrl });
+    }
+
+    const saveDish = async (e) => {		
 		e.preventDefault() 
 		try{
-            if(userData.id){
-                const modified = await actions.editUser(userData)
+            if(dishData.id){
+                const modified = await actions.editDish(dishData)
                 if(modified){
                     closeModal()
                     //cleanModal()
                 }
             } else {
-                const created = await actions.createEmployee(userData)
+                const created = await actions.createDish(dishData)
                 if(created){
                     closeModal()
                     //cleanModal()
@@ -68,66 +73,54 @@ export const UserModal = ({id}) => {
         modalRef.current.click()
     }
     const cleanModal = () => {
-        setUserData({"name":"","email":"","password":"","phone_number":"","role_id":"","is_active":""})
+        setDishData({"name":"","description":"","image_url":"","price":"","discount_percentage":"","cooking_time":"","quantity":""})
     }
-
-    const roles = Object.freeze({
-        GUEST: 0,
-        CLIENT: 1,
-        CHEF: 2,
-        ADMIN: 3,
-    });
-
-    const rolesName = {
-        [roles.GUEST]: "Invitado",
-        [roles.CLIENT]: "Cliente",
-        [roles.CHEF]: "Cocinero",
-        [roles.ADMIN]: "Administrador"
-    };
 
     return (
         <div>
             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <form onSubmit={saveEmployee} className="form-employee">
+            <form onSubmit={saveDish} className="form-employee">
                 <div className="modal-dialog">
                     <div className="modal-content">
                     <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="staticBackdropLabel">{id>0?"Editar Empleado":"Crear Empleado"}</h1>
+                        <h1 className="modal-title fs-5" id="staticBackdropLabel">{id>0?"Editar":"Crear"} Plato</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <div className="modal-body">
                             <div className="input-group my-auto row mx-auto">
-                                <span className="input-group-text col-3" id="inputGroup-sizing-default">Nombre</span>
-                                <input type="text" className="form-control col-9" name="name" value={userData.name||""} onChange={handleChangeData} required />
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">Nombre</span>
+                                <input type="text" className="form-control col-9" name="name" value={dishData.name||""} onChange={handleChangeData} required />
                             </div>
                         </div>
                         <div className="modal-body">
                             <div className="input-group my-auto row mx-auto">
-                                <span className="input-group-text col-3" id="inputGroup-sizing-default">Correo</span>
-                                <input type="email" className="form-control col-9" name="email" value={userData.email||""} onChange={handleChangeData} required />
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">Descripcion</span>
+                                <textarea type="text" className="form-control col-9" name="description" value={dishData.description||""} onChange={handleChangeData} required />
                             </div>
                         </div>
                         {
-                            id>0?(<></>):(
                             <div className="modal-body">
                                 <div className="input-group my-auto row mx-auto">
-                                    <span className="input-group-text col-3" id="inputGroup-sizing-default">Contraseña</span>
-                                    <input type="password" className="form-control col-9" name="password" value={userData.password||""} onChange={handleChangeData} required />
+                                    <span className="input-group-text col-4" id="inputGroup-sizing-default">Imagen</span>
+                                    <label for="image" className="form-control col-9">
+                                        <img src={dishData.image_url  || "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"} onError={(e) => e.target.src = userImg} className="imgProfile" style={{width:"100%"}}/>
+                                        <input type="file" name="image" id="image" onChange={uploadImage} style={{display:"none"}}/>
+                                    </label>
                                 </div>
-                            </div>)
+                            </div>
                         }
                         <div className="modal-body">
                             <div className="input-group my-auto row mx-auto">
-                                <span className="input-group-text col-3" id="inputGroup-sizing-default">Celular</span>
-                                <input type="text" className="form-control col-9" name="phone_number" value={userData.phone_number||""} onChange={handleChangeData} />
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">Precio</span>
+                                <input type="number" className="form-control col-9" name="price" value={dishData.price||"0"} onChange={handleChangeData} />
                             </div>
                         </div>
-                        {
-                            userData.role_id==1?(
+                        {/* {
+                            dishData.role_id==1?(
                                 <div className="modal-body">
                                     <div className="input-group my-auto row mx-auto">
                                         <span className="input-group-text col-3" id="inputGroup-sizing-default">Rol</span>
-                                        <select className="form-select col-9" aria-label="Default select example" name="role_id" value={userData.role_id||""} onChange={handleChangeData} required>
+                                        <select className="form-select col-9" aria-label="Default select example" name="role_id" value={dishData.role_id||""} onChange={handleChangeData} required>
                                             <option disabled value="">Seleccione</option>
                                             <option value={roles.CLIENT}>{rolesName[roles.CLIENT]}</option>
                                         </select>
@@ -136,26 +129,43 @@ export const UserModal = ({id}) => {
                                 <div className="modal-body">
                                     <div className="input-group my-auto row mx-auto">
                                         <span className="input-group-text col-3" id="inputGroup-sizing-default">Rol</span>
-                                        <select className="form-select col-9" aria-label="Default select example" name="role_id" value={String(userData.role_id)} onChange={handleChangeData} required>
+                                        <select className="form-select col-9" aria-label="Default select example" name="role_id" value={String(dishData.role_id)} onChange={handleChangeData} required>
                                             <option disabled value="">Seleccione</option>
                                             <option value={roles.ADMIN}>{rolesName[roles.ADMIN]}</option>
                                             <option value={roles.CHEF}>{rolesName[roles.CHEF]}</option>
                                         </select>
                                     </div>
                                 </div>)
-                        }
+                        } */}
                         
                         <div className="modal-body">
                             <div className="input-group my-auto row mx-auto">
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">% Descuento</span>
+                                <input type="number" className="form-control col-9" name="discount_percentage" value={dishData.discount_percentage||"0"} onChange={handleChangeData} />
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            <div className="input-group my-auto row mx-auto">
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">Tiempo cocción</span>
+                                <input type="number" className="form-control col-9" name="cooking_time" value={dishData.cooking_time||"0"} onChange={handleChangeData} />
+                            </div>
+                        </div>
+                        <div className="modal-body">
+                            <div className="input-group my-auto row mx-auto">
+                                <span className="input-group-text col-4" id="inputGroup-sizing-default">Cantidad</span>
+                                <input type="number" className="form-control col-9" name="quantity" value={dishData.quantity||"0"} onChange={handleChangeData} />
+                            </div>
+                        </div>
+                        {/* <div className="modal-body">
+                            <div className="input-group my-auto row mx-auto">
                                 <span className="input-group-text col-3" id="inputGroup-sizing-default">Estado</span>
-                                <select className="form-select col-9" aria-label="Default select example" name="is_active" value={String(userData.is_active)} onChange={handleChangeData}  required>
+                                <select className="form-select col-9" aria-label="Default select example" name="is_active" value={String(dishData.is_active)} onChange={handleChangeData}  required>
                                     <option disabled value="">Seleccione</option>
                                     <option value="true">Activo</option>
                                     <option value="false">Inactivo</option>
                                 </select>
                             </div>
-                        </div>
-
+                        </div> */}
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" ref={modalRef}>Cerrar</button>
                         <button type="submit" className="btn btn-primary">Guardar</button>

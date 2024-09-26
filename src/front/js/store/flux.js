@@ -28,7 +28,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			btnaditional:false,
 			extras:[],
 			modalExtras:0,
-			ingredients:""
+			ingredients:[],
+			imageUrl:"",
 		},
 		actions: {
 			
@@ -53,6 +54,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json();
 					if (response.status === 200){
 						await setStore({ dishes: data })
+					}
+				} catch (err) {
+					console.error("Error:", err);
+				}
+			},
+			getIngredients: async () => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/ingredients`, {
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+					const data = await response.json();
+					if (response.status === 200){
+						await setStore({ ingredients: data })
 					}
 				} catch (err) {
 					console.error("Error:", err);
@@ -123,7 +141,98 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Dishes complete")
 				}
 			},
+			createDish: async (dish) => {
+				try {
+					dish.price = parseFloat(dish.price)
+					dish.discount_percentage = parseFloat(dish.discount_percentage)
+					dish.cooking_time = parseInt(dish.cooking_time)
+					dish.quantity = parseInt(dish.quantity)
+					dish.image_url = (dish.image_url || "");
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes`, {
+						method: 'POST',
+						body: JSON.stringify(dish),
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
 
+					const data = await response.json();
+
+					if (response.status === 201){
+						const store = getStore()
+						let listDishes = [];
+						listDishes = store.dishes;
+						listDishes.push(data)
+						await setStore({ dishes: listDishes })
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Plato creado!",
+						});
+						return true
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
+						return false
+					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
+
+			editDish: async (dish) => {
+				try {
+					dish.price = parseFloat(dish.price)
+					dish.discount_percentage = parseFloat(dish.discount_percentage)
+					dish.cooking_time = parseInt(dish.cooking_time)
+					dish.quantity = parseInt(dish.quantity)
+					dish.image_url = (dish.image_url || "");
+					const response = await fetch(`${process.env.BACKEND_URL}/dishes/${dish.id}`, {
+						method: 'PUT',
+						body: JSON.stringify(dish),
+						headers:{
+							"Access-Control-Allow-Origin": "*",
+							"Authorization": `Bearer ${localStorage.getItem("token")}`,
+							"Content-Type": "application/json"
+						}
+					});
+
+					const data = await response.json();
+
+					if (response.status === 200){
+						const store = getStore()
+						let listDishes = [];
+						listDishes = store.dishes;
+						const objIndex = listDishes.findIndex(obj => obj.id == data.id);
+						listDishes[objIndex] = data
+						await setStore({ dishes: listDishes })
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Plato editado!",
+						});
+						return true
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
+						return false
+					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
 			getUsers: async () => {
 				const store = getStore()
 
@@ -185,16 +294,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"password": newUpdateUser.password
 						})
 					})
-
-					if(!response.ok){
-						console.log(`El id ${userId} que intentas editar no existe`)
+					if (response.status === 200){
+						const data = await response.json();
+						await setStore({ dataUsersById: data });
+						Swal.fire({
+							icon: "success",
+							title: "Hecho",
+							text: "Perfil actualizado!",
+						});
+					} else {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: data.message,
+						});
 					}
 
-					const data = await response.json();
-                    console.log(data);
-					setStore({ dataUsersById: data });
 
-					return data;
 
 				}catch (e) {
                     console.error("Error al actualizar el usuario:", e);
@@ -728,6 +844,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						return false
 					}
+
+				} catch (err) {
+					console.error("Error:", err);
+					return false
+				}
+			},
+			uploadImage: async (e) => {
+				try {
+					const files = e.target.files;
+					const data = new FormData();
+					data.append("file", files[0])
+					data.append("upload_preset",process.env.CLOUDINARY_PRESET_NAME)
+
+					const response = await fetch(`${process.env.CLOUDINARY_URL}`, {
+						method: 'POST',
+						body: data
+					});
+
+					const file = await response.json()
+					setStore({imageUrl:file.secure_url})
 
 				} catch (err) {
 					console.error("Error:", err);

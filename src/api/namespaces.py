@@ -26,6 +26,12 @@ dishes_namespace = Namespace(
     authorizations=authorizations
 )
 
+ingredients_namespace = Namespace(
+    "ingredients",
+    description="Ingredients CRUD.",
+    authorizations=authorizations
+)
+
 fake_namespace = Namespace(
     "fake",
     description="Fake token and db population.",

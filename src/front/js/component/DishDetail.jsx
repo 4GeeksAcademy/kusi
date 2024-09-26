@@ -9,6 +9,11 @@ export const DishDetail = () => {
     const { store, actions } = useContext(Context);
     const [showExtras, setShowExtras] = useState(false);
 
+    useEffect(()=>{
+        console.log(store.dishSelected)
+        console.log(store.dishSelected.name)
+    },[])
+
     const addToCart = (id) => {
         const updatedList = store.list;
         let currentDish = store.dishSelected;
@@ -105,7 +110,7 @@ export const DishDetail = () => {
                 <div className="col">
                     <h4>{store.dishSelected.name}</h4>
                     <p>{store.dishSelected.description}</p>
-                    <p>Ingredientes: {store.ingredients}</p>
+                    {store.dishSelected.ingredients === undefined?<></>:store.dishSelected.ingredients.length > 0?(<p>Ingredientes: {store.dishSelected.ingredients.map(u => u.name).join(', ')}</p>):<></>}
                 </div>
             </div>
             <div className="col-4 d-flex justify-content-center align-items-center mb-2">

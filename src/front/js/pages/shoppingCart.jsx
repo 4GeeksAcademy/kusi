@@ -57,7 +57,7 @@ export const ShoppingCart = () => {
                             <div className="row col-9 col-sm-9 col-md-9">
                    
                               <div className="col-8 col-lg-6 col-md-6 text-start icon-left">
-                                {/* {item.name} */}
+                                {item.name}
                               </div>
                           
                               <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
