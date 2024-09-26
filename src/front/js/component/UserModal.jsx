@@ -49,13 +49,13 @@ export const UserModal = ({id}) => {
                 const modified = await actions.editUser(userData)
                 if(modified){
                     closeModal()
-                    cleanModal()
+                    //cleanModal()
                 }
             } else {
                 const created = await actions.createEmployee(userData)
                 if(created){
                     closeModal()
-                    cleanModal()
+                    //cleanModal()
                 }
             }
 
@@ -155,6 +155,7 @@ export const UserModal = ({id}) => {
                                 </select>
                             </div>
                         </div>
+
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" ref={modalRef}>Cerrar</button>
                         <button type="submit" className="btn btn-primary">Guardar</button>

@@ -4,11 +4,14 @@ import plateAndKnife from '../../assets/images/plate-and-knife.png';
 import kusiLogo from '../../assets/images/kusi-logo.png';
 import '../../styles/landingPage.css';
 import { Link, useNavigate } from "react-router-dom";
+import { Navbar } from '../component/Navbar.jsx';
 
 export default function Development() {
     return (
-        <div className="landing-container container-fluid p-0">
-            <div className="row g-0 vh-100">
+        <>
+        <Navbar/>
+        <div className="landing-container container-fluid p-0 pt-5 h-100">
+            <div className="row g-0">
                 <div className="landing-img-1 col-md-2 col-lg-1 d-none d-md-flex flex-column justify-content-end">
                     <img
                         className="img-fluid"
@@ -44,5 +47,6 @@ export default function Development() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
