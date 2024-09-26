@@ -86,7 +86,7 @@
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0",
 		"react-simple-chatbot": "^0.6.1",
-		"styled-components": "^6.1.13",
+		"styled-components": "^4.0.0",
 		"sweetalert2": "^11.14.0"
 	}
 }
