@@ -156,7 +156,7 @@ export const Dishes = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {store.dishes.map((item) => (
+                                        {store.ingredients.map((item) => (
                                                 <tr key={item.id}>
                                                     {/* <td>
                                                         <button className="btn btn-dark mx2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={()=>{handleDetailsUser(item.id)}}>
