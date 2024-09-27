@@ -8,11 +8,13 @@ import userImg from '../../assets/images/user.png';
 import arrowImg from '../../assets/images/arrow.png';
 import '../../styles/profile.css'
 import { jwtDecode } from 'jwt-decode';
+import { Navbar } from "../component/Navbar.jsx";
 
 
 
 export const Profile = () => {
 
+    let navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [userNewData, setUserNewData] = useState({
         email: "",
@@ -79,13 +81,13 @@ export const Profile = () => {
 
     
     return(
+        <>
+        <Navbar/>
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
         
             <div className="d-flex align-items-center w-50">
                 <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
-                    <Link to="/menu">
-                        <img className="arrow-img" src={arrowImg}/>
-                    </Link>
+                    <img className="arrow-img" src={arrowImg} onClick={()=>navigate(-1)}/>
                     
                 </div>
                 
@@ -160,5 +162,6 @@ export const Profile = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 }

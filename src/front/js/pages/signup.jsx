@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import "../../styles/signup.css";
+import { jwtDecode } from 'jwt-decode';
 
 import { Context } from "../store/appContext";
 import Swal from 'sweetalert2'
@@ -35,8 +36,21 @@ export const SignUp = () => {
 
                     await actions.login(dataLogin,false)
                     localStorage.removeItem("user_created");
-                    if(localStorage.getItem("token"))
-                    navigate("/")
+                    if(localStorage.getItem("token")){
+
+                        const decodedToken = jwtDecode(localStorage.getItem("token"));
+                        console.log(decodedToken.sub)
+                        const roleId = decodedToken.sub.role_id || 0;
+                        
+                        if(roleId>=0 && roleId <= 3){
+                            navigate(store.menuItemsByRole[roleId][0].link)
+                        } else {
+                            navigate("/menu")
+                        }
+        
+                        localStorage.setItem('activeNavBar', 0)
+                        
+                    }
 
             });
 
