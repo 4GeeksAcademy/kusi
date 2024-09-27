@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+.container-image-egg{
+    width: 600px;
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-egg{
+    width: 550px;
+    height: 550px;
+    position: absolute;
+    top: -160px;
+    left: 20px;
+    animation: bounce 2s infinite;
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+
+@media (max-width: 500px) {
+    .container-image-egg{
+        width: 500px;
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .image-egg{
+        width: 450px;
+        height: 450px;
+        position: absolute;
+        top: -160px;
+        left: 20px;
+        animation: bounce 2s infinite;
+    }
+}
