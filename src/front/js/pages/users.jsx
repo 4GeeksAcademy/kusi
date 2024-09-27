@@ -44,7 +44,9 @@ export const Users = () => {
             title: "Estás seguro de eliminar este usuario?",
             showCancelButton: true,
             confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            iconColor: "#F44322",
+			confirmButtonColor: "#F44322",
           }).then((result) => {
             if (result.isConfirmed) {
                 actions.deleteUser(id);

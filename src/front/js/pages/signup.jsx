@@ -26,6 +26,8 @@ export const SignUp = () => {
                     icon: "success",
                     title: "Bienvenido",
                     text: "!Cuenta creada!",
+                    iconColor: "#F44322",
+					confirmButtonColor: "#F44322",
                 }).then(async (result) => {
                     
                     let dataLogin = {

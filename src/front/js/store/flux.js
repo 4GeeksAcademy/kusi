@@ -170,6 +170,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Plato creado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return true
 					} else {
@@ -177,6 +179,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return false
 					}
@@ -217,6 +221,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Plato editado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return true
 					} else {
@@ -224,6 +230,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return false
 					}
@@ -301,12 +309,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Perfil actualizado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 					} else {
 						Swal.fire({
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 					}
 
@@ -619,7 +631,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (showModal) {
 							Swal.fire({
 								icon: "success",
-								title: "Bienvenido"
+								title: "Bienvenido",
+								iconColor: "#F44322"
 							});
 						}
 					} else {
@@ -627,6 +640,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322"
 						});
 					}
 				} catch (e) {
@@ -653,6 +667,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: "Email ya existe",
+							iconColor: "#F44322"
 						});
 					} else if(resp.status == 201){
 						localStorage.setItem("user_created" , true)
@@ -661,6 +676,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: "Error desconocido",
+							iconColor: "#F44322"
 						});
 					}
 					
@@ -768,6 +784,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Empleado creado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return true
 					} else {
@@ -775,6 +793,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return false
 					}
@@ -816,6 +836,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Usuario editado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return true
 					} else {
@@ -823,6 +845,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return false
 					}
@@ -860,6 +884,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "success",
 							title: "Hecho",
 							text: "Usuario eliminado!",
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return true
 					} else {
@@ -867,6 +893,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: "error",
 							title: "Error",
 							text: data.message,
+							iconColor: "#F44322",
+							confirmButtonColor: "#F44322",
 						});
 						return false
 					}
