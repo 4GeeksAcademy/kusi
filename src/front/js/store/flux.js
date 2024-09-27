@@ -494,16 +494,42 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			recoverPassword: async (email) => {
+			
 				try{
-					let resp = await fetch(process.env.BACKEND_URL + "/", {
-						method: 'POST',
+					const resp = await fetch(`${process.env.BACKEND_URL}/auth/reset`, {
+						method: "PUT",
 						body: JSON.stringify(email),
+						headers: {
+							"Access-Control-Allow-Origin": "*",
+							"Content-Type": "application/json",
+						},	
 					})
-					let data = await resp.json()
-					console.log(data);					
+					
+					const data = await resp.json()
+
+						if (resp.status===204) {
+						  window.location.href = "/email-sent";
+						// console.log(data);
+						 return
+						}
+
+					
+
+					else {
+				
+					await Swal.fire({
+						title: "Oh no!", 
+						text: data.message, 
+						icon: "warning",
+						  confirmButtonColor: "#F44322",
+						  cancelButtonColor: "#F44322"});
+					window.location.href = "/reset-password";
+					return
+					}
+
+			
 				}catch(e){
 					console.error(e);
-					
 				}
 			},
 
