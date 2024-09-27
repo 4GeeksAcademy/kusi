@@ -7,22 +7,23 @@ import forpassword from '../../assets/images/for-password.png';
 export const ResetPassword = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
-    const [sendEmail,setSendEmail] = useState("")
+    const [sendEmail,setSendEmail] = useState({})
 
     const handleChange = (e)=> {
-        let email = e.target.value
-		setSendEmail(email)
+        setSendEmail({[e.target.name]: e.target.value });
 	}
 
 
-    const resetPassword = () => {
-
-		try{
-            // actions.recoverPassword(sendEmail)
-            navigate("/email-sent")           
-		}catch(e){
-			console.error(e);
-		}
+    const resetPassword = async (e) => {
+        e.preventDefault();
+        try {
+            await actions.recoverPassword(sendEmail);
+            navigate("/email-sent");
+        } catch (error) {
+            console.error(error);
+        }
+                       
+		
     }
 
 
