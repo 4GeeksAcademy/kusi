@@ -13,7 +13,6 @@
 }
 
 .list-group-item {
-  border: none;
   font-family: ABeeZee;
 }
 
@@ -28,7 +27,7 @@ textarea {
   font-family: ABeeZee;
 }
 
-.span-icon{
+.pointer-icon{
   cursor: pointer;
 }
 
@@ -42,6 +41,25 @@ textarea {
   width: auto;
 }
 
+.image-cover {
+  margin-left: -12px;
+}
+
+.container-text-buttons {
+  margin-left: -24px;
+}
+/* .container-button-images {
+  margin-left: -15px;
+}
+.button-images {
+  margin-left: -85px;
+} */
+@media (max-width: 997px){
+  .button-images {
+    margin-left: -80px;
+  }
+}
+
 @media (max-width:570px){
   #kusilogo{
     height: 20px;
@@ -53,7 +71,7 @@ textarea {
     width: auto;
   }
 
-  .icon-right{
+  /* .icon-right{
     margin-right: 0;
     padding-right: 0;
     margin-bottom: 10px;
@@ -62,6 +80,6 @@ textarea {
   .icon-left{
     margin-left: 0;
     margin-bottom: 10px;
-  }
+  } */
 
 }
