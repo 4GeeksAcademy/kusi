@@ -40,7 +40,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			orderDish: [],
 			order:[],
 			dishes: [],
-			dishSelected: {},
+			dishSelected: undefined,
 			dataDishesById: [],
 			dataUsers: [],
 			dataUsersById: [],
@@ -572,7 +572,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 
 						if (resp.status===204) {
-						  window.location.href = "/email-sent";
+						  window.location.href = "/sent";
 						// console.log(data);
 						 return
 						}
@@ -585,11 +585,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						title: "Oh no!", 
 						text: data.message, 
 						icon: "warning",
-						  confirmButtonColor: "#F44322",
-						  cancelButtonColor: "#F44322"});
-					window.location.href = "/reset-password";
+						confirmButtonColor: "#F44322",
+						cancelButtonColor: "#F44322"
+					});
+					window.location.href = "/reset";
 					return
-					}
+				}
 
 			
 				}catch(e){

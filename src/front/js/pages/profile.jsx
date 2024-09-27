@@ -82,15 +82,11 @@ export const Profile = () => {
     
     return(
         <>
-        <Navbar/>
         <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        
-            <div className="d-flex align-items-center w-50">
-                <div className="d-flex justify-content-center align-items-center pe-3 pe-md-0" style={{width:"10%", height:"100px"}}>
+            <div className="container-fluid">
                     <img className="arrow-img" src={arrowImg} onClick={()=>navigate(-1)}/>
-                    
-                </div>
-                
+            </div>
+            <div className="container text-center w-50">    
                 <div className="d-flex justify-content-center align-items-center" style={{width:"80%", height:"100px"}}>
                     <h1>Perfil</h1>
                 </div>
@@ -144,7 +140,7 @@ export const Profile = () => {
 
                                         <div className="container-data py-3 px-5 px-lg-0 ms-lg-4 text-start">
                                             <h6 className="ms-1" style={{color:"#736F6F"}}>Contraseña</h6>
-                                            <input className="input-data-password w-100 py-2 rounded-pill px-3" type="password" name="password" value={""} disabled/>
+                                            <input className="input-data-password w-100 py-2 rounded-pill px-3" type="password" name="password" value={userNewData.password} onChange={handleChange}/>
                                         </div>
                                     </div>
 
@@ -155,7 +151,6 @@ export const Profile = () => {
                                         Guardar
                                     </button>
                                </div>
-                                
                             </div>
                         </div>
                     </div>

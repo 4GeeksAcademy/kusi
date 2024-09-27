@@ -10,15 +10,9 @@ export const DishDetail = () => {
     const { store, actions } = useContext(Context);
     const [showExtras, setShowExtras] = useState(false);
 
-    useEffect(()=>{
-        console.log(store.dishSelected)
-        console.log(store.dishSelected.name)
-    },[])
-
     const addToCart = async (id) => {
         
 		let updatedList = JSON.parse(localStorage.getItem("listcart")) || []
-        console.log(updatedList)
         //const updatedList = store.list;
         let currentDish = store.dishSelected;
         let found = false;
@@ -69,6 +63,13 @@ export const DishDetail = () => {
     function handleViewCart() {
         handleDismissModal();
         navigate("/shopping-cart");
+    }
+
+    if (
+        store.dishSelected === undefined ||
+        store.dishSelected === null
+    ) {
+        return <></>;
     }
 
     if (showExtras) {
@@ -123,7 +124,7 @@ export const DishDetail = () => {
                 <div className="col">
                     <h4>{store.dishSelected.name || ""}</h4>
                     <p>{store.dishSelected.description || ""}</p>
-                    {store.dishSelected.ingredients === undefined?<></>:store.dishSelected.ingredients.length > 0?(<p>Ingredientes: {store.dishSelected.ingredients.map(u => u.name).join(', ')}</p>):<></>}
+                    {store.dishSelected.ingredients === undefined || store.dishSelected.ingredients.length == 0 ? <></> : (<p>Ingredientes: {store.dishSelected.ingredients.map(u => u.name).join(', ')}.</p>)}
                 </div>
             </div>
             <div className="col-4 d-flex justify-content-center align-items-center mb-2">

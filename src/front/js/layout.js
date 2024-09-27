@@ -35,8 +35,8 @@ const Layout = () => {
                     <Route element={<Paypal />} path="/payment" />
                     <Route element={<PaymentMade />} path="/payment/success" />
                     <Route element={<PaymentNotMade />} path="/payment/failed" />
-                    <Route element={<ResetPassword />} path="/reset-password" />
-                    <Route element={<EmailSent />} path="/email-sent" />
+                    <Route element={<ResetPassword />} path="/reset" />
+                    <Route element={<EmailSent />} path="/sent" />
                     <Route element={<Chat />} path="/chat"/>
                     <Route element={<Dishes />} path="/dishes" />
                     <Route element={<Orders />} path="/orders" />

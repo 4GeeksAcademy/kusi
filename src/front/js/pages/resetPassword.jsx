@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef  } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Context } from '../store/appContext';
 import forpassword from '../../assets/images/for-password.png';
-
+import arrowImg from '../../assets/images/arrow.png';
 
 export const ResetPassword = () => {
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const ResetPassword = () => {
         e.preventDefault();
         try {
             await actions.recoverPassword(sendEmail);
-            navigate("/email-sent");
+            navigate("/sent");
         } catch (error) {
             console.error(error);
         }
@@ -30,12 +30,17 @@ export const ResetPassword = () => {
     return(
         <div className="container">
             <div className="container text-center">
-                <div className="container mb-4"><img className="img-fluid" src={forpassword} alt="" /></div>
+                <div className="container-fluid text-start px-0">
+                    <img className="arrow-img" src={arrowImg} onClick={()=>navigate("/login")}/>
+                </div>
+                <div className="container mb-4">
+                    <img className="img-fluid" src={forpassword} alt="" />
+                </div>
                 <h2>¿Olvidaste tu contraseña?</h2>
-                <h5>Descuida! Te enviaremos una nueva a tu email. </h5>
+                <h5>¡Descuida! Te enviaremos una nueva a tu correo.</h5>
                 <form onSubmit={resetPassword} className="container">
                     <div className="container my-4">
-                        <input className="inputLogin" name="email" type="email" placeholder="Ingresa tu email aquí" required onChange={handleChange}></input>
+                        <input className="inputLogin" name="email" type="email" placeholder="Ingresa tu correo aquí" required onChange={handleChange}></input>
                     </div>
                     <div className="container my-3">
                         <button type="submit" className="btn btn-danger">Cambiar contraseña</button>

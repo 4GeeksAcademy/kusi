@@ -11,7 +11,6 @@ import { jwtDecode } from 'jwt-decode';
 // TODO: Navbar should be imported in the main screen page.
 export const Navbar = () => {
     const { store, actions } = useContext(Context);
-    const [activeTabIndex, setActiveTabIndex] = useState(0);
     const [userId, setUserId] = useState(0);
     const [roleId, setRoleId] = useState(0);
     const navigate = useNavigate();
@@ -46,8 +45,6 @@ export const Navbar = () => {
         navigate("/login");
     };
 
-
-    //const roleId = store.dataUsersById?.role_id;
     const menuItems = store.menuItemsByRole[roleId] || store.menuItemsByRole[store.roles.CLIENT];
 
 
@@ -58,7 +55,7 @@ export const Navbar = () => {
                     <button className="navbar-toggler border-0 d-lg-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <FontAwesomeIcon style={{ color: "#736F6F" }} icon={faBars} />
                     </button>
-                    <Link to="/">
+                    <Link to="/menu">
                         <div className="navbar-brand ms-lg-3 mx-auto d-flex justify-content-center align-items-center">
                             <img className="navbar-logo" src={kusiLogo} alt="Logo Kusi" style={{ maxHeight: "60px", width: "60%" }} />
                         </div>

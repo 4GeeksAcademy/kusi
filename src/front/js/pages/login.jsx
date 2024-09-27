@@ -90,7 +90,7 @@ export const Login = () => {
                         <div><input className="inputLogin" placeholder="Ingresa tu contraseña" type="password" id="inputPassword" name="password" value={dataLogin.password} onChange={handleChangeData} required /></div>
                     </div>
                     <div>
-                        <Link to="/reset-password" className="div-link"><span className="span">¿Olvidaste tu contraseña?</span></Link>
+                        <Link to="/reset" className="div-link"><span className="span">¿Olvidaste tu contraseña?</span></Link>
                     </div>
                     <div className="d-flex text-center justify-content-center align-items-center">
                         <button
