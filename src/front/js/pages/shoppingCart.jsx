@@ -103,7 +103,13 @@ export const ShoppingCart = () => {
                             <img 
                                 src={emptycart} alt="" id="emptycart" />
                         </div>
-                        <div className="text-center justify-content-center align-items-center mb-3"><button onClick={()=>navigate("/menu")}>Regresar al Menu</button></div>
+                        <div
+                          className="text-center justify-content-center align-items-center mb-3"
+                        >
+                          <button onClick={()=>navigate("/menu")}>
+                            Regresar al menú
+                          </button>
+                        </div>
                     </div>
                     </>
                 )}
