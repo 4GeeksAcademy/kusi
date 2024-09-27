@@ -114,7 +114,7 @@ class SignUp(Resource):
         salted_password = f"{password}{salt}"
         hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
         
-        client_role = Role.query.filter_by(name=RoleName.ADMIN.value).one_or_none()
+        client_role = Role.query.filter_by(name=RoleName.CLIENT.value).one_or_none()
 
         try:
             new_user = User(

@@ -32,14 +32,6 @@ export const Navbar = () => {
         }
     },[localStorage.getItem("token")]);
 
-    const Roles = Object.freeze({
-        GUEST: 0,
-        CLIENT: 1,
-        CHEF: 2,
-        ADMIN: 3,
-    });
-
-
     const handleViewProfile = () => {
         navigate("/profile");
     };
@@ -55,28 +47,8 @@ export const Navbar = () => {
     };
 
 
-    const menuItemsByRole = {
-        [Roles.GUEST]: [
-            { title: "Menú", link: "/menu" }
-        ],
-        [Roles.CLIENT]: [
-            { title: "Menú", link: "/menu" },
-            { title: "Pedidos", link: "/orders" }
-        ],
-        [Roles.CHEF]: [
-            { title: "Pedidos", link: "/orders" }
-        ],
-        [Roles.ADMIN]: [
-            { title: "Menús", link: "/dishes" },
-            { title: "Pedidos", link: "/orders" },
-            { title: "Usuarios", link: "/users" },
-            { title: "Reportes", link: "/reports" }
-        ]
-    };
-
-
     //const roleId = store.dataUsersById?.role_id;
-    const menuItems = menuItemsByRole[roleId] || menuItemsByRole[Roles.CLIENT];
+    const menuItems = store.menuItemsByRole[roleId] || store.menuItemsByRole[store.roles.CLIENT];
 
 
     return (
@@ -98,7 +70,7 @@ export const Navbar = () => {
                     <button className="btn" type="button">
                         <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faCircleUser} onClick={handleViewProfile} />
                     </button>
-                    {roleId === Roles.CLIENT && (
+                    {roleId === store.roles.CLIENT && (
                         <button className="btn" type="button">
                             <FontAwesomeIcon className="fs-2" style={{ color: "#F44322" }} icon={faCartShopping} onClick={handleShoppingCart}/>
                         </button>
@@ -113,9 +85,9 @@ export const Navbar = () => {
                         {menuItems.length > 0 ? menuItems.map((item, index) => (
                             <li className="nav-item px-0 py-0 my-0 px-lg-5 mx-lg-2" key={index}>
                                 <a className="nav-link fs-4"
-                                   style={{ color: activeTabIndex === index ? "#F44322" : "black" }}
+                                   style={{ color: (localStorage.getItem('activeNavBar', 0) == index) ? "#F44322" : "black" }}
                                    href={item.link}
-                                   onClick={() => setActiveTabIndex(index)}>
+                                   onClick={() => {localStorage.setItem('activeNavBar', index)}}>
                                     {item.title}
                                 </a>
                             </li>
