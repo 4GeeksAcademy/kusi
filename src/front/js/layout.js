@@ -32,9 +32,9 @@ const Layout = () => {
                     <Route element={<SignUp />} path="/signup" />
                     <Route element={<Menu />} path="/menu" />
                     <Route element={<ShoppingCart />} path="/shopping-cart" />
-                    <Route element={<Paypal />} path="/paypal" />
-                    <Route element={<PaymentMade />} path="/payment-made" />
-                    <Route element={<PaymentNotMade />} path="/payment-not-made" />
+                    <Route element={<Paypal />} path="/payment" />
+                    <Route element={<PaymentMade />} path="/payment/success" />
+                    <Route element={<PaymentNotMade />} path="/payment/failed" />
                     <Route element={<ResetPassword />} path="/reset-password" />
                     <Route element={<EmailSent />} path="/email-sent" />
                     <Route element={<Chat />} path="/chat"/>

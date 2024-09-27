@@ -14,7 +14,7 @@ export const PaymentNotMade = () => {
                 <h2>Oh no! La compra no fue realizada.</h2>
                 <div className="container mb-3"><img className="img-fluid" src={errorface} alt="" /></div>
                 <div className="container">
-                    <button onClick={()=>navigate("/paypal")}className="btn btn-danger">Volver</button>
+                    <button onClick={()=>navigate("/payment")}className="btn btn-danger">Volver</button>
                 </div>
             </div>
         </div>

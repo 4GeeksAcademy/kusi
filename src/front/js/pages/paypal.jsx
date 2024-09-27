@@ -44,14 +44,14 @@ export const Paypal = () => {
                                         
                                         console.log("COMPRA EXITOSA");
                                         console.log(details);
-                                        navigate("/payment-made")
+                                        navigate("/payment/success")
                                         actions.createOrder();
                                     })
                                     
                                 }}
 
                                 onError= {(err) => {
-                                    navigate("/payment-not-made");
+                                    navigate("/payment/failed");
                                 }}
                                
                             />

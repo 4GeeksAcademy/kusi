@@ -425,7 +425,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							  localStorage.setItem("amount", getActions().totalPrice());
 							  localStorage.setItem("order", JSON.stringify(addNote));
 							  console.log(store.order);
-							  window.location.href = "/paypal";
+							  window.location.href = "/payment";
 							} else {
 							  let data = await resp.json();
 							  console.log(data);
