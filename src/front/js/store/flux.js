@@ -1,13 +1,39 @@
 import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 
+const Roles = Object.freeze({
+	GUEST: 0,
+	CLIENT: 1,
+	CHEF: 2,
+	ADMIN: 3,
+});
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			roles: Object.freeze({ 
-				CLIENT :1,
-				CHEF :2,
-				ADMIN :3
+			roles : Object.freeze({
+				GUEST: 0,
+				CLIENT: 1,
+				CHEF: 2,
+				ADMIN: 3,
+			}),
+			menuItemsByRole :Object.freeze({
+				[Roles.GUEST]: [
+					{ title: "Menú", link: "/menu" }
+				],
+				[Roles.CLIENT]: [
+					{ title: "Menú", link: "/menu" },
+					{ title: "Pedidos", link: "/orders" }
+				],
+				[Roles.CHEF]: [
+					{ title: "Pedidos", link: "/orders" }
+				],
+				[Roles.ADMIN]: [
+					{ title: "Menús", link: "/dishes" },
+					{ title: "Pedidos", link: "/orders" },
+					{ title: "Usuarios", link: "/users" },
+					{ title: "Reportes", link: "/reports" }
+				]
 			}),
 			dataAditionalById: [],
 			list : [],
@@ -587,7 +613,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 
 					const data = await response.json()
-
 					if (response.status === 200) {
 						localStorage.setItem("token", data.access_token);
 						if (showModal) {
@@ -641,8 +666,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}catch(error){
 					console.log("Error: ", error)
 				}
-								//reset the global store
-				setStore({ demo: demo });
 			},
 				incrementAdicional: () => {
 					const store = getStore();
