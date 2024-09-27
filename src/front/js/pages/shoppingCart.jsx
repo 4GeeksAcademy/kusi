@@ -40,7 +40,7 @@ export const ShoppingCart = () => {
     {store.list.length>0?(
       <>
           <Navbar></Navbar>
-            <div className='container-fluid w-100 d-flex justify-content-center align-items-center'>
+            <div className='container-fluid w-100 d-flex justify-content-center align-items-center mt-5'>
                  <div className="container p-0 mt-0">
                   <div className="container mb-5 mt-3" id="title">
                       <div className="d-flex justify-content-center">
@@ -93,12 +93,13 @@ export const ShoppingCart = () => {
                         </li>
                       ))}
                     </ul>
-
-                    <div className="container mb-5 w-100 bg-primary d-flex flex-column justify-content-center align-items-center">
-                      <h5 className="text-end mb-3 bg-danger" style={{width:"80%"}}>Total a Pagar: S/. {actions.totalPrice()}</h5>
-                      <h5 className="text-start">Notas del pedido (opcional)</h5>
-                      <textarea className="form-control" name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
-                      <p className="text-end mb-1 text-secondary">{notes.length}/255</p>
+                    <div className='w-100 d-flex justify-content-center mb-5'>
+                      <h5 className="text-end" style={{width:"80%"}}>Total a Pagar: S/. {actions.totalPrice()}</h5>
+                    </div>
+                    <div className="container mb-5 mt-5 w-100 d-flex flex-column justify-content-center align-items-center">
+                      <h5 className="text-start" style={{width:"80%"}}>Notas del pedido (opcional)</h5>
+                      <textarea className="form-control" style={{width:"81%"}} name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
+                      <p className="text-end mb-1 text-secondary" style={{width:"80%"}}>{notes.length}/255</p>
                       <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button className="btn btn-danger" onClick={()=>goToPay()}>Continuar</button></div>
                     </div>
                    </div>
