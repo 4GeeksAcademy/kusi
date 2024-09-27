@@ -24,8 +24,7 @@ export const PageNotFound = () => {
 
         <button 
             onClick={handleClickHome} 
-            className="btn btn-warning mt-4" 
-            style={{ fontSize: '1.5em', fontFamily: "Righteous, sans-serif" }}
+            className="btn btn-danger mt-4"
         >
             Inicio
         </button>
