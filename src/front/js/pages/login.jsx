@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef  } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/login.css";
 import '../../styles/landingPage.css';
+import { jwtDecode } from 'jwt-decode';
 
 import { Context } from "../store/appContext";
 
@@ -10,6 +11,21 @@ export const Login = () => {
     const { store, actions } = useContext(Context);
 	const navigate = useNavigate();
 
+    
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            const decodedToken = jwtDecode(localStorage.getItem("token"));
+            const roleId = decodedToken.sub.role_id || 0;
+            
+            if(roleId>=0 && roleId <= 3){
+                navigate(store.menuItemsByRole[roleId][0].link)
+            } else {
+                navigate("/menu")
+            }
+
+            localStorage.setItem('activeNavBar', 0)
+        } 
+    }, []);
 
     const [dataLogin,setDataLogin] = useState({})
 
@@ -22,8 +38,21 @@ export const Login = () => {
 		e.preventDefault() 
 		try{
 			await actions.login(dataLogin)
-            if(localStorage.getItem("token"))
-            navigate("/menu")
+            if(localStorage.getItem("token")){
+
+                const decodedToken = jwtDecode(localStorage.getItem("token"));
+                const roleId = decodedToken.sub.role_id || 0;
+                
+                if(roleId>=0 && roleId <= 3){
+                    navigate(store.menuItemsByRole[roleId][0].link)
+                } else {
+                    navigate("/menu")
+                }
+
+                localStorage.setItem('activeNavBar', 0)
+                
+            }
+
 
 		}catch(e){
 			console.error(e);
