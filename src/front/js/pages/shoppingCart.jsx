@@ -16,11 +16,13 @@ import { Context } from "../store/appContext";
 export const ShoppingCart = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
+    const [cart,setCart] = useState(0)
     const [notes,setNotes] = useState("")
     
 
-    useEffect(()=>{
-        actions.getDishes()
+    useEffect(async ()=>{
+      await actions.getDishes()
+      await actions.updateListCart(JSON.parse(localStorage.getItem("listcart")) || [])
     },[]);
 
 	const handleChange = (e)=> {
@@ -37,7 +39,7 @@ export const ShoppingCart = () => {
 
   return(
     <>
-    {store.list.length>0?(
+    {(store.list).length>0?(
       <>
           <Navbar></Navbar>
             <div className='container-fluid w-100 d-flex justify-content-center align-items-center mt-5'>
@@ -48,7 +50,7 @@ export const ShoppingCart = () => {
                       </div>
                   </div> 
                   <ul className="p-0 d-flex flex-column justify-content-center align-items-center">
-                      {store.list.map(item => (
+                      {(store.list).map(item => (
                         <li key={item.id} className="list-group-item d-flex align-items-center justify-content-center mb-2 pe-1 border border-1 rounded" style={{ width: "80%" }}>
                           <div className="row w-100 col-12 justify-content-between align-items-center flex-nowrap" style={{ flexWrap: 'nowrap' }}>
                             {/* Imagen del producto */}
@@ -78,7 +80,7 @@ export const ShoppingCart = () => {
                                     <img src={minus} alt="" style={{ width: '20px' }} />
                                   </span>
                                   <span className="px-1">{item.quantity}</span>
-                                  <span onClick={() => actions.incrementDish(item.id, item.quantity)} className="pointer-icon mx-1">
+                                  <span onClick={() => actions.incrementDish(item.id)} className="pointer-icon mx-1">
                                     <img src={plus} alt="" style={{ width: '20px' }} />
                                   </span>
                                 </div>

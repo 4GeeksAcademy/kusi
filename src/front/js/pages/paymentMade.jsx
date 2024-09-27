@@ -7,6 +7,9 @@ import check from '../../assets/images/check.png';
 export const PaymentMade = () => {
     const navigate = useNavigate();
 
+    useEffect(()=>{
+        localStorage.removeItem("listcart")
+    },[])
 
     return(
         <div className="container">

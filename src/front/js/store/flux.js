@@ -1,4 +1,3 @@
-import { faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 
 const Roles = Object.freeze({
@@ -81,6 +80,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (response.status === 200){
 						await setStore({ dishes: data })
 					}
+					else if (response.status===401){
+						localStorage.clear()
+						window.location.href = "/login";
+						return
+						
+					}
 				} catch (err) {
 					console.error("Error:", err);
 				}
@@ -120,8 +125,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error:", e);
 				}
 			},
-			updateListCart: (newList) => {
-				setStore({ list: newList });
+			updateListCart: async (newList) => {
+				await setStore({ list: newList });
 			},
 			getExtrasByDishId: async (id) => {
 				try{
@@ -348,20 +353,57 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			incrementDish : (id) => {
 				const store = getStore();
-				const transitory = store.list.find(product =>
-					product.id === id)
-					  if(transitory){ 
-						getActions().changePrice(id,transitory.quantity+1,transitory.unit_price)
-					  }
+
+				let listCart = JSON.parse(localStorage.getItem("listcart")) || []
+				let found = false;
+				for (let i  = 0; i < listCart.length; i++) {
+					if (listCart[i].id == id) {
+
+						let dishFind = store.dishes.find(dish =>dish.id === id)
+						if(dishFind){
+							if (listCart[i].quantity < dishFind.quantity) {
+								listCart[i].quantity += 1;
+								found = true;
+								break;
+							}else {
+								Swal.fire({
+									title: "Cantidad máxima",
+									text: "No es posible  agregar más debido al stock.",
+									icon: "warning",
+								})
+							}
+						}
+					}
+				}
+				if(found){
+					localStorage.setItem("listcart",JSON.stringify(listCart))
+					setStore({ list: listCart });
+				}
 			},
 			decrementDish : (id) => {
+				
 				const store = getStore();
-				const transitory = store.list.find(product =>
-					product.id === id && product.quantity>1)
-						if(transitory){ 
-							getActions().changePrice(id,transitory.quantity-1,transitory.unit_price)
-				 	 }
-			  },
+
+				let listCart = JSON.parse(localStorage.getItem("listcart")) || []
+				let found = false;
+				for (let i  = 0; i < listCart.length; i++) {
+					if (listCart[i].id == id) {
+
+						let dishFind = store.dishes.find(dish =>dish.id === id)
+						if(dishFind){
+							if (listCart[i].quantity > 1) {
+								listCart[i].quantity -= 1;
+								found = true;
+								break;
+							}
+						}
+					}
+				}
+				if(found){
+					localStorage.setItem("listcart",JSON.stringify(listCart))
+					setStore({ list: listCart });
+				}
+			},
 			changePrice : (id,quantity) => {
 				const store = getStore();
 				const transitorylist = store.list.map((product) =>
@@ -379,11 +421,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				
 			},
 			deleteDish : (id) => {
+
+
+				
 				const store = getStore();
-				const newtransitory = store.list.filter((product) =>
+
+				let listCart = JSON.parse(localStorage.getItem("listcart")) || []
+				let found = false;
+
+				const newtransitory = listCart.filter((product) =>
 					product.id !== id
 				  )
-				setStore({list: newtransitory})
+				if(newtransitory){
+					localStorage.setItem("listcart",JSON.stringify(newtransitory))
+					setStore({list: newtransitory})
+				}
 				
 			},
 			btnContinuar : async (instructionsnote) => {
