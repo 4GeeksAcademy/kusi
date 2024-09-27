@@ -7,7 +7,8 @@ import minus from '../../assets/images/minus.png';
 import plus from '../../assets/images/plus.png';
 import kusilogo from '../../assets/images/kusi-logo.png'
 import { Navbar } from "../component/Navbar.jsx";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 import { Context } from "../store/appContext";
 
@@ -36,59 +37,69 @@ export const ShoppingCart = () => {
 
   return(
     <>
-    {store.list.length>0?(<>
+    {store.list.length>0?(
+      <>
           <Navbar></Navbar>
-            <div className='container-cart'>
-                <div className="container">
-                </div>
-                 <div className="container mr-5 pr-5 p-0 mt-0">
+            <div className='container-fluid w-100 d-flex justify-content-center align-items-center mt-5'>
+                 <div className="container p-0 mt-0">
                   <div className="container mb-5 mt-3" id="title">
-                      
                       <div className="d-flex justify-content-center">
-                        <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1></div>
+                        <h1 className="d-flex justify-content-center align-items-center flex-grow-1 mb-0">Mi pedido</h1>
+                      </div>
                   </div> 
-                  <ul className="p-0">{store.list.map(item => (
-                      <li key={item.id} className="list-group-item d-flex align-items-center justify-content-center">
-                      <div className="row w-100 justify-content-center align-items-center border border-secondary-subtle">
+                  <ul className="p-0 d-flex flex-column justify-content-center align-items-center">
+                      {store.list.map(item => (
+                        <li key={item.id} className="list-group-item d-flex align-items-center justify-content-center mb-2 pe-1 border border-1 rounded" style={{ width: "80%" }}>
+                          <div className="row w-100 col-12 justify-content-between align-items-center flex-nowrap" style={{ flexWrap: 'nowrap' }}>
+                            {/* Imagen del producto */}
+                            <div className="col-3 d-flex justify-content-start align-items-center" style={{ height: '100px', minWidth: '120px' }}>
+                              <img 
+                                src={item.image_url} 
+                                alt={item.id} 
+                                className="image-cover rounded" 
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', maxWidth: 'none' }} 
+                              />
+                            </div>
 
-                          <div className="col-3 col-sm-3 col-md-3 d-flex justify-content-center">
-                            <img src={item.image_url} alt={item.id} className="img-fluid rounded" style={{ maxWidth: '100px' }} />
-                          </div>
-                            <div className="row col-9 col-sm-9 col-md-9">
-                   
-                              <div className="col-8 col-lg-6 col-md-6 text-start icon-left">
+                            {/* Descripción y precio en la misma fila */}
+                            <div className="container-text-buttons d-flex flex-row col-9 justify-content-between align-items-center flex-wrap" style={{ flexWrap: 'nowrap' }}>
+                              <div className="col-8 col-lg-6 col-md-6 text-start">
                                 {item.name}
                               </div>
-                          
-                              <div className="col-4 col-lg-2 col-md-2 align-self-center text-end icon-right">
-                                S/.{item.price.toFixed(2)*item.quantity}
+
+                              <div className="col-4 col-lg-2 col-md-2 align-self-center text-end">
+                                S/.{(item.price * item.quantity).toFixed(2)}
                               </div>
-                            
-                              <div className="col-8 col-lg-3 col-md-3 align-self-center text-start icon-left">
-                                <div className="text-start icon-left p-0 m-0">
-                                  <span onClick={() => actions.decrementDish(item.id)} className="span-icon"><img 
-                                    src={minus} alt=""  /></span>
+
+                              {/* Control de cantidad */}
+                              <div className="container-button-images col-8 col-lg-3 col-md-3 d-flex justify-content-center align-items-center" style={{ minWidth: '150px' }}>
+                                <div className="button-images d-flex align-items-center justify-content-between">
+                                  <span onClick={() => actions.decrementDish(item.id)} className="pointer-icon mx-1">
+                                    <img src={minus} alt="" style={{ width: '20px' }} />
+                                  </span>
                                   <span className="px-1">{item.quantity}</span>
-                                  <span onClick={() => actions.incrementDish(item.id,item.quantity)} className="span-icon"><img 
-                                    src={plus} alt=""  /></span>
+                                  <span onClick={() => actions.incrementDish(item.id, item.quantity)} className="pointer-icon mx-1">
+                                    <img src={plus} alt="" style={{ width: '20px' }} />
+                                  </span>
                                 </div>
                               </div>
-                          
-                              <div className="col-4 col-lg-1 col-md-1 align-self-center text-end icon-right">
-                                <span onClick={() => actions.deleteDish(item.id)} className="span-icon">
-                                <img 
-                                  src={bin} alt="" id="bin" />
-                                </span>
+
+                              {/* Botón de eliminación */}
+                              <div className="col-4 col-lg-1 col-md-1 d-flex justify-content-end align-items-center" onClick={() => actions.deleteDish(item.id)}>
+                                <FontAwesomeIcon className='fs-4 pointer-icon' style={{ color: "#F44322" }} icon={faTrashCan} />
                               </div>
-                            </div>  
-                        </div>
-                      </li>))}
+                            </div>
+                          </div>
+                        </li>
+                      ))}
                     </ul>
-                    <div className="container mb-5 text-center">
-                      <h5 className="text-end mb-3">Total a Pagar: S/. {actions.totalPrice()}</h5>
-                      <h5 className="text-start">Notas del pedido (opcional)</h5>
-                      <textarea className="form-control" name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
-                      <p className="text-end mb-1 text-secondary">{notes.length}/255</p>
+                    <div className='w-100 d-flex justify-content-center mb-5'>
+                      <h5 className="text-end" style={{width:"80%"}}>Total a Pagar: S/. {actions.totalPrice()}</h5>
+                    </div>
+                    <div className="container mb-5 mt-5 w-100 d-flex flex-column justify-content-center align-items-center">
+                      <h5 className="text-start" style={{width:"80%"}}>Notas del pedido (opcional)</h5>
+                      <textarea className="form-control" style={{width:"81%"}} name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
+                      <p className="text-end mb-1 text-secondary" style={{width:"80%"}}>{notes.length}/255</p>
                       <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button className="btn btn-danger" onClick={()=>goToPay()}>Continuar</button></div>
                     </div>
                    </div>
