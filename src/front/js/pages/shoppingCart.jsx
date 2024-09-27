@@ -16,14 +16,16 @@ import { Context } from "../store/appContext";
 export const ShoppingCart = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
-    const [cart,setCart] = useState(0)
     const [notes,setNotes] = useState("")
     
 
-    useEffect(async ()=>{
-      await actions.getDishes()
-      await actions.updateListCart(JSON.parse(localStorage.getItem("listcart")) || [])
-    },[]);
+    useEffect(() => {
+      const fetch = async ()=>{
+        await actions.getDishes()
+        await actions.updateListCart(JSON.parse(localStorage.getItem("listcart")) || [])
+      };
+      fetch();
+    }, []);
 
 	const handleChange = (e)=> {
 		let txt = e.target.value
@@ -31,17 +33,16 @@ export const ShoppingCart = () => {
 	}
 
     const goToPay = async () => {
-            await actions.btnContinuar(notes);
-            navigate("/paypal")
-            setNotes("")   
-		
+        await actions.btnContinuar(notes);
+        navigate("/payment")
+        setNotes("")
 	}
 
-  return(
+  return (
     <>
+    <Navbar/>
     {(store.list).length>0?(
       <>
-          <Navbar></Navbar>
             <div className='container-fluid w-100 d-flex justify-content-center align-items-center mt-5'>
                  <div className="container p-0 mt-0">
                   <div className="container mb-5 mt-3" id="title">
@@ -100,7 +101,7 @@ export const ShoppingCart = () => {
                     </div>
                     <div className="container mb-5 mt-5 w-100 d-flex flex-column justify-content-center align-items-center">
                       <h5 className="text-start" style={{width:"80%"}}>Notas del pedido (opcional)</h5>
-                      <textarea className="form-control" style={{width:"81%"}} name="" id="" onChange={handleChange} maxlength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
+                      <textarea className="form-control" style={{width:"81%"}} name="" id="" onChange={handleChange} maxLength="255" placeholder="Escriba sus indicaciones aquí"></textarea>
                       <p className="text-end mb-1 text-secondary" style={{width:"80%"}}>{notes.length}/255</p>
                       <div className="text-center justify-content-center align-items-center mb-3 mt-0"><button className="btn btn-danger" onClick={()=>goToPay()}>Continuar</button></div>
                     </div>
@@ -109,7 +110,6 @@ export const ShoppingCart = () => {
             </div>    
             </>     ):(
                   <>
-                  <Navbar></Navbar>
                     <div className="container text-center justify-content-center align-items-center container-cart">
                         <h1>Tu carrito está vacío! </h1>
                         <div className="container">
@@ -119,13 +119,13 @@ export const ShoppingCart = () => {
                         <div
                           className="text-center justify-content-center align-items-center mb-3"
                         >
-                          <button onClick={()=>navigate("/menu")}>
+                          <button className="btn btn-danger" onClick={()=>navigate("/menu")}>
                             Regresar al menú
                           </button>
                         </div>
                     </div>
                     </>
-                )}
+              )}
     </>
   );
 
