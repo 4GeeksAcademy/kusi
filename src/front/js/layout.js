@@ -17,7 +17,7 @@ import { Orders } from './pages/Orders.jsx';
 import { ViewOrderDetails } from './pages/ViewOrderDetails.jsx';
 import { Users } from "./pages/users.jsx";
 import { Dishes } from './pages/dishes.jsx';
-import Development from './pages/development.jsx';
+import { PageNotFound } from './pages/PageNotFound.jsx';
 
 const Layout = () => {
     const basename = process.env.BASENAME || '';
@@ -42,7 +42,7 @@ const Layout = () => {
                     <Route element={<Orders />} path="/orders" />
                     <Route element={<ViewOrderDetails/>} path="/orders/:id" />
                     <Route element={<Users />} path="/users" />
-                    <Route element={<Development/>} path="*"/>
+                    <Route element={<PageNotFound/>} path="*"/>
                 </Routes>
             </BrowserRouter>
         </div>
