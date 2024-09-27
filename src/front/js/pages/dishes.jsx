@@ -46,7 +46,9 @@ export const Dishes = () => {
             title: "Estás seguro de eliminar este plato?",
             showCancelButton: true,
             confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            iconColor: "#F44322",
+			confirmButtonColor: "#F44322",
           }).then((result) => {
             if (result.isConfirmed) {
                 actions.deleteDish(id);
@@ -60,7 +62,9 @@ export const Dishes = () => {
             title: "Estás seguro de eliminar este plato?",
             showCancelButton: true,
             confirmButtonText: "Eliminar",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            iconColor: "#F44322",
+			confirmButtonColor: "#F44322",
           }).then((result) => {
             if (result.isConfirmed) {
                 actions.deleteIngredient(id);
