@@ -31,7 +31,6 @@ user_update_model = users_namespace.model("UserUpdate",{
     "name": fields.String,
     "phone_number": fields.String,
     "is_active": fields.Boolean,
-    "profile_picture_url": fields.String,
     "password": fields.String
 })
 
@@ -124,7 +123,7 @@ class CreateAndFetchUsers(Resource):
 @users_namespace.response(404, 'User not found')
 @users_namespace.response(500, 'Server error')
 class UserAPI(Resource):
-    method_decorators = [jwt_required()]
+    @jwt_required()
     @users_namespace.doc(security="jsonWebToken")
     @users_namespace.marshal_with(user_model)
     def get(self, id):
@@ -137,7 +136,7 @@ class UserAPI(Resource):
         except Exception as error:
             return str(error),500
     
-    method_decorators = [jwt_required()]
+    @jwt_required()
     @users_namespace.doc(security="jsonWebToken")
     @users_namespace.expect(user_update_model)
     def put(self,id):
@@ -151,8 +150,11 @@ class UserAPI(Resource):
                 user.email = payload["email"]
             if "phone_number" in payload:
                 user.phone_number = payload["phone_number"]
-            if "profile_picture_url" in payload:
-                user.profile_picture_url = payload["profile_picture_url"]
+            if "profile_picture_url" in payload and payload["profile_picture_url"] is not None:
+                profile_picture_url = payload["profile_picture_url"]
+                profile_picture_url = profile_picture_url.strip()
+                if len(profile_picture_url) > 0:
+                    user.profile_picture_url = profile_picture_url
             if "is_active" in payload:
                 user.is_active = payload["is_active"]
             if "role_id" in payload:
@@ -162,16 +164,17 @@ class UserAPI(Resource):
                 user.role_id = payload["role_id"]
             if "password" in payload:
                 password = payload["password"]
-                salt = secrets.token_hex(16)
-                salted_password = f"{password}{salt}"
-                hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
-                user.hashed_salted_password = hashed_salted_password
+                password = password.strip()
+                if len(password) > 0:
+                    salted_password = f"{password}{user.salt}"
+                    hashed_salted_password = bcrypt.generate_password_hash(salted_password).decode("utf-8")
+                    user.hashed_salted_password = hashed_salted_password
             db.session.commit()
             return user.serialize(), 200
         except Exception as e:
             return { "message": str(e) }, 500
 
-    method_decorators = [jwt_required()]
+    @jwt_required()
     @users_namespace.doc(security="jsonWebToken")
     def delete(self,id):
         '''Delete user'''
