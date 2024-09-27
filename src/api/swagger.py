@@ -15,6 +15,7 @@ def setup_swagger(app):
         title="Kusi API Documentation",
         description="Endpoints and Models",
         version="1.0",
+        prefix="/api",
         doc="/docs",
         validate=True
     )
