@@ -87,7 +87,7 @@ export const Adicional = ({ dish, imgSrc, name, price, description }) => {
                 
                 <button
                     type="button"
-                    className="btn rounded-pill px-4"
+                    className="btn rounded-pill m-4"
                     onClick={ () => addToCart(dish.id || 0) }
                     style={{ color: 'white', background: '#F44322' }}
                 >
